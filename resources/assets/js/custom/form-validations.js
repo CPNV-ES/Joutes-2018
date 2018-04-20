@@ -64,6 +64,7 @@ $( document ).ready(function() {
 		    	var startDateValue = $('#formTournament #startDate').val();
 		    	var startTimeValue = $('#formTournament #startTime').val();
 		    	var imgValue = $('#formTournament #img').val();
+                var teamsPerPools = $('#formTournament #teamPerPool').val();
 
 		    	var patternName = /^[a-zA-Z0-9-_ ]{3,45}$/;
 		    	var patternSport = /^[0-9]+$/; // '' = empty, 1-2-3-... = sport
@@ -86,6 +87,10 @@ $( document ).ready(function() {
 		    	if(imgValue == '' && $('#formTournament').is('.add')){
 		    		error += 'Le champ Image ne doit pas être vide.<br>';
 		    	}
+
+                if(teamsPerPools < 2 || teamsPerPools > 20){
+                    error += "Le nombre d'équipes par poule doit être entre 2 et 20.<br>";
+                }
 		    	break;
 		}
 

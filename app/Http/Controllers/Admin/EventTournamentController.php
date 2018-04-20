@@ -29,6 +29,7 @@ class EventTournamentController extends Controller
         //$dropdownListTeams = $this->getDropDownListTeams(null);
         return view('tournament.create')->with('dropdownListSportsWithCourt', $dropdownListSportsWithCourt)
                                         ->with('dropdownListSportsWithNoCourt', $dropdownListSportsWithNoCourt)
+                                        ->with('nbTeamPerPool', $request->nbTeamPerPool)
                                         //->with('dropdownListTeams', $dropdownListTeams)
                                         ->with('eventId', $eventId);
     }

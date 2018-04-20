@@ -1,1 +1,983 @@
-function closePool(){$(".close-pool-btn").click(function(){alertConfirmEndPool("Terminer la poule","Etes-vous sur de vouloir terminer la poule, le changement de score sera impossible après cette action !")})}function alertConfirmEndPool(e,t){swal({title:e,text:t,type:"warning",showCancelButton:!0,cancelButtonText:"Annuler",confirmButtonColor:"#DD6B55",confirmButtonText:"Confirmer"},function(e){if(e){var t=document.createElement("div");t.id+="opac";var a=document.createElement("img");a.className+="loader",a.src="/images/loader.gif",t.prepend(a),document.body.prepend(t);var r=$("table#matches").data("tournament"),n=$("table#matches").data("pool");$("#pool-rankings-table tbody tr").each(function(){$.ajax({url:"/admin/tournaments/"+r+"/pools/"+n,method:"PUT",dataType:"json",cache:!1,headers:{"X-CSRF-TOKEN":$('meta[name="csrf-token"]').attr("content")},data:{team_id:$(this).data("id"),rank_in_pool:$(this).data("rank")},success:function(e){if(!$(".alert.alert-success.end-pool").length){var a=$("<div class='alert alert-success end-pool' role='alert'>Le poule à bien été terminée</div>");$("#match-block").prepend(a),a.fadeTo(3e3,500).slideUp(500,function(){a.slideUp(500)})}$(".action i").each(function(){$(this).remove()}),$(".close-pool-btn").remove(),$("input#shiftTime").parent().remove(),t.remove()},error:function(e){t.remove()}})})}})}$(document).ready(function(){function e(e,t,a){swal({title:t,text:a,type:"warning",showCancelButton:!0,cancelButtonText:"Annuler",confirmButtonColor:"#DD6B55",confirmButtonText:"Confirmer",closeOnConfirm:!1},function(t){t?$(e).submit():$(".addMember")[0]&&($(".addMember").find("option")[0].selected=!0)})}$(".button-delete").click(function(){event.preventDefault();var t=$(this).data("type"),a=$(this).data("name"),r="",n="",o=$(this).parent();switch(t){case"sport":r='Voulez-vous vraiment supprimer le sport "'+a+'"?',n="La suppression de ce sport va entrainer la suppression des courts liés";break;case"court":r='Voulez-vous vraiment supprimer le terrain "'+a+'"?';break;case"tournament":r='Voulez-vous vraiment supprimer le tournois "'+a+'" ?';break;case"teamMember":r='Voulez-vous vraiment supprimer "'+a+'" de cette équipe ?';break;case"memberTeam":r="Voulez-vous vraiment retirer "+a+" ?"}e(o,r,n)}),$(".addMember").change(function(){var t=$(this).find("option:selected").text(),a=$(this).parent();if("team"==$(this).attr("name"))var r="Voulez-vous ajouter ce participant à l'équipe \""+t+'" ?';else var r='Voulez-vous ajouter "'+t+"\" à l'équipe ?";e(a,r,"")})}),$(document).ready(function(){$(".show-devs").click(function(){$(".dev-names").hasClass("hide")?$(".dev-names").removeClass("hide").addClass("show"):$(".dev-names").removeClass("show").addClass("hide")})}),$(document).ready(function(){$(".formSend").click(function(){var e=$(this).parent().parent(),t=e.attr("id"),a="";switch(t){case"formSport":var r=$("#formSport #name").val(),n=$("#formSport #description").val(),o=/^[a-zA-Z0-9-_ ]{3,20}$/,i=/^[a-zA-Z0-9-_ ]{0,45}$/;o.test(r)||(a+="Le champ Nom ne doit pas être vide et doit avoir entre 3 et 45 caractères.<br>"),i.test(n)||(a+="Le champ Description peut avoir maximum 45 caractères.<br>");break;case"formCourt":var r=$("#formCourt #name").val(),c=$("#formCourt #acronym").val(),s=$("#formCourt #sport").val(),o=/^[a-zA-Z0-9-_ ]{1,20}$/,d=/^[a-zA-Z0-9-_ ]{1,3}$/,l=/^[0-9]+$/;o.test(r)||(a+="Le champ Nom ne doit pas être vide et doit avoir entre 1 et 20 caractères.<br>"),d.test(c)||(a+="Le champ Acronyme ne doit pas être vide et doit avoir entre 1 et 3 caractères.<br>"),l.test(s)||(a+="Aucun sport sélectionné.<br>");break;case"formEvent":var r=$("#formEvent #name").val(),m=$("#formEvent #img").val(),o=/^[a-zA-Z0-9-_ ]{3,20}$/;o.test(r)||(a+="Le champ Nom ne doit pas être vide et doit avoir entre 3 et 20 caractères.<br>"),""==m&&$("#formEvent").is(".add")&&(a+="Le champ Image ne doit pas être vide.<br>");break;case"formTournament":var r=$("#formTournament #name").val(),s=$("#formTournament #sport").val(),u=$("#formTournament #startDate").val(),p=$("#formTournament #startTime").val(),m=$("#formTournament #img").val(),o=/^[a-zA-Z0-9-_ ]{3,45}$/,l=/^[0-9]+$/,h=/^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$/,v=/^([01]\d|2[0-3]):([0-5]\d)$/;o.test(r)||(a+="Le champ Nom ne doit pas être vide et doit avoir entre 3 et 45 caractères.<br>"),l.test(s)||(a+="Aucun sport sélectionné.<br>"),v.test(p)||(a+="Le champ Heure de début ne doit pas être vide et doit être sous la forme hh:mm.<br>"),h.test(u)||(a+="Le champ Date de début ne doit pas être vide et doit être sous la forme jj.mm.aaaa.<br>"),""==m&&$("#formTournament").is(".add")&&(a+="Le champ Image ne doit pas être vide.<br>")}""==a?e.submit():($(".alert").remove(),$(".alert-danger").remove(),$("h1").after('<div class="alert alert-danger">'+a+"</div>"))})}),$(document).ready(function(){$("#login_link").click(function(){$("#login_popup").modal(),$("#login_popup .modal-body .error").remove()}),$("#login_popup").on("shown.bs.modal",function(){$("#username").focus()}),$("#login_popup .btn-login-form").click(function(e){e.preventDefault();var t=$("#login-form #username").val(),a=$("#login-form #password").val(),r=$("#login-form input[name=_token]").val();$.ajax({url:"/admin",method:"POST",dataType:"html",headers:{"X-CSRF-TOKEN":r},data:{username:t,password:a},success:function(e){var t=e.split("::");if("accepted"==t[0])window.location.href=t[1];else{var a=t[1];$("#login_popup .modal-body .error").remove(),$("#login_popup .modal-body").append('<div class="error">'+a+"</div>"),$("#login-form #password").val("")}}})})}),$(document).ready(function(){$("#multiple-teams-select").length&&$("#multiple-teams-select").select2({placeholder:"Choisir une équipe",allowClear:!0})}),$(document).ready(function(){$(".search").on("input",function(e){var t=$(".search").val().toLowerCase();$(".searchIn tr, .searchIn .hideSearch").each(function(){var e=$(this).find(".name").text().toLowerCase();e.indexOf(t)<0?$(this).hide("fast"):$(this).show("fast")})});var e={language:{decimal:"",emptyTable:"Aucune données disponible",info:"_START_ à _END_ sur _TOTAL_ entrées",infoEmpty:"0 à 0 sur 0 entrées",infoFiltered:"(Total de _MAX_ total entrées)",infoPostFix:"",thousands:",",lengthMenu:"Voir _MENU_ entrée",loadingRecords:"Chargement...",processing:"En traitement...",search:"",searchPlaceholder:"Recherche",zeroRecords:"Aucune données trouvées",paginate:{first:"Première",last:"Dernière",next:"Suivant",previous:"Précédent"}},paging:!1,info:!1,searching:!1},t={language:{decimal:"",emptyTable:"Aucune données disponible",info:"_START_ à _END_ sur _TOTAL_ entrées",infoEmpty:"0 à 0 sur 0 entrées",infoFiltered:"(Total de _MAX_ total entrées)",infoPostFix:"",thousands:",",lengthMenu:"Voir _MENU_ entrée",loadingRecords:"Chargement...",processing:"En traitement...",search:"",searchPlaceholder:"Recherche",zeroRecords:"Aucune données trouvées",paginate:{first:"Première",last:"Dernière",next:"Suivant",previous:"Précédent"}},bLengthChange:!1};$("#tournament-teams-table").DataTable(t),$("#teams-table").DataTable(t),$("#participants-table").DataTable(t),$(".translate").DataTable(e),$(".dataTables_wrapper").removeClass("container-fluid"),$("#pools-table td.clickable").on("click",function(){var e=$("#pools-table").data("tournament"),t=$(this).data("id");window.location.href=e+"/pools/"+t}),$("#teams-table").on("click","td.clickable",function(){var e=$(this).data("id");window.location.href="teams/"+e}),$("#teams-show-table").on("click","td.clickable",function(){var e=$(this).data("id");window.location.href="/admin/participants/"+e}),$("#participants-table").on("click","td.clickable",function(){var e=$(this).data("id");window.location.href="participants/"+e}),$("#participants-show-table").on("click","td.clickable",function(){var e=$(this).data("id");window.location.href="/admin/teams/"+e}),$("#tournament-teams-table").on("click","td.clickable",function(){var e=$(this).data("id");window.location.href="/admin/teams/"+e})}),$(document).ready(function(){$(".big-screen").click(function(e){e.preventDefault(),window.open($(this).attr("href"),"_blank","height="+screen.height+",width="+screen.width)})}),$(document).ready(function(){$(".return").each(function(){$(this).click(function(e){e.preventDefault(),history.back()})})}),$(document).ready(function(){function e(r){r.parent().children(".editTime").hide();var o=r.parent(),i=o.parent().children("td.score1"),c=o.parent().children("td.score2"),s=i.text(),d=c.text();i.empty(),c.empty();var l=document.createElement("input");l.setAttribute("type","number"),l.setAttribute("min","0"),l.setAttribute("value",s);var m=document.createElement("input");m.setAttribute("type","number"),m.setAttribute("min","0"),m.setAttribute("value",d),i.append(l),c.append(m);var u=document.createElement("i");u.className+="fa fa-lg fa-check-square-o",u.setAttribute("aria-hidden","true");var p=document.createElement("i");p.className+="fa fa-lg fa-times",p.setAttribute("aria-hidden","true"),r.after(u),u.after(p),r.remove(),$(p).click(function(){$(this).parent().children(".editTime").show(),o.append(r),u.remove(),p.remove(),l.remove(),m.remove(),i.append(s),c.append(d),r.click(function(){e($(this))})}),$(u).click(function(){a($(l).val(),$(m).val())?n(o):t("danger","Format de score invalide")})}function t(e,t){switch($(".alert").remove(),e){case"danger":var a=$("<div class='alert alert-danger' role='alert'>"+t+"</div>");$("#match-block").prepend(a),r(a);break;case"success":var n=$("<div class='alert alert-success' role='alert'>"+t+"</div>");$("#match-block").prepend(n),r(n)}}function a(e,t){var a=/^[0-9]{1,3}$/;return!(!a.test(e)||!a.test(t))}function r(e){e.fadeTo(3e3,500).slideUp(500,function(){e.slideUp(500)})}function n(a){var r=$("table#matches").data("tournament"),n=$("table#matches").data("pool"),i=a.parent().data("game"),c=document.createElement("div");c.id+="opac";var s=document.createElement("img");s.className+="loader",s.src="/images/loader.gif",c.prepend(s),document.body.prepend(c),$.ajax({url:"/admin/tournaments/"+r+"/pools/"+n+"/games/"+i,method:"PUT",dataType:"json",context:this,cache:!1,headers:{"X-CSRF-TOKEN":$('meta[name="csrf-token"]').attr("content")},data:{score1:a.parent().children("td.score1").children("input").val(),score2:a.parent().children("td.score2").children("input").val()},error:function(e,a,r){200!=e.status&&t("danger","Une erreur est survenue ..."),c.remove()},success:function(r){var n=document.createElement("i");n.className+="fa fa-lg fa-trophy",n.setAttribute("aria-hidden","true");var i=a.parent().children("td.score1"),s=a.parent().children("td.score2"),n=$(n),d=a.children("i.fa-check-square-o"),l=a.children("i.fa-times");d.parent().parent().children(".separator").text("-"),d.parent().parent().children(".separator").removeClass("sepTime"),d.parent().children(".editTime").remove(),a.append(n),d.remove(),l.remove(),i.append(i.children("input").val()),s.append(s.children("input").val()),i.children("input").remove(),s.children("input").remove(),n.click(function(){e($(this))}),0==$(".sepTime").length&&0==$(".close-pool-btn").length&&($("h1").append('<a class="greenBtn close-pool-btn">Terminer la poule</a>'),closePool()),o(r),t("success","Changement effectué et classement mis à jour"),c.remove()}})}function o(e){var t=$("#pool-rankings-table tbody");t.empty();for(var a=0;a<e.length;a++)tr=$('<tr data-id="'+e[a].team_id+'" data-rank="'+(a+1)+'"></tr>'),allTds="<td>"+(a+1)+"</td><td>"+e[a].team+"</td><td>"+e[a].score+"</td><td>"+e[a].W+"</td><td>"+e[a].L+"</td><td>"+e[a].D+"</td><td>"+e[a]["+-"]+"</td>",tr.html(allTds),t.append(tr)}$("table#matches td.action i.editScore").click(function(){e($(this))})}),$(document).ready(function(){function e(e){var a=$("#shiftTime").val();if(a%1!==0||""==a)return t("danger","Le décalage doit être un numéro entier qui correspond à un temps en minute..."),void opac.remove();var r=$("#matches tr .sepTime"),n=$("table#matches").data("tournament"),o=$("table#matches").data("pool");r.each(function(){var e=$(this).parent().data("game"),r=$(this).text(),i=r.split(":"),c=60*i[0]*60+60*i[1];c+=60*a;var s=new Date(null);s.setTime(s.getTime()+60*s.getTimezoneOffset()*1e3),s.setSeconds(c);var d=(s.toISOString().substr(11,8),("0"+s.getHours()).slice(-2)+":"+("0"+s.getMinutes()).slice(-2)),l=("0"+s.getHours()).slice(-2)+":"+("0"+s.getMinutes()).slice(-2)+":"+("0"+s.getSeconds()).slice(-2);$.ajax({url:"/admin/tournaments/"+n+"/pools/"+o+"/games/"+e,method:"PUT",context:this,cache:!1,headers:{"X-CSRF-TOKEN":$('meta[name="csrf-token"]').attr("content")},data:{newTime:l},error:function(e,a,r){200!=e.status&&(t("danger","Une erreur est survenue ..."),opac.remove())},success:function(e){$(this).text(d),$(".alert.alert-success").length||t("success","Le décalage des heures a bien été effectué"),$("#opac").length&&opac.remove()}})})}function t(e,t){switch($(".alert").remove(),e){case"danger":var r=$("<div class='alert alert-danger' role='alert'>"+t+"</div>");$("#match-block").prepend(r),a(r);break;case"success":var n=$("<div class='alert alert-success' role='alert'>"+t+"</div>");$("#match-block").prepend(n),a(n)}}function a(e){e.fadeTo(3e3,500).slideUp(500,function(){e.slideUp(500)})}function r(e){e.parent().children(".editScore").hide();var a=e.parent(),n=a.parent().children("td.separator"),o=n.text().split(":")[0],i=n.text().split(":")[1],c='<input type="text" id="formHourTime" value="'+o+'">:<input type="text" id="formMinuteTime" value="'+i+'">';n.text(""),n.append(c);var s=document.createElement("i");s.className+="fa fa-lg fa-check-square-o",s.setAttribute("aria-hidden","true");var d=document.createElement("i");d.className+="fa fa-lg fa-times",d.setAttribute("aria-hidden","true"),e.after(s),s.after(d),e.remove(),$(d).click(function(){$(this).parent().children(".editScore").show(),n.text(o+":"+i),a.prepend(e),s.remove(),d.remove(),e.click(function(){r($(this))})}),$(s).click(function(){var n=document.createElement("div");n.id+="opac";var o=document.createElement("img");o.className+="loader",o.src="/images/loader.gif",n.prepend(o),document.body.prepend(n);var i=$("#formMinuteTime").val(),c=$("#formHourTime").val();if(i>=60||i<0||i%1!==0||""==i)return void t("danger","Format de temps invalide");if(c>=24||c<0||c%1!==0||""==c)return void t("danger","Format de temps invalide");var l=$("table#matches").data("tournament"),m=$("table#matches").data("pool"),u=$(this).parent().parent().data("game"),p=c+":"+i+":00";$.ajax({url:"/admin/tournaments/"+l+"/pools/"+m+"/games/"+u,method:"PUT",context:this,cache:!1,headers:{"X-CSRF-TOKEN":$('meta[name="csrf-token"]').attr("content")},data:{newTime:p},error:function(e,a,r){200!=e.status&&t("danger","Une erreur est survenue ..."),n.remove()},success:function(o){$(this).parent().children(".editScore").show(),1==i.length&&(i="0"+i),1==c.length&&(c="0"+c),$(this).parent().parent().children(".separator").text(c+":"+i),a.prepend(e),s.remove(),d.remove(),e.click(function(){r($(this))}),t("success","Changement d'heure effectué"),n.remove()}})})}$("#shiftMatch").click(function(){var t=document.createElement("div");t.id+="opac";var a=document.createElement("img");a.className+="loader",a.src="/images/loader.gif",t.prepend(a),document.body.prepend(t),event.preventDefault(),e($(this))}),$("table#matches td.action i.editTime").click(function(){r($(this))})}),$(document).ready(function(){$(".import").click(function(){$(this).parent().submit()})}),$(document).ready(function(){closePool()});
+$( document ).ready(function() {
+	// Create custom delete alert when we click on a .button-delete
+	// @author Dessaules Loïc
+	// @modified by Dessauges Antoine
+	$('.button-delete').click(function(){
+
+		event.preventDefault(); // cancel the event click, needed to delte participant in team. Without the form is sumbit on icon click
+
+		var type = $(this).data("type");
+		var name = $(this).data("name");
+		var title = '';
+		var text = '';
+		var form = $(this).parent();
+
+		switch(type) {
+		    case "sport":
+		    	title = "Voulez-vous vraiment supprimer le sport \""+name+"\"?";
+		        text = "La suppression de ce sport va entrainer la suppression des courts liés";
+		        break;
+	        case "court":
+	        	title = "Voulez-vous vraiment supprimer le terrain \""+name+"\"?";
+		        break;
+		    case "tournament":
+		    	title = "Voulez-vous vraiment supprimer le tournois \""+name+"\" ?";
+		        break;
+	      	case "teamMember":
+		    	title = "Voulez-vous vraiment supprimer \""+name+"\" de cette équipe ?";
+		        break;
+		    case "memberTeam":
+		    	title = "Voulez-vous vraiment retirer "+name+" ?";
+		        break;
+		}
+		
+		alertConfirm(form, title, text);
+
+		});
+
+
+		// Open confirm pop-up when select change
+	  	// @author Dessauges Antoine
+	  	$( ".addMember" ).change(function() {
+
+			var name = $(this).find("option:selected").text();
+			var form = $(this).parent();
+			if($(this).attr("name") == "team")
+				var title = "Voulez-vous ajouter ce participant à l'équipe \""+name+"\" ?";
+			else
+	  			var title = "Voulez-vous ajouter \""+name+"\" à l'équipe ?";
+
+		  	alertConfirm(form, title, '');
+
+		});
+
+
+		// Display the popup
+		function alertConfirm(form, title, text){
+			swal({
+		  	title: title,
+		  	text: text,
+		  	type: "warning",
+		  	showCancelButton: true,
+		  	cancelButtonText: "Annuler",
+	  		confirmButtonColor: "#DD6B55",
+		  	confirmButtonText: "Confirmer",
+		  	closeOnConfirm: false
+		},
+		function(isConfirm){
+			if(isConfirm){
+				$(form).submit();
+			}
+			else{
+				if ($(".addMember")[0]) //if class exit on this page
+					$('.addMember').find("option")[0].selected = true;//display defaut select
+			}
+
+		});
+	}
+
+});
+
+$( document ).ready(function() {
+	// Shows dev on footer
+	$('.show-devs').click(function() {
+		if ($('.dev-names').hasClass('hide')) {
+			$('.dev-names').removeClass('hide').addClass('show');
+		}
+		else {
+			$('.dev-names').removeClass('show').addClass('hide');
+		}
+	});
+});
+$( document ).ready(function() {
+	/* FORM VALIDATIONS */
+	// @author Dessaules Loïc
+	$('.formSend').click(function(){
+		var form = $(this).parent().parent();
+		var formId = form.attr('id');
+		var error = '';
+
+		switch(formId) {
+		    case "formSport":
+		    	var nameValue = $('#formSport #name').val();
+		    	var descriptionValue = $('#formSport #description').val();
+
+		    	var patternName = /^[a-zA-Z0-9-_ ]{3,20}$/;
+		    	var patternDecription = /^[a-zA-Z0-9-_ ]{0,45}$/;
+
+		    	if(!patternName.test(nameValue)){
+		    		error += 'Le champ Nom ne doit pas être vide et doit avoir entre 3 et 45 caractères.<br>';
+		    	}
+		    	if(!patternDecription.test(descriptionValue)){
+		    		error += 'Le champ Description peut avoir maximum 45 caractères.<br>';
+		    	}
+		        break;
+
+	        case "formCourt":
+	        	var nameValue = $('#formCourt #name').val();
+	        	var acronymValue = $('#formCourt #acronym').val();
+		    	var sportValue = $('#formCourt #sport').val(); // '' = empty, 1-2-3-... = sport
+
+		    	var patternName = /^[a-zA-Z0-9-_ ]{1,20}$/;
+		    	var patternAcronym = /^[a-zA-Z0-9-_ ]{1,3}$/;
+		    	var patternSport = /^[0-9]+$/;
+
+		    	if(!patternName.test(nameValue)){
+		    		error += 'Le champ Nom ne doit pas être vide et doit avoir entre 1 et 20 caractères.<br>';
+		    	}
+		    	if(!patternAcronym.test(acronymValue)){
+		    		error += 'Le champ Acronyme ne doit pas être vide et doit avoir entre 1 et 3 caractères.<br>';
+		    	}
+		    	if(!patternSport.test(sportValue)){
+		    		error += 'Aucun sport sélectionné.<br>';
+		    	}
+		        break;
+
+		    case "formEvent":
+	        	var nameValue = $('#formEvent #name').val();
+	        	var imgValue = $('#formEvent #img').val();
+
+		    	var patternName = /^[a-zA-Z0-9-_ ]{3,20}$/;
+
+		    	if(!patternName.test(nameValue)){
+		    		error += 'Le champ Nom ne doit pas être vide et doit avoir entre 3 et 20 caractères.<br>';
+		    	}
+		    	//if image is not empty but only if this is on the create event (edit event image can be null and conserve the oldest image)
+		    	if(imgValue == '' && $('#formEvent').is('.add')){
+		    		error += 'Le champ Image ne doit pas être vide.<br>';
+		    	}
+
+		        break;
+
+		    case "formTournament":
+		    	var nameValue = $('#formTournament #name').val();
+		    	var sportValue = $('#formTournament #sport').val();
+		    	var startDateValue = $('#formTournament #startDate').val();
+		    	var startTimeValue = $('#formTournament #startTime').val();
+		    	var imgValue = $('#formTournament #img').val();
+                var teamsPerPools = $('#formTournament #teamPerPool').val();
+
+		    	var patternName = /^[a-zA-Z0-9-_ ]{3,45}$/;
+		    	var patternSport = /^[0-9]+$/; // '' = empty, 1-2-3-... = sport
+		    	var patternDate = /^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$/;
+		    	var patternTime = /^([01]\d|2[0-3]):([0-5]\d)$/;
+
+		    	if(!patternName.test(nameValue)){
+		    		error += 'Le champ Nom ne doit pas être vide et doit avoir entre 3 et 45 caractères.<br>';
+		    	}
+		    	if(!patternSport.test(sportValue)){
+		    		error += 'Aucun sport sélectionné.<br>';
+		    	}
+		    	if(!patternTime.test(startTimeValue)){
+		    		error += 'Le champ Heure de début ne doit pas être vide et doit être sous la forme hh:mm.<br>';
+		    	}
+		    	if(!patternDate.test(startDateValue)){
+		    		error += 'Le champ Date de début ne doit pas être vide et doit être sous la forme jj.mm.aaaa.<br>';
+		    	}
+		    	//if image is not empty but only if this is on the create event (edit event image can be null and conserve the oldest image)
+		    	if(imgValue == '' && $('#formTournament').is('.add')){
+		    		error += 'Le champ Image ne doit pas être vide.<br>';
+		    	}
+
+                if(teamsPerPools < 2 || teamsPerPools > 20){
+                    error += "Le nombre d'équipes par poule doit être entre 2 et 20.<br>";
+                }
+		    	break;
+		}
+
+		if(error == ''){
+			form.submit();
+		}else{
+			$('.alert').remove();
+			$('.alert-danger').remove();
+			$('h1').after(
+				'<div class="alert alert-danger">'
+				+error
+				+'</div>'
+			);
+		}
+
+	});
+});
+$( document ).ready(function() {
+    // Login popup
+    $("#login_link").click(function() {
+    	$('#login_popup').modal();
+    	$("#login_popup .modal-body .error").remove();
+    });
+    // Set focus when the popup loaded
+    $('#login_popup').on('shown.bs.modal', function(){
+    	$("#username").focus();
+    })
+
+
+    $("#login_popup .btn-login-form").click(function(event){
+    	event.preventDefault();
+    	var username = $("#login-form #username").val();
+    	var password = $("#login-form #password").val();
+    	var token = $("#login-form input[name=_token]").val();
+    	
+    	// Ajaj Posting data
+      	$.ajax({
+            url         : '/admin',
+            method      : 'POST',
+            dataType    : 'html',
+            headers		: {'X-CSRF-TOKEN': token},
+            data        : {
+                username: username,
+                password: password,
+            },
+            success : function(data) {
+                var res = data.split("::");
+                if(res[0] == "accepted"){
+                	window.location.href = res[1];
+                }else{
+                	var error = res[1];
+                	$("#login_popup .modal-body .error").remove();
+                	$("#login_popup .modal-body").append('<div class="error">'+error+'</div>');
+            	 	$("#login-form #password").val("");
+                }
+            }
+        });
+    });
+});
+$( document ).ready(function() {
+	/* Add multiple select chooser for the teams which participate on a tournament */
+	// do this if we are on the good page (id of the select exists)
+	if($('#multiple-teams-select').length){
+		$("#multiple-teams-select").select2({
+			placeholder: 'Choisir une équipe',
+	  		allowClear: true
+	  	});
+	}
+});
+$( document ).ready(function() {
+
+	// Search in a table and display only result who correspond to the search
+  	// @author Dessauges Antoine
+  	$('.search').on('input',function(e){
+
+    	var search = $('.search').val().toLowerCase();
+
+    	$('.searchIn tr, .searchIn .hideSearch').each( function() {
+
+    		var teamName = $(this).find(".name").text().toLowerCase();
+
+    		if(teamName.indexOf(search) < 0)
+    			$(this).hide( "fast");
+    		else
+    			$(this).show( "fast");
+
+    	});
+
+    });
+
+
+	// Init Datatable on our table -> https://datatables.net/
+    // @author Dessaules Loïc
+	var tableFrTranslateWithoutAllInfos = {
+		"language": {
+	        "decimal":        "",
+		    "emptyTable":     "Aucune données disponible",
+		    "info":           "_START_ à _END_ sur _TOTAL_ entrées",
+		    "infoEmpty":      "0 à 0 sur 0 entrées",
+		    "infoFiltered":   "(Total de _MAX_ total entrées)",
+		    "infoPostFix":    "",
+		    "thousands":      ",",
+		    "lengthMenu":     "Voir _MENU_ entrée",
+		    "loadingRecords": "Chargement...",
+		    "processing":     "En traitement...",
+		   	"search":         "",
+		    "searchPlaceholder": "Recherche",
+		    "zeroRecords":    "Aucune données trouvées",
+		    "paginate": {
+		        "first":      "Première",
+		        "last":       "Dernière",
+		        "next":       "Suivant",
+		        "previous":   "Précédent"
+		    }
+	    },
+	    "paging":   false,
+        "info":     false,
+        "searching":	false,
+	};
+
+	var tableFrTranslateWithoutEntries = {
+		"language": {
+	        "decimal":        "",
+		    "emptyTable":     "Aucune données disponible",
+		    "info":           "_START_ à _END_ sur _TOTAL_ entrées",
+		    "infoEmpty":      "0 à 0 sur 0 entrées",
+		    "infoFiltered":   "(Total de _MAX_ total entrées)",
+		    "infoPostFix":    "",
+		    "thousands":      ",",
+		    "lengthMenu":     "Voir _MENU_ entrée",
+		    "loadingRecords": "Chargement...",
+		    "processing":     "En traitement...",
+		    "search":         "",
+		    "searchPlaceholder": "Recherche",
+		    "zeroRecords":    "Aucune données trouvées",
+		    "paginate": {
+		        "first":      "Première",
+		        "last":       "Dernière",
+		        "next":       "Suivant",
+		        "previous":   "Précédent"
+		    }
+	    },
+        "bLengthChange":     false,
+	};
+
+	// Specific table without the top-left élément (nb x - y entries)
+	$('#tournament-teams-table').DataTable(tableFrTranslateWithoutEntries);
+	$('#teams-table').DataTable(tableFrTranslateWithoutEntries);
+	$('#participants-table').DataTable(tableFrTranslateWithoutEntries);
+	// All tables without all data, just the table
+	$('.translate').DataTable(tableFrTranslateWithoutAllInfos);
+
+	// datatables add a container fluid, I don't want that, so I delete the class
+	$('.dataTables_wrapper').removeClass('container-fluid');
+
+	// Redirect when click on a cell
+	$('#pools-table td.clickable').on('click', function(){
+		var tournament_id = $("#pools-table").data("tournament");
+		var pool_id = $(this).data("id");
+		window.location.href = tournament_id+"/pools/"+pool_id;
+	});
+
+	$('#teams-table').on('click', 'td.clickable', function(){
+		var team_id = $(this).data("id");
+		window.location.href = "teams/"+team_id;
+	});
+
+	$('#teams-show-table').on('click', 'td.clickable', function(){
+		var participant_id = $(this).data("id");
+		window.location.href = "/admin/participants/"+participant_id;
+	});
+
+	$('#participants-table').on('click', 'td.clickable', function(){
+		var participant_id = $(this).data("id");
+		window.location.href = "participants/"+participant_id;
+	});
+
+	$('#participants-show-table').on('click', 'td.clickable', function(){
+		var team_id = $(this).data("id");
+		window.location.href = "/admin/teams/"+team_id;
+	});
+
+	$('#tournament-teams-table').on('click', 'td.clickable', function(){
+		var team_id = $(this).data("id");
+		window.location.href = "/admin/teams/"+team_id;
+	});
+});
+
+$(document).ready(function() {
+    $('.big-screen').click(function(e) {
+        e.preventDefault();
+
+        console.log($(this).attr("href"));
+
+        window.open($(this).attr("href"), "_blank", "height=" + screen.height +",width=" + screen.width + "");
+    });
+});
+
+$(document).ready(function() {
+    $('.return').each(function() {
+        $(this).click(function(event) {
+            event.preventDefault();
+            history.back();
+        });
+    })
+});
+
+$( document ).ready(function() {
+	$("table#matches td.action i.editScore").click(function() {
+		unlockScore($(this));
+	});
+
+	function unlockScore(pencil){
+
+		pencil.parent().children('.editTime').hide();
+
+		var tdAction = pencil.parent();
+		var tdScore1 = tdAction.parent().children("td.score1");
+		var tdScore2 = tdAction.parent().children("td.score2");
+		// Get scores of each team
+		var score1 = tdScore1.text();
+		var score2 = tdScore2.text();
+		// Clear the TDs
+		tdScore1.empty();
+		tdScore2.empty();
+		// Create form inputs
+		var inputScore1 = document.createElement("input");
+		inputScore1.setAttribute('type',"number");
+		inputScore1.setAttribute('min',"0");
+		inputScore1.setAttribute('value',score1);
+		var inputScore2 = document.createElement("input");
+		inputScore2.setAttribute('type',"number");
+		inputScore2.setAttribute('min',"0");
+		inputScore2.setAttribute('value',score2);
+		// Append
+		tdScore1.append(inputScore1);
+		tdScore2.append(inputScore2);
+		// Create and delete icons
+		var checkSquare = document.createElement("i");
+		checkSquare.className += "fa fa-lg fa-check-square-o";
+		checkSquare.setAttribute('aria-hidden',"true");
+		var cross = document.createElement("i");
+		cross.className += "fa fa-lg fa-times";
+		cross.setAttribute('aria-hidden',"true");
+		pencil.after(checkSquare);
+		checkSquare.after(cross);
+
+		pencil.remove();
+
+		// Discard all things
+		$(cross).click(function(){
+
+			//display edit score btn
+			$(this).parent().children('.editTime').show();
+
+			// Remove square and cross icons and recreate pencil icon
+			tdAction.append(pencil);
+			checkSquare.remove();
+			cross.remove();
+
+			// Remove inputs
+			inputScore1.remove();
+			inputScore2.remove();
+			// Place old score on the TDs
+			tdScore1.append(score1);
+			tdScore2.append(score2);
+
+			// Add listener to new pencil recreate
+			pencil.click(function(){
+				unlockScore($(this));
+			});
+
+		});
+
+		$(checkSquare).click(function(){
+			// Success
+			if(valid($(inputScore1).val(), $(inputScore2).val())){
+				ajaxCall(tdAction);
+			}
+			// Error
+			else{
+				displayAlert("danger", "Format de score invalide");
+			}
+		});
+	}
+
+	function displayAlert(type, message){
+		$(".alert").remove();
+
+		switch(type) {
+
+	    	case "danger":
+
+				var errorAlert = $("<div class='alert alert-danger' role='alert'>"+message+"</div>");
+				$("#match-block").prepend(errorAlert);
+				// After 2sec, the alert will disappear
+				disappear(errorAlert);
+		        break;
+
+		    case "success":
+
+				var success = $("<div class='alert alert-success' role='alert'>"+message+"</div>");
+				$("#match-block").prepend(success);
+				// After 2sec, the alert will disappear
+				disappear(success);
+		        break;
+		}
+	}
+
+	function valid(score1, score2){
+		var patternNumeric = /^[0-9]{1,3}$/;
+		if(!patternNumeric.test(score1) || !patternNumeric.test(score2)){
+    		return false;
+    	}else{
+    		return true;
+    	}
+	}
+
+	function disappear(alert){
+		alert.fadeTo(3000, 500).slideUp(500, function(){
+		    alert.slideUp(500);
+		});
+	}
+
+	function ajaxCall(tdAction){
+
+		var tournamentId = $("table#matches").data("tournament");
+		var poolId = $("table#matches").data("pool");
+		var gameId = tdAction.parent().data("game");
+
+		// Create the loader
+		var opac = document.createElement("div");
+		opac.id += "opac";
+		var imgLoader = document.createElement('img');
+		imgLoader.className += "loader";
+		imgLoader.src = '/images/loader.gif';
+		opac.prepend(imgLoader);
+		document.body.prepend(opac);
+
+		$.ajax({
+            url         : '/admin/tournaments/'+tournamentId+'/pools/'+poolId+'/games/'+gameId+'',
+            method      : 'PUT',
+            dataType    : 'json',
+            context     : this,
+            cache       : false,
+            headers     : {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            data        : {
+        		score1 : tdAction.parent().children("td.score1").children("input").val(),
+        		score2 : tdAction.parent().children("td.score2").children("input").val()
+            },
+            error : function(xhr, options, ajaxError) {
+            	if(xhr.status != 200){
+            		displayAlert("danger", "Une erreur est survenue ...");
+            	}
+            	// Remove loader
+				opac.remove();
+            },
+            success : function(data) {
+            	// Create new pencil icon
+            	var pencil = document.createElement("i");
+				pencil.className += "fa fa-lg fa-trophy";
+				pencil.setAttribute('aria-hidden',"true");
+
+				// Create variable i will use
+				var tdScore1 = tdAction.parent().children("td.score1");
+				var tdScore2 = tdAction.parent().children("td.score2");
+				var pencil = $(pencil);
+                var checkSquare = tdAction.children("i.fa-check-square-o");
+                var cross = tdAction.children("i.fa-times");
+
+                // Remove time and display "-"
+                checkSquare.parent().parent().children(".separator").text("-");
+                checkSquare.parent().parent().children(".separator").removeClass("sepTime");
+
+				// Remove square and cross icons and add pencil icon
+				checkSquare.parent().children(".editTime").remove(); //delete pencil edit time
+				tdAction.append(pencil);
+				checkSquare.remove();
+				cross.remove();
+
+				// Place new score on the TDs
+				tdScore1.append(tdScore1.children("input").val());
+				tdScore2.append(tdScore2.children("input").val());
+
+				// Remove inputs
+				tdScore1.children("input").remove();
+				tdScore2.children("input").remove();
+
+				// Add listener to new pencil recreate
+				pencil.click(function(){
+					unlockScore($(this));
+				});
+
+				if ($('.sepTime').length == 0) {
+					if ($('.close-pool-btn').length == 0) {
+						$('h1').append('<a class="greenBtn close-pool-btn">Terminer la poule</a>');
+						closePool();
+					}
+				}
+
+
+				// Update the rankings table
+				updateRankingstable(data);
+
+				// Display success message
+				displayAlert("success", "Changement effectué et classement mis à jour")
+
+				// Remove loader
+				opac.remove();
+
+            }
+        });
+	}
+
+	function updateRankingstable(rankings){
+		// Clear the Tbdy and rebuilt it
+		var tBody = $("#pool-rankings-table tbody");
+		tBody.empty();
+		for (var i = 0; i < rankings.length; i++) {
+			// tr = document.createElement("tr");
+			tr = $('<tr data-id="' + rankings[i]["team_id"] + '" data-rank="' + (i + 1) + '"></tr>');
+			allTds = '<td>'+(i+1)+'</td><td>'+rankings[i]["team"]+'</td><td>'+rankings[i]["score"]+'</td><td>'+rankings[i]["W"]+'</td><td>'+rankings[i]["L"]+'</td><td>'+rankings[i]["D"]+'</td><td>'+rankings[i]["+-"]+'</td>';
+			tr.html(allTds);
+			tBody.append(tr);
+		}
+
+	}
+
+
+});
+
+$( document ).ready(function() {
+
+	$("#shiftMatch").click(function() {
+		// Create the loader
+		var opac = document.createElement("div");
+		opac.id += "opac";
+		var imgLoader = document.createElement('img');
+		imgLoader.className += "loader";
+		imgLoader.src = '/images/loader.gif';
+		opac.prepend(imgLoader);
+		document.body.prepend(opac);
+
+		event.preventDefault(); // cancel the event
+		shiftMatch($(this));
+	});
+
+	function shiftMatch(self){
+
+		var shiftTime = $('#shiftTime').val();
+
+		//if empty or not numeric
+		if(!(shiftTime % 1 === 0 && shiftTime != '')){
+			displayAlert("danger", "Le décalage doit être un numéro entier qui correspond à un temps en minute...");
+			opac.remove();
+			return;
+		}
+
+		var matches = $('#matches tr .sepTime');
+		var tournamentId = $("table#matches").data("tournament");
+		var poolId = $("table#matches").data("pool");
+
+		matches.each(function()
+		{
+			var gameId = $(this).parent().data("game");
+
+		    var oldTime = $(this).text();
+
+			var tempTime = oldTime.split(':');
+			var timeInSecond = tempTime[0] * 60 * 60 + tempTime[1] * 60 ; 
+
+			//add time
+			timeInSecond += (shiftTime * 60)
+		
+			//convert second in string HH:MM:SS
+			var newDate = new Date(null);
+			newDate.setTime( newDate.getTime() + newDate.getTimezoneOffset()*60*1000 ); // make timezone correcte
+			newDate.setSeconds(timeInSecond); 
+			var result = newDate.toISOString().substr(11, 8);
+
+			// create var for the dom display and for the DB , the 0 add in start and the slice fix the number for having 14:05:00 instead of 14:5:0
+			var timeDOM = ('0'+newDate.getHours()).slice(-2)+":"+('0'+newDate.getMinutes()).slice(-2);
+			var timeDB = ('0'+newDate.getHours()).slice(-2)+":"+('0'+newDate.getMinutes()).slice(-2)+":"+('0'+newDate.getSeconds()).slice(-2);
+
+			$.ajax({
+	            url         : '/admin/tournaments/'+tournamentId+'/pools/'+poolId+'/games/'+gameId,
+	            method      : 'PUT',
+	            context     : this,
+	            cache       : false,
+	            headers     : {            
+	                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')        
+	            },
+	            data        : {
+	        		newTime : timeDB
+	            },
+	            error : function(xhr, options, ajaxError) {
+	            	if(xhr.status != 200){
+	            		displayAlert("danger", "Une erreur est survenue ...");
+	            		// Remove loader
+                        opac.remove();
+	            	}
+	            },
+	            success : function(data) {
+	            	$(this).text(timeDOM);
+
+	            	// limit number of alerts to one. This is done because multiple request are made.
+                    if (!$('.alert.alert-success').length) {
+                        displayAlert("success", "Le décalage des heures a bien été effectué");
+                    }
+
+                    if($('#opac').length){
+	                    // Remove loader
+	                    opac.remove();
+                	}
+	            }
+	        });
+
+		});
+
+	
+
+	} //shiftMatch
+
+	function displayAlert(type, message){	
+		$(".alert").remove();
+
+		switch(type) {
+
+	    	case "danger":
+
+				var errorAlert = $("<div class='alert alert-danger' role='alert'>"+message+"</div>");
+				$("#match-block").prepend(errorAlert);
+				// After 2sec, the alert will disappear
+				disappear(errorAlert);
+		        break;
+
+		    case "success":
+
+				var success = $("<div class='alert alert-success' role='alert'>"+message+"</div>");
+				$("#match-block").prepend(success);
+				// After 2sec, the alert will disappear
+				disappear(success);
+		        break;
+		}
+	}
+
+	function disappear(alert){
+		alert.fadeTo(3000, 500).slideUp(500, function(){
+		    alert.slideUp(500);
+		});
+	}
+
+	//EDIT TIME
+	
+	$("table#matches td.action i.editTime").click(function() {
+		unlockTime($(this));
+	});
+
+	function unlockTime(pencil){
+
+		pencil.parent().children('.editScore').hide();
+
+		var tdAction = pencil.parent();
+		var tdTime = tdAction.parent().children("td.separator");
+		var hour = (tdTime.text()).split(":")[0]; 
+		var minute = tdTime.text().split(":")[1];
+
+		var form = '<input type="text" id="formHourTime" value="'+hour+'">:<input type="text" id="formMinuteTime" value="'+minute+'">';
+
+		tdTime.text("");
+		tdTime.append(form); 
+
+		// Create and delete icons
+		var checkSquare = document.createElement("i");
+		checkSquare.className += "fa fa-lg fa-check-square-o";
+		checkSquare.setAttribute('aria-hidden',"true");
+		var cross = document.createElement("i");
+		cross.className += "fa fa-lg fa-times";
+		cross.setAttribute('aria-hidden',"true");
+		pencil.after(checkSquare);
+		checkSquare.after(cross);
+
+		pencil.remove();
+		// Discard all things
+		$(cross).click(function(){
+
+
+			//display edit score btn
+			$(this).parent().children('.editScore').show();
+
+			tdTime.text(hour+":"+minute);
+
+			// Remove square and cross icons and recreate pencil icon
+			tdAction.prepend(pencil);
+			checkSquare.remove();
+			cross.remove();
+
+			// Add listener to new pencil recreate
+			pencil.click(function(){
+				unlockTime($(this));
+			});
+		});
+
+		$(checkSquare).click(function(){
+
+			// Create the loader
+	        var opac = document.createElement("div");
+	        opac.id += "opac";
+	        var imgLoader = document.createElement('img');
+	        imgLoader.className += "loader";
+	        imgLoader.src = '/images/loader.gif';
+	        opac.prepend(imgLoader);
+	        document.body.prepend(opac);
+
+			var newMinute = $("#formMinuteTime").val();
+			var newHour = $("#formHourTime").val();
+			
+			// if not between 0 and 59, not numeric or empty
+			if( newMinute >= 60 || newMinute < 0 || newMinute % 1 !== 0 || newMinute == ''){
+				displayAlert("danger", "Format de temps invalide"); 
+				return;
+			}
+
+			// if not between 0 and 59, not numeric or empty
+			if( newHour >= 24 || newHour < 0 || newHour % 1 !== 0 || newHour == ''){
+				displayAlert("danger", "Format de temps invalide"); 
+				return;
+			}
+
+				
+
+			var tournamentId = $("table#matches").data("tournament");
+			var poolId = $("table#matches").data("pool");
+			var gameId = $(this).parent().parent().data("game");
+			var timeDB = newHour+":"+newMinute+":00";
+
+			$.ajax({
+	            url         : '/admin/tournaments/'+tournamentId+'/pools/'+poolId+'/games/'+gameId,
+	            method      : 'PUT',
+	            context     : this,
+	            cache       : false,
+	            headers     : {            
+	                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')        
+	            },
+	            data        : {
+	        		newTime : timeDB
+	            },
+	            error : function(xhr, options, ajaxError) {
+	            	if(xhr.status != 200){
+	            		displayAlert("danger", "Une erreur est survenue ...");
+	            	}
+	            	// Remove loader
+                    opac.remove();
+	            },
+	            success : function(data) {
+	            	  
+	            	//display edit score btn
+					$(this).parent().children('.editScore').show();
+
+	            	if(newMinute.length == 1)
+	            		newMinute = "0"+newMinute;
+
+	            	if(newHour.length ==1)
+	            		newHour = "0"+newHour;
+
+	            	$(this).parent().parent().children(".separator").text(newHour+":"+newMinute);
+
+					// Remove square and cross icons and recreate pencil icon
+					tdAction.prepend(pencil);
+					checkSquare.remove();
+					cross.remove();
+
+					// Add listener to new pencil recreate
+					pencil.click(function(){
+						unlockTime($(this));
+					});
+
+					displayAlert("success", "Changement d'heure effectué");
+
+					// Remove loader
+                    opac.remove();
+
+	            }
+	        });
+
+		
+		});
+
+	}
+
+
+
+
+});
+$(document).ready(function() {
+    $(".import").click(function() {
+        $(this).parent().submit();
+    });
+});
+
+$(document).ready(function() {
+    closePool();
+});
+
+
+function closePool() {
+    $('.close-pool-btn').click(function() {
+
+        alertConfirmEndPool("Terminer la poule","Etes-vous sur de vouloir terminer la poule, le changement de score sera impossible après cette action !");
+
+    });
+}
+
+
+// Display the popup
+function alertConfirmEndPool(title, text) {
+    swal({
+        title: title,
+        text: text,
+        type: "warning",
+        showCancelButton: true,
+        cancelButtonText: "Annuler",
+        confirmButtonColor: "#DD6B55",
+        confirmButtonText: "Confirmer"
+    },
+    function(isConfirm){
+        if(isConfirm) {
+
+
+            // Create the loader
+            var opac = document.createElement("div");
+            opac.id += "opac";
+            var imgLoader = document.createElement('img');
+            imgLoader.className += "loader";
+            imgLoader.src = '/images/loader.gif';
+            opac.prepend(imgLoader);
+            document.body.prepend(opac);
+
+
+            var tournament_id = $("table#matches").data("tournament");
+            var pool_id       = $("table#matches").data("pool");
+
+            $("#pool-rankings-table tbody tr").each(function() {
+
+                $.ajax({
+                    url         : '/admin/tournaments/' + tournament_id + '/pools/' + pool_id,
+                    method      : 'PUT',
+                    dataType    : 'json',
+                    cache       : false,
+                    headers     : {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    data        : {
+                        team_id         : $(this).data("id"),
+                        rank_in_pool    : $(this).data("rank")
+                    },
+                    success : function(data) {
+
+                        // limit number of alerts to one. This is done because multiple request are made.
+                        if (!$('.alert.alert-success.end-pool').length) {
+                            // Display success message
+                            var success = $("<div class='alert alert-success end-pool' role='alert'>Le poule à bien été terminée</div>");
+                            $("#match-block").prepend(success);
+                            // After 2sec, the alert will disappear
+                            success.fadeTo(3000, 500).slideUp(500, function(){
+                                success.slideUp(500);
+                            });
+                        }
+
+                        $('.action i').each(function() {
+                            $(this).remove();
+                        });
+
+                        $('.close-pool-btn').remove();
+
+                        $('input#shiftTime').parent().remove();
+
+                        // Remove loader
+                        opac.remove();
+                    },
+                    error : function(xhr) {
+                        console.error('readyState: ' + xhr.readyState);
+                        console.error('status: ' + xhr.status);
+                        console.error('responseText: ' + xhr.responseText);
+                        // Remove loader
+                        opac.remove();
+                    }
+                });
+
+            });
+
+        }
+
+    });
+}
+
+//# sourceMappingURL=all.js.map

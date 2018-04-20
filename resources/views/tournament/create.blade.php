@@ -33,6 +33,10 @@
 				{{ Form::select('sport', array('Avec terrains' => $dropdownListSportsWithCourt, 'Sans terrains' => $dropdownListSportsWithNoCourt), null, array('placeholder' => 'Sélectionner', 'class' => 'allSameStyle form-control', 'id' => 'sport')) }}
 			</div>
 			<div class="form-group">
+				{{ Form::label('teamPerPool', "Nombre d'équipes par poule") }}
+				{{ Form::number('teamPerPool', 0, array('class' => 'allSameStyle form-control')) }}
+			</div>
+			<div class="form-group">
 				{{ Form::label('startDate', 'Date de début') }}
 				{{ Form::date('startDate', \Carbon\Carbon::now(), array('class' => 'allSameStyle form-control')) }}
 			</div>

@@ -7,7 +7,7 @@
 			Evénements
 			@if(Auth::check())
 				@if(Auth::user()->role == 'administrator')
-					<a href="{{route('events.create')}}" class="greenBtn" title="Créer un événement">Ajouter</i></a>
+					<a href="{{route('events.create')}}" class="greenBtn" title="Créer un événement">Ajouter</a>
 				@endif
 			@endif
 		</h1>

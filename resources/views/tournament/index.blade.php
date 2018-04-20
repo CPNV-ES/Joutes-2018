@@ -12,7 +12,7 @@
 				Tournois de l'évenement {{ $event->name }}
 				@if(Auth::check() && $fromEvent)
 					@if(Auth::user()->role == 'administrator')
-						<a href="{{route('events.tournaments.create', $event->id)}}" class="greenBtn" title="Créer un tournoi">Ajouter</i></a>
+						<a href="{{route('events.tournaments.create', $event->id)}}" class="greenBtn" title="Créer un tournoi">Ajouter</a>
 					@endif
 				@endif
 			</h1>
