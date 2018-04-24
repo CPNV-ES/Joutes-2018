@@ -38,7 +38,7 @@
 			</div>
 			<div class="form-group">
 				{{ Form::label('img', "Nombre d'équipes par poule") }}
-				{{ Form::number('teamsPerPools', $nbTeamPerPool, array('class' => 'allSameStyle form-control')) }}
+				{{ Form::number('teamsPerPools', $tournament->nbTeamPerPool, array('class' => 'allSameStyle form-control')) }}
 			</div>
 			<div class="form-group">
 				{{ Form::label('startDate', 'Date de début') }}

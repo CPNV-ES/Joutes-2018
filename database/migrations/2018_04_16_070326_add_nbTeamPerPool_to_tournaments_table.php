@@ -14,7 +14,7 @@ class AddNbTeamPerPoolToTournamentsTable extends Migration
     public function up()
     {
         Schema::table('tournaments', function (Blueprint $table) {
-            $table->integer('nbTeamPerPool');
+            $table->integer('nbTeamPerPool')->default(4);
         });
     }
 
