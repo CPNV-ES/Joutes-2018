@@ -13,6 +13,7 @@
 				<a href="{{ route('tournaments.schedule.index', $tournament->id) }}" class="greenBtn big-screen" title="Affichage écran géant">Affichage écran geant</a>
 				<a href="{{ route('tournaments.index', $tournament->id) }}" class="greenBtn" title="Valider le tournoi">Valider le tournoi</a>
 			@endif
+
 		</h1>
 
 		<div class="right">

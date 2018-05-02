@@ -55,4 +55,10 @@ class TournamentController extends Controller
                                       ->with('pools', $pools)
                                       ->with('totalStage', $totalStage);
     }
+
+    public function update(Request $request)
+    {
+        // insert contract generation logic here lol
+
+    }
 }
