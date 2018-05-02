@@ -29,7 +29,6 @@ class EventTournamentController extends Controller
         //$dropdownListTeams = $this->getDropDownListTeams(null);
         return view('tournament.create')->with('dropdownListSportsWithCourt', $dropdownListSportsWithCourt)
                                         ->with('dropdownListSportsWithNoCourt', $dropdownListSportsWithNoCourt)
-                                        ->with('nbTeamPerPool', $request->nbTeamPerPool)
                                         //->with('dropdownListTeams', $dropdownListTeams)
                                         ->with('eventId', $eventId);
     }
@@ -104,6 +103,7 @@ class EventTournamentController extends Controller
             $tournament->start_date = $request->input('startDate')." ". $request->input('startTime').":00";
             $tournament->event_id = $eventId;
             $tournament->img = $imageName;
+            $tournament->nbTeamPerPool = $request->input('teamPerPool');
             $tournament->sport_id = $request->input('sport');
             $tournament->save();
 
