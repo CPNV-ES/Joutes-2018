@@ -175,4 +175,14 @@ class Tournament extends Model
 
         return $tournament_games->sortBy('start_time')->take($limit);
     }
+
+    /**
+     * Get the start_time of the tournament
+     * @return Time as string
+     *
+     * @author Quentin Neves
+     */
+    public function getStartTime() {
+        return $this->start_date->hour.':'.$this->start_date->minute;
+    }
 }
