@@ -1,9 +1,10 @@
 <?php
 /**
- * Created by PhpStorm.
  * User: quentin.neves
  * Date: 01.05.2018
  * Time: 15:33
+ * Description:
+ *      After tournament validation, this model is used to create all pools, contenders and games of the tournament
  */
 
 namespace App;
@@ -28,19 +29,17 @@ class TournamentSetup {
 
     // TODO : Put this method as private
     public function createPools($startDate, $nbTeamPerPool, $maxTeamsNbr){
-        $poolNbr = 1 / $nbTeamPerPool * $maxTeamsNbr; // gives the number of pools to create
-        $poolNames = array();
-        $poolNames[0] = ['A','B','C','D','E','F','G','H'];
-        $poolNames[1] = ['WIN1','WIN2','WIN3','WIN4','FUN1','FUN2','FUN3','FUN4'];
-        $poolNames[2] = ['BEST1','BEST2','BEST3','BEST4','GOOD1','GOOD2','GOOD3','GOOD4'];
+        $nbPools = 1 / $nbTeamPerPool * $maxTeamsNbr; // gives the number of pools to create
+        $this->createPoolsName($nbPools, $nbTeamPerPool);
 
+        // --- Obsolete ---
         // Writes each pool name for the last stage of a tournament
-        for ($i = 1; $i <= $nbTeamPerPool; $i++){
+        for ($i = 1; $i <= $nbPools; $i++){
             $lastPlaceOfPool = $nbTeamPerPool * $i;
             $poolNames[3][$i-1] = 'Finale '. ($lastPlaceOfPool) - 3 .'-'. $lastPlaceOfPool; // e.i.  'Finale 1-4'
         }
 
-        for ($i = 0; $i < $poolNbr; $i++) {
+        for ($i = 0; $i < $nbPools; $i++) {
             $pool = new Pool;
             $pool->start_time = $startDate;
             $pool->end_time = date('d-m-Y H:i', strtotime('+3 days +3 hours', strtotime($startDate->format('Y-m-d'))));
@@ -48,12 +47,45 @@ class TournamentSetup {
 
     }
 
-    private function createPoolsName(){
-        // for loop for each stage
-        // TODO: See if there's always 4 stages in a tournament
-        for ($i = 0; $i < 4; $i++){
+    /**
+     * Create all pools names
+     *
+     * @param $nbPools          - Total number of pool in tournament
+     * @param $nbTeamsPerPool   - Number of teams per pool
+     * @return Pools names as an Array of string
+     *
+     * @author Quentin Neves
+     */
+    private function createPoolsName($nbPools, $nbTeamsPerPool){
+        // TODO: Check if there's always 4 stages in a tournament and adapt the code accordingly
+        $nbStages = 4; // default value
+        $poolNames = array();
 
+        // for loop for each stage
+        for ($s = 0; $s < $nbStages; $s++) {
+            for ($p = 0; $p < $nbPools; $p++) {
+                switch ($s){
+                    // case 0 = stage 1
+                    case 0:
+                        $poolNames[$s][$p] = 'Poule'.$s;
+                        break;
+                    case 1:
+                        if ($p < $nbPools / 2) $poolNames[$s][$p] = 'WIN'.$s;
+                        else $poolNames[$s][$p] = 'FUN'.$p;
+                        break;
+                    case 2:
+                        if ($p < $nbPools / 2) $poolNames[$s][$p] = 'BEST'.$s;
+                        else $poolNames[$s][$p] = 'GOOD'.$p;
+                        break;
+                    // final pool
+                    case 3:
+                        $lastPlaceOfPool = $nbTeamsPerPool * $p;
+                        $poolNames[$s][$p] = 'Finale '. ($lastPlaceOfPool) - ($nbTeamsPerPool- 1) .'-'. $lastPlaceOfPool; // e.i. 'Finale 1-4' for a 4 teams per pool tournament
+                        break;
+                }
+            }
         }
+        return $poolNames;
     }
 
     private function createContenders(){
