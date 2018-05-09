@@ -30,7 +30,8 @@ class TournamentSetup {
     // TODO : Put this method as private
     public function createPools($startDate, $nbTeamPerPool, $maxTeamsNbr){
         $nbPools = 1 / $nbTeamPerPool * $maxTeamsNbr; // gives the number of pools to create
-        $this->createPoolsName($nbPools, $nbTeamPerPool);
+        $nbPools = 5;
+        $poolsName = $this->createPoolsName($nbPools, $nbTeamPerPool);
 
         // --- Obsolete ---
         // Writes each pool name for the last stage of a tournament
@@ -59,7 +60,7 @@ class TournamentSetup {
     private function createPoolsName($nbPools, $nbTeamsPerPool){
         // TODO: Check if there's always 4 stages in a tournament and adapt the code accordingly
         $nbStages = 4; // default value
-        $poolNames = array();
+        $poolsName = array();
 
         // for loop for each stage
         for ($s = 0; $s < $nbStages; $s++) {
@@ -67,25 +68,26 @@ class TournamentSetup {
                 switch ($s){
                     // case 0 = stage 1
                     case 0:
-                        $poolNames[$s][$p] = 'Poule'.$s;
+                        $poolsName[$s][$p] = 'Poule '.($p + 1); // all +1 are just here because the index starts at 0
                         break;
                     case 1:
-                        if ($p < $nbPools / 2) $poolNames[$s][$p] = 'WIN'.$s;
-                        else $poolNames[$s][$p] = 'FUN'.$p;
+                        if ($p < $nbPools / 2) $poolsName[$s][$p] = 'WIN '.($p + 1);
+                        else $poolsName[$s][$p] = 'FUN '.($p - ($nbPools/2) + 1); // not working on odd numbers
                         break;
                     case 2:
-                        if ($p < $nbPools / 2) $poolNames[$s][$p] = 'BEST'.$s;
-                        else $poolNames[$s][$p] = 'GOOD'.$p;
+                        if ($p < $nbPools / 2) $poolsName[$s][$p] = 'BEST '.($p + 1);
+                        else $poolsName[$s][$p] = 'GOOD '.($p - ($nbPools/2) + 1); // not working on odd numbers
                         break;
                     // final pool
                     case 3:
-                        $lastPlaceOfPool = $nbTeamsPerPool * $p;
-                        $poolNames[$s][$p] = 'Finale '. ($lastPlaceOfPool) - ($nbTeamsPerPool- 1) .'-'. $lastPlaceOfPool; // e.i. 'Finale 1-4' for a 4 teams per pool tournament
+                        $lastPlaceOfPool = $nbTeamsPerPool * ($p + 1);
+                        $poolsName[$s][$p] = 'Finale '. (($lastPlaceOfPool) - ($nbTeamsPerPool- 1)) .'-'. $lastPlaceOfPool; // e.i. 'Finale 1-4' for a 4 teams per pool tournament
                         break;
                 }
             }
         }
-        return $poolNames;
+        dd($poolsName);
+        return $poolsName;
     }
 
     private function createContenders(){
