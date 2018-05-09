@@ -48,6 +48,14 @@ class TournamentSetup {
 
     }
 
+    private function createPoolsName(){
+        // for loop for each stage
+        // TODO: See if there's always 4 stages in a tournament
+        for ($i = 0; $i < 4; $i++){
+
+        }
+    }
+
     private function createContenders(){
 
     }
