@@ -31,4 +31,9 @@ class User extends Model implements Authenticatable
         return $this->role;
     }
 
+    public function participant()
+    {
+        return $this->hasOne('App\Participant');
+    }
+
 }

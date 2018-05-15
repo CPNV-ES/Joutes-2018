@@ -16,6 +16,11 @@ class Participant extends Model
         return $this->belongsToMany('App\Team')->withPivot('isCaptain');
     }
 
+    public function user()
+    {
+        return $this->belongsTo('App\User');
+    }
+
     public function tournaments() {
         // get event teams
         $teams = $this->teams;

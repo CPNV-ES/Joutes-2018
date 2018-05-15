@@ -17,6 +17,15 @@ class EventController extends Controller
      */
     public function index(Request $request) {
 
+        //Check for off-line user
+        if (isset($_ENV['OFFLINE'])) {
+            $offline = $_ENV['OFFLINE'];
+        }
+        else
+        {
+            $offline = "NO";
+        }
+
         $events = Event::all()->sortByDesc("id");
 
         // check is it's an api request
@@ -30,7 +39,7 @@ class EventController extends Controller
             }
         }
 
-        return view('event.index')->with('events', $events);
+        return view('event.index')->with('events', $events)->with('offline', $offline);
 
     }
 

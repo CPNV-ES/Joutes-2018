@@ -19,15 +19,42 @@
     </head>
     <body>
 
+    <div id="login_popup" class="modal fade" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-sm" role="document">
+            <div class="modal-content removeRaduis">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">Connect as</h4>
+                </div>
+                <div class="modal-body">
+                    {{ Form::open(array('url' => route('admin.store'), 'method' => 'post', 'id' => 'login-form')) }}
+                    {{ Form::radio('role', 'administrator', true, ['class' => 'roles']) }} Administrator <br>
+                    {{ Form::radio('role', 'participant', null, ['class' => 'roles']) }} Participant <br>
+                    {{ Form::radio('role', 'writer', null, ['class' => 'roles']) }} Writer <br>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default removeRaduis" data-dismiss="modal">Fermer</button>
+                    <button type="submit" class="btn btn-primary btn-login-form">Connexion</button>
+                </div>
+                {{ Form::close() }}
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+
     <div class="navbar-header">
         <div class="user-infos">
             @if(Auth::check())
                 <span class="username">{{ Auth::user()->username }}</span>
                 {{ Form::open(array('url' => route('admin.destroy', 0), 'method' => 'delete')) }}
-                    {{ Form::button('<i class="fa fa-power-off" aria-hidden="true"></i>', array('type' => 'submit','class' => 'logout')) }}
+                {{ Form::button('<i class="fa fa-power-off" aria-hidden="true"></i>', array('type' => 'submit','class' => 'logout')) }}
                 {{ Form::close() }}
             @else
-                <span id="login_link"><a href="/saml2/login">Connexion</a></span>
+                @if($offline == "YES")
+                    <span id="login_link">Off-Line Connexion</span>
+                @else
+                    <span><b><a href="/saml2/login">Connexion</a></b></span>
+                @endif
             @endif
         </div>
     </div>
