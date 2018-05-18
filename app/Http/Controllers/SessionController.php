@@ -48,7 +48,15 @@ class SessionController extends Controller
      */
     public function destroy($id)
     {
-        $offline = $_ENV['OFFLINE'];
+        //Check for off-line user
+        if (isset($_ENV['OFFLINE'])) {
+            $offline = $_ENV['OFFLINE'];
+        }
+        else
+        {
+            $offline = "NO";
+        }
+
         // Check the user type (off-line user or intranet user)
         if ($offline == "YES") {
             //delete off-line user
@@ -57,6 +65,14 @@ class SessionController extends Controller
             return redirect(route('events.index'));
         }
         else {
+            //Check for error
+            if ((Auth::user()->username == "ADMIN Tester") || (Auth::user()->username == "PARTICIPANT Tester") || (Auth::user()->username == "WRITER Tester"))
+            {
+                //delete off-line user
+                $this->delete_offline_user(Auth::user()->username, Auth::user()->role);
+                Auth::logout();
+                return redirect(route('events.index'));
+            }
             return redirect()->route('saml_logout');
         }
     }

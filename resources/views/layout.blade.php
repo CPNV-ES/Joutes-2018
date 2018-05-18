@@ -50,7 +50,7 @@
                 {{ Form::button('<i class="fa fa-power-off" aria-hidden="true"></i>', array('type' => 'submit','class' => 'logout')) }}
                 {{ Form::close() }}
             @else
-                @if($offline == "YES")
+                @if (isset($_ENV['OFFLINE']) && $_ENV['OFFLINE'] == "YES")
                     <span id="login_link">Off-Line Connexion</span>
                 @else
                     <span><b><a href="/saml2/login">Connexion</a></b></span>
