@@ -16,9 +16,13 @@ class ExampleTest extends TestCase
      */
     public function testBasicExample()
     {
+        $this->testPoolsNames();
+    }
+
+    private function testPoolsNames () {
         $setup = new TournamentSetup;
         $tournament = Tournament::find(1);
 
-        $setup->createPools($tournament->start_date, 4, 32);
+        $setup->createPools($tournament, 4, 32);
     }
 }

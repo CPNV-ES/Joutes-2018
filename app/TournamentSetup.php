@@ -22,29 +22,37 @@ class TournamentSetup {
         // get max team number per tournament
 
 
-        $this->createPools($tournament->start_date, $nbTeamPerPool, $maxTeamsNbr, $tournament);
+        $this->createPools($tournament, $nbTeamPerPool, $maxTeamsNbr);
         $this->createContenders();
         $this->createGame();
     }
 
     // TODO : Put this method as private
-    public function createPools($startDate, $nbTeamPerPool, $maxTeamsNbr){
+    public function createPools($tournament, $nbTeamPerPool, $maxTeamsNbr){
         $nbPools = 1 / $nbTeamPerPool * $maxTeamsNbr; // gives the number of pools to create
-        $nbPools = 5;
-        $poolsName = $this->createPoolsName($nbPools, $nbTeamPerPool);
+        $nbStages = 4;
+        $startTime = $tournament->start_date;
+        $endTime = date('H:i:s', strtotime('+2 hours', strtotime($startTime->format('Y-m-d'))));
+        $poolsName = $this->createPoolsName($nbPools, $nbStages, $tournament);
+        //dd($poolsName);
 
-        // --- Obsolete ---
-        // Writes each pool name for the last stage of a tournament
-        for ($i = 1; $i <= $nbPools; $i++){
-            $lastPlaceOfPool = $nbTeamPerPool * $i;
-            $poolNames[3][$i-1] = 'Finale '. ($lastPlaceOfPool) - 3 .'-'. $lastPlaceOfPool; // e.i.  'Finale 1-4'
+        for ($stage = 1; $stage <= $nbStages; $stage++){
+            for ($pool = 1; $pool <= $nbPools; $pool++){
+                $truc = [
+                    'start_time' => date("H:i:s", strtotime($startTime)),
+                    'end_time' => $endTime,
+                    'poolName' => $poolsName[$stage][$pool],
+                    'stage' => $stage,
+                    'poolSize' => $nbTeamPerPool,
+                    'isFinished' => 0,
+                    'tournament_id' => $tournament->id,
+                    'mode_id' => 1,
+                    'gameType_id' => 1
+                ];
+                $thepool[$stage][$pool] = Pool::create($truc);
+            }
         }
-
-        for ($i = 0; $i < $nbPools; $i++) {
-            $pool = new Pool;
-            $pool->start_time = $startDate;
-            $pool->end_time = date('d-m-Y H:i', strtotime('+3 days +3 hours', strtotime($startDate->format('Y-m-d'))));
-        }
+        dd($thepool);
 
     }
 
@@ -52,41 +60,21 @@ class TournamentSetup {
      * Create all pools names
      *
      * @param $nbPools          - Total number of pool in tournament
-     * @param $nbTeamsPerPool   - Number of teams per pool
+     * @param $tournament       - Current tournament
      * @return Pools names as an Array of string
      *
      * @author Quentin Neves
      */
-    private function createPoolsName($nbPools, $nbTeamsPerPool){
-        // TODO: Check if there's always 4 stages in a tournament and adapt the code accordingly
-        $nbStages = 4; // default value
+    private function createPoolsName($nbPools, $nbStages, $tournament){
+        // TODO: Adapt to x stages
         $poolsName = array();
+        $sport = $tournament->getSport();
 
-        // for loop for each stage
-        for ($s = 0; $s < $nbStages; $s++) {
-            for ($p = 0; $p < $nbPools; $p++) {
-                switch ($s){
-                    // case 0 = stage 1
-                    case 0:
-                        $poolsName[$s][$p] = 'Poule '.($p + 1); // all +1 are just here because the index starts at 0
-                        break;
-                    case 1:
-                        if ($p < $nbPools / 2) $poolsName[$s][$p] = 'WIN '.($p + 1);
-                        else $poolsName[$s][$p] = 'FUN '.($p - ($nbPools/2) + 1); // not working on odd numbers
-                        break;
-                    case 2:
-                        if ($p < $nbPools / 2) $poolsName[$s][$p] = 'BEST '.($p + 1);
-                        else $poolsName[$s][$p] = 'GOOD '.($p - ($nbPools/2) + 1); // not working on odd numbers
-                        break;
-                    // final pool
-                    case 3:
-                        $lastPlaceOfPool = $nbTeamsPerPool * ($p + 1);
-                        $poolsName[$s][$p] = 'Finale '. (($lastPlaceOfPool) - ($nbTeamsPerPool- 1)) .'-'. $lastPlaceOfPool; // e.i. 'Finale 1-4' for a 4 teams per pool tournament
-                        break;
-                }
+        for ($stage = 1; $stage <= $nbStages; $stage++) {
+            for ($pool = 1; $pool <= $nbPools; $pool++) {
+                $poolsName[$stage][$pool] = $sport." ".$stage."-".$pool; // i.e. "Badminton 1-3"
             }
         }
-        dd($poolsName);
         return $poolsName;
     }
 

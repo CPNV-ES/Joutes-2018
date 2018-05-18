@@ -185,4 +185,14 @@ class Tournament extends Model
     public function getStartTime() {
         return $this->start_date->hour.':'.$this->start_date->minute;
     }
+
+    /**
+     * Get the sport of the tournament
+     * @return Time as string
+     *
+     * @author Quentin Neves
+     */
+    public function getSport() {
+        return Sport::find($this->sport_id)->name;
+    }
 }

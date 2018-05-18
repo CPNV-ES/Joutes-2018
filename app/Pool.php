@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\Auth;
 class Pool extends Model
 {
     public $timestamps = false; // Disable timestamp created_at etc.
-    //protected $fillable = array('fk_sports', 'name'); // -> We have to define all data we use on our courts table (For use : ->all())
+    protected $fillable = array('start_time', 'end_time', 'poolName', 'stage', 'poolSize', 'isFinished', 'tournament_id', 'mode_id', 'gameType_id'); // -> We have to define all data we use on our courts table (For use : ->all())
 
     /**
     * Create a new belongs to relationship instance between pool and Tournament

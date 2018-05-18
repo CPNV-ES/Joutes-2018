@@ -37,6 +37,10 @@
 				{{ Form::number('teamPerPool', 0, array('class' => 'allSameStyle form-control')) }}
 			</div>
 			<div class="form-group">
+				{{ Form::label('nbStages', "Nombre d'étapes") }}
+				{{ Form::number('nbStages', 0, array('class' => 'allSameStyle form-control')) }}
+			</div>
+			<div class="form-group">
 				{{ Form::label('startDate', 'Date de début') }}
 				{{ Form::date('startDate', \Carbon\Carbon::now(), array('class' => 'allSameStyle form-control')) }}
 			</div>
@@ -44,12 +48,6 @@
 				{{ Form::label('startTime', 'Heure de début') }}
 				{{ Form::text('startTime', null, array('placeholder' => 'hh:mm', 'class'=>'form-control')) }}
 			</div>
-			<!--
-			<div class="form-group">
-				{{-- Form::label('teams', 'Équipes participantes') }}
-				{{ Form::select('teams[]', $dropdownListTeams, null, array('class' => 'allSameStyle form-control', 'id' => 'multiple-teams-select', 'multiple')) --}}
-			</div>
-			-->
 
 			<div class="form-group">
 				{{ Form::label('img', 'Image') }}
