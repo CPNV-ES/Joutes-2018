@@ -55,7 +55,7 @@ class LoginListener
 			$partecipant = new \App\Participant();
 			$partecipant->first_name = $userData['attributes']['givenName'][0];
             $partecipant->last_name = $userData['attributes']['sn'][0];
-            $partecipant->save();
+            $user->participant()->save($partecipant);
 		}
         
         //insert sessionIndex and nameId into session
