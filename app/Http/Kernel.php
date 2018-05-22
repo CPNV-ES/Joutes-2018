@@ -58,5 +58,6 @@ class Kernel extends HttpKernel
         'checkIsAdmin' => \App\Http\Middleware\CheckIsAdmin::class,
         'checkIsWriterOrAdmin' => \App\Http\Middleware\CheckIsWriterOrAdmin::class,
         'samlauth' => \App\Http\Middleware\SamlAuth::class,
+        'checkIsParticipant' => \App\Http\Middleware\CheckIsParticipant::class
     ];
 }

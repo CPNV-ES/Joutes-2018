@@ -50,3 +50,8 @@ Route::group(['middleware'=>'checkIsWriterOrAdmin', 'prefix'=>'admin', 'namespac
 	Route::resource('tournaments.pools.games', 'TournamentPoolGameController', ['only' => 'update']);
 	Route::resource('tournaments.pools', 'TournamentPoolController', ['only' => 'update']);
 });
+
+/* Authorization for Participant*/
+Route::group(['middleware'=>'checkIsParticipant', 'namespace' => 'Participant'],function(){
+    Route::resource('profile', 'ProfileController', ['only' => ['index', 'update']]);
+});
