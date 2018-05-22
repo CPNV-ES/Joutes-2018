@@ -49,7 +49,7 @@ class LoginListener
 			$user->password = bcrypt(str_random(8));
             $user->last_name = $userData['attributes']['sn'][0];
             $user->first_name = $userData['attributes']['givenName'][0];
-			$user->role = "writer";
+			$user->role = "participant";
 			$user->save();
 
 			$partecipant = new \App\Participant();
