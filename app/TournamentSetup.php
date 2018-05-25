@@ -34,7 +34,6 @@ class TournamentSetup {
         $startTime = $tournament->start_date;
         $endTime = date('H:i:s', strtotime('+2 hours', strtotime($startTime->format('Y-m-d'))));
         $poolsName = $this->createPoolsName($nbPools, $nbStages, $tournament);
-        //dd($poolsName);
 
         for ($stage = 1; $stage <= $nbStages; $stage++){
             for ($pool = 1; $pool <= $nbPools; $pool++){
@@ -52,7 +51,6 @@ class TournamentSetup {
                 $thepool[$stage][$pool] = Pool::create($truc);
             }
         }
-        dd($thepool);
 
     }
 
@@ -66,19 +64,17 @@ class TournamentSetup {
      * @author Quentin Neves
      */
     private function createPoolsName($nbPools, $nbStages, $tournament){
-        // TODO: Adapt to x stages
         $poolsName = array();
         $sport = $tournament->getSport();
 
-        for ($stage = 1; $stage <= $nbStages; $stage++) {
-            for ($pool = 1; $pool <= $nbPools; $pool++) {
-                $poolsName[$stage][$pool] = $sport." ".$stage."-".$pool; // i.e. "Badminton 1-3"
-            }
-        }
+        // create each pool name, i.e. "Badminton 1-3"
+        for ($stage = 1; $stage <= $nbStages; $stage++) { for ($pool = 1; $pool <= $nbPools; $pool++) { $poolsName[$stage][$pool] = $sport." ".$stage."-".$pool; } }
+
         return $poolsName;
     }
 
-    private function createContenders(){
+    private function createContenders($tournament){
+        // table fields : rank_in_pool, pool_id, team_id, pool_from_id
 
     }
 
