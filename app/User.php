@@ -36,4 +36,12 @@ class User extends Model implements Authenticatable
         return $this->hasOne('App\Participant');
     }
 
+    public function teams()
+    {
+        $participant = Auth::user()->participant()->first();
+        $teams = $participant->teams;
+        return $teams;
+        //return $this->hasManyThrough('App\Team', 'App\Participant', 'team_id','user_id' );
+    }
+
 }

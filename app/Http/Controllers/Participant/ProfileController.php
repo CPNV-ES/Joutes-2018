@@ -16,14 +16,33 @@ class ProfileController extends Controller
 
     public function index()
     {
-        $currentUserId = Auth::user()->id;
-        $currentPartecipant = Participant::where('user_ID', $currentUserId)->get()->first();
-        $teams = Participant::find($currentPartecipant->id)->teamss;
+        $participant = Auth::user()->participant()->first();
+        $teams = $participant->teams;
         return view('profile.index')->with('teams', $teams);
     }
 
     public function update()
     {
         return view('profile.index');
+    }
+
+    public function create(Request $request)
+    {
+
+    }
+
+    public function store(Request $request)
+    {
+
+    }
+
+    public function show()
+    {
+
+    }
+
+    public function destry()
+    {
+
     }
 }

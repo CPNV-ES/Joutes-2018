@@ -92,12 +92,23 @@ $( document ).ready(function() {
 $( document ).ready(function() {
 	/* FORM VALIDATIONS */
 	// @author Dessaules Loïc
+	// @edit Davide Carboni
 	$('.formSend').click(function(){
 		var form = $(this).parent().parent();
 		var formId = form.attr('id');
 		var error = '';
 
 		switch(formId) {
+            case "formTeam":
+                var nameValue = $('#formTeam #name').val();
+
+                var patternName = /^[a-zA-Z0-9-_ ]{3,20}$/;
+
+                if(!patternName.test(nameValue)){
+                    error += 'Le champ Nom ne doit pas être vide et doit avoir entre 3 et 45 caractères.<br>';
+                }
+                break;
+
 		    case "formSport":
 		    	var nameValue = $('#formSport #name').val();
 		    	var descriptionValue = $('#formSport #description').val();

@@ -7,6 +7,8 @@ use App\Team;
 use App\Participant;
 use Illuminate\Http\Request;
 use Cookie;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Auth;
 
 class TeamController extends Controller
 {
@@ -32,7 +34,7 @@ class TeamController extends Controller
      */
     public function create()
     {
-        //
+        return view('team.create');
     }
 
     /**
@@ -43,7 +45,35 @@ class TeamController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        /* LARAVEL VALIDATION */
+        // create the validation rules
+        $rules = array(
+            'name' => 'required|min:3|max:35|unique:teams,name'
+        );
+
+        $validator = Validator::make($request->all(), $rules);
+
+        if ($validator->fails()) {
+            return view('team.create')->withErrors($validator->errors());
+        } else {
+            $team = new Team();
+            $team->name = $request->input('name');
+            $team->tournament_id = null;
+            $team-> validation = 0;
+            $team->owner_id = Auth::user()->id;
+            $team->save();
+
+            if (Auth::user()->role == "participant") {
+                $participant = Auth::user()->participant()->first();
+                $team->participants()->attach([$participant->id => array('isCaptain' => '0' )]); //add the link row in intemrediate table
+            }
+
+            if (Auth::user()->role == "administrator") {
+                $team->save();
+            }
+
+            return redirect()->route('profile.index');
+        }
     }
 
     /**

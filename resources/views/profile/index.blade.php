@@ -6,6 +6,13 @@
 
         <h1>{{ Auth::user()->username }}</h1>
 
+        <div>
+            <h1>
+                Equipes
+                <a href="{{route('teams.create')}}" class="greenBtn" title="Créer un equipes">Céer</a>
+            </h1>
+        </div>
+
         <div class="row">
             <div class="col-lg-6">
                 <table id="tournament-teams-table" class="table table-striped table-bordered table-hover" cellspacing="0" width="100%">
