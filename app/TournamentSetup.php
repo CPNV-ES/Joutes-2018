@@ -16,21 +16,19 @@ class TournamentSetup {
     public function generateTournament($id){
 
         $tournament = Tournament::find($id);
-        $nbTeams = count($tournament->teams());
         $nbTeamPerPool = $tournament->nbTeamPerPool;
-        $maxTeamsNbr = 4;
-        // get max team number per tournament
 
+        //TODO: Add a "nbMaxTeam" and "nbStage" to tournament table
+        $nbMaxTeam = 4;
+        $nbStages = 4;
 
-        $this->createPools($tournament, $nbTeamPerPool, $maxTeamsNbr);
-        $this->createContenders();
+        $this->createPools($tournament, $nbTeamPerPool, $nbMaxTeam, $nbStages);
+        $this->createContenders($tournament);
         $this->createGame();
     }
 
-    // TODO : Put this method as private
-    public function createPools($tournament, $nbTeamPerPool, $maxTeamsNbr){
+    private function createPools($tournament, $nbTeamPerPool, $maxTeamsNbr, $nbStages){
         $nbPools = 1 / $nbTeamPerPool * $maxTeamsNbr; // gives the number of pools to create
-        $nbStages = 4;
         $startTime = $tournament->start_date;
         $endTime = date('H:i:s', strtotime('+2 hours', strtotime($startTime->format('Y-m-d'))));
         $poolsName = $this->createPoolsName($nbPools, $nbStages, $tournament);
@@ -48,10 +46,12 @@ class TournamentSetup {
                     'mode_id' => 1,
                     'gameType_id' => 1
                 ];
+
+                dd($truc);
+
                 $thepool[$stage][$pool] = Pool::create($truc);
             }
         }
-
     }
 
     /**
@@ -73,9 +73,13 @@ class TournamentSetup {
         return $poolsName;
     }
 
-    private function createContenders($tournament){
+    public function createContenders($tournament){
         // table fields : rank_in_pool, pool_id, team_id, pool_from_id
+        $teamsCollec = $tournament::with('teams')->get();
 
+        dd($teamsCollec);
+
+        return view('tournament.index')->with('teamsCollec', $teamsCollec);
     }
 
     private function createGame(){

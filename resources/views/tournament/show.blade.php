@@ -11,7 +11,7 @@
 			{{ $tournament->name }}
 			@if (Auth::check() && (Auth::user()->role == 'administrator' || Auth::user()->role == 'writer'))
 				<a href="{{ route('tournaments.schedule.index', $tournament->id) }}" class="greenBtn big-screen" title="Affichage écran géant">Affichage écran geant</a>
-				<a href="{{ route('tournaments.index', $tournament->id) }}" class="greenBtn" title="Valider le tournoi">Valider le tournoi</a>
+				<a href="{{ route('tournamentSetup.update', $tournament->id) }}" class="greenBtn" title="Valider le tournoi">Valider le tournoi</a>
 			@endif
 
 		</h1>

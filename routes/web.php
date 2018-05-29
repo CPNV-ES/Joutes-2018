@@ -23,6 +23,7 @@ Route::resource('tournaments.pools', 'TournamentPoolController');
 Route::resource('admin', 'SessionController', ['only' => ['store', 'destroy']]);
 Route::resource('tournaments.schedule', 'ScheduleController', ['only' => ['index']]);
 
+
 # Route to download apk
 Route::get('/download', function() {
     return view('download.index');
@@ -43,6 +44,7 @@ Route::group(['middleware'=>'checkIsAdmin', 'prefix'=>'admin', 'namespace' => 'A
 	Route::resource('participants', 'ParticipantController');
 	Route::resource('teams.participants', 'TeamParticipantController', ['only' => ['destroy', 'store']]);
     Route::resource('events.import', 'EventImportController', ['only' => ['store']]);
+    Route::resource('tournamentSetup', 'TournamentSetupController', ['only' => ['update']]);
 });
 
 /* Authorization for Writer or Admin*/

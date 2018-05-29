@@ -58,7 +58,6 @@ class TournamentController extends Controller
 
     public function update(Request $request)
     {
-        // insert contract generation logic here lol
 
     }
 }
