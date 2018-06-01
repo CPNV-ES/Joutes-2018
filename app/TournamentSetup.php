@@ -11,47 +11,53 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use App\Tournament;
+use PhpParser\Node\Expr\Array_;
 
 class TournamentSetup {
+
     public function generateTournament($id){
 
         $tournament = Tournament::find($id);
         $nbTeamPerPool = $tournament->nbTeamPerPool;
+        $pools = array();
 
         //TODO: Add a "nbMaxTeam" and "nbStage" to tournament table
         $nbMaxTeam = 4;
         $nbStages = 4;
 
-        $this->createPools($tournament, $nbTeamPerPool, $nbMaxTeam, $nbStages);
-        $this->createContenders($tournament);
+        $pools = $this->createPools($tournament, $nbTeamPerPool, $nbMaxTeam, $nbStages);
+        $this->createContenders($tournament, pools);
         $this->createGame();
     }
 
-    private function createPools($tournament, $nbTeamPerPool, $maxTeamsNbr, $nbStages){
-        $nbPools = 1 / $nbTeamPerPool * $maxTeamsNbr; // gives the number of pools to create
+        public function createPools($tournament, $poolSize, $maxTeamsNbr, $nbStages){
+        $nbPools = 1 / $poolSize * $maxTeamsNbr; // gives the number of pools to create
         $startTime = $tournament->start_date;
         $endTime = date('H:i:s', strtotime('+2 hours', strtotime($startTime->format('Y-m-d'))));
         $poolsName = $this->createPoolsName($nbPools, $nbStages, $tournament);
 
+        //TODO : Replace this with correct eloquent usage
         for ($stage = 1; $stage <= $nbStages; $stage++){
-            for ($pool = 1; $pool <= $nbPools; $pool++){
-                $truc = [
-                    'start_time' => date("H:i:s", strtotime($startTime)),
-                    'end_time' => $endTime,
-                    'poolName' => $poolsName[$stage][$pool],
-                    'stage' => $stage,
-                    'poolSize' => $nbTeamPerPool,
-                    'isFinished' => 0,
-                    'tournament_id' => $tournament->id,
-                    'mode_id' => 1,
-                    'gameType_id' => 1
-                ];
+            for ($poolCount = 1; $poolCount <= $nbPools; $poolCount++){
+                $pool = new Pool;
 
-                dd($truc);
+                $pool->start_time = date("H:i:s", strtotime($startTime));
+                $pool->end_time = $endTime;
+                $pool->poolName = $poolsName[$stage][$poolCount];
+                $pool->stage = $stage;
+                $pool->poolSize = $poolSize;
+                $pool->isFinished = false;
+                $pool->tournament_id = $tournament->id;
+                $pool->mode_id = 1;
+                $pool->gameType_id = 1;
 
-                $thepool[$stage][$pool] = Pool::create($truc);
+                $pool->save();
+
+                $pools[$stage][$poolCount] = $pool;
             }
         }
+
+        return $pools;
     }
 
     /**
@@ -65,21 +71,30 @@ class TournamentSetup {
      */
     private function createPoolsName($nbPools, $nbStages, $tournament){
         $poolsName = array();
-        $sport = $tournament->getSport();
 
         // create each pool name, i.e. "Badminton 1-3"
-        for ($stage = 1; $stage <= $nbStages; $stage++) { for ($pool = 1; $pool <= $nbPools; $pool++) { $poolsName[$stage][$pool] = $sport." ".$stage."-".$pool; } }
+        for ($stage = 1; $stage <= $nbStages; $stage++) { for ($pool = 1; $pool <= $nbPools; $pool++) { $poolsName[$stage][$pool] = $tournament->getSport() ." ".$stage."-".$pool; } }
 
         return $poolsName;
     }
 
-    public function createContenders($tournament){
+    public function createContenders($tournament, $pools){
         // table fields : rank_in_pool, pool_id, team_id, pool_from_id
-        $teamsCollec = $tournament::with('teams')->get();
+        $teams = $tournament->teams;
 
-        dd($teamsCollec);
+        for ($i = 0; $i < count($teams); $i++) {
+            $contenders = new Contender;
 
-        return view('tournament.index')->with('teamsCollec', $teamsCollec);
+            $contenders->rank_in_pool = null;
+            $contenders->pool_id = $pools[0][$i];
+            $contenders->team_id = $i;
+            $contenders->team_id = $i + 1;
+            $contenders->pool_from_id = 'mdr';
+
+            $contenders->save();
+        }
+
+        dd(count($pools));
     }
 
     private function createGame(){
