@@ -15,30 +15,53 @@ use PhpParser\Node\Expr\Array_;
 
 class TournamentSetup {
 
+    /**
+     * Main function that decide how to create a tournament
+     *
+     * @param $tournament       - Current tournament
+     * @param $poolSize         - Number of teams in a pool
+     * @param $pools            - Array of created pools, used in contenders creation
+     *
+     * @author Quentin Neves
+     */
     public function generateTournament($id){
 
         $tournament = Tournament::find($id);
-        $nbTeamPerPool = $tournament->nbTeamPerPool;
-        $pools = array();
+        $poolSize = $tournament->nbTeamPerPool;
 
-        //TODO: Add a "nbMaxTeam" and "nbStage" to tournament table
+        //TODO: Add a "nbMaxTeam" and "nbStage" to tournament table and delete these variable
         $nbMaxTeam = 4;
         $nbStages = 4;
 
-        $pools = $this->createPools($tournament, $nbTeamPerPool, $nbMaxTeam, $nbStages);
-        $this->createContenders($tournament, pools);
+        $pools = $this->createPools($tournament, $poolSize, $nbMaxTeam, $nbStages);
+        $contenders = $this->createContenders($tournament);
         $this->createGame();
     }
 
-        public function createPools($tournament, $poolSize, $maxTeamsNbr, $nbStages){
-        $nbPools = 1 / $poolSize * $maxTeamsNbr; // gives the number of pools to create
+    /**
+     * @param $tournament   - Current tournament
+     * @param $poolSize     - Number of teams in a pool
+     * @param $maxTeamsNbr  - Total number of teams participating to the tournament
+     * @param $nbStages     - Total number of stages in the tournament
+     * @return $pools       - Array of created pools, used for contenders creation
+     *
+     * @author Quentin Neves
+     */
+    private function createPools($tournament, $poolSize, $maxTeamsNbr, $nbStages){
+
+        // Calculate the required number of pools
+        $nbPools = 1 / $poolSize * $maxTeamsNbr;
+
         $startTime = $tournament->start_date;
+
+        // TODO: Adapt the strtotime depending on tournament's sport
         $endTime = date('H:i:s', strtotime('+2 hours', strtotime($startTime->format('Y-m-d'))));
+
         $poolsName = $this->createPoolsName($nbPools, $nbStages, $tournament);
 
-        //TODO : Replace this with correct eloquent usage
         for ($stage = 1; $stage <= $nbStages; $stage++){
             for ($poolCount = 1; $poolCount <= $nbPools; $poolCount++){
+
                 $pool = new Pool;
 
                 $pool->start_time = date("H:i:s", strtotime($startTime));
@@ -56,7 +79,6 @@ class TournamentSetup {
                 $pools[$stage][$poolCount] = $pool;
             }
         }
-
         return $pools;
     }
 
@@ -78,23 +100,42 @@ class TournamentSetup {
         return $poolsName;
     }
 
-    public function createContenders($tournament, $pools){
+    public function createContenders($tournament) {
         // table fields : rank_in_pool, pool_id, team_id, pool_from_id
         $teams = $tournament->teams;
+        $pools = $tournament->pools;
 
-        for ($i = 0; $i < count($teams); $i++) {
-            $contenders = new Contender;
+        $stages = 4; //$tournament->stages;
+        $nbPool = 4; // 1 / $tournament->poolSize * $tournament->maxTeamNbr;
 
-            $contenders->rank_in_pool = null;
-            $contenders->pool_id = $pools[0][$i];
-            $contenders->team_id = $i;
-            $contenders->team_id = $i + 1;
-            $contenders->pool_from_id = 'mdr';
+        $poolIndex = 0; // defines the index of the pool to get the id from
+        $rank = 1; // defines the contender's rank in the current pool
 
-            $contenders->save();
+
+        for ($s = 0; $s <= $stages; $s++) {
+            for ($t = 0; $t < count($teams); $t++) {
+                $contender = new Contender;
+
+                $contender->rank_in_pool = ($s == 0) ? null : $rank; // in first stage, the rank in pool must be null
+
+                $contender->team_id = ($s == 0) ? $teams[$t]->id : null;
+
+                //dd(count($pools));
+
+                $contender->pool_id = $pools[$poolIndex]->id; // $rank - 1 correspond to pool index in $pools
+                $contender->pool_from_id = null;
+
+                $contender->save();
+
+                $contenders[$s][$rank - 1][$t] = $contender;
+                $rank++;
+                if($rank > $nbPool) {
+                    $rank = 1;
+                    $poolIndex++;
+                }
+            }
         }
-
-        dd(count($pools));
+        dd($contenders);
     }
 
     private function createGame(){
