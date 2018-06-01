@@ -6,36 +6,42 @@
 
         <h1>{{ Auth::user()->username }}</h1>
 
-        <div>
-            <h1>
-                Equipes
-                <a href="{{route('teams.create')}}" class="greenBtn" title="Créer un equipes">Céer</a>
-            </h1>
-        </div>
-
         <div class="row">
-            <div class="col-lg-6">
-                <table id="tournament-teams-table" class="table table-striped table-bordered table-hover" cellspacing="0" width="100%">
-                    <thead>
-                    <tr>
-                        <th>Liste des vos équipes</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    @if(count($teams) > 0)
-                        @foreach ($teams as $team)
-                            <tr>
-                                    <td class="clickable" data-id="{{$team->id}}">{{$team->name}}</td>
-                            </tr>
-                        @endforeach
-                    @else
-                        <tr>
-                            <td>Aucune équipe pour l'instant ...</td>
-                        </tr>
-                    @endif
-                    </tbody>
-                </table>
+
+
+            <div class="col-md-4 hideSearch">
+                <div class="box">
+                    <div class="imgBox">
+                        <a href="" title="Voir l'événement">
+                            <img src="/images/teams.jpg" alt="Image du sport">
+                            <div class="title name"> Vos Equipes </div>
+                        </a>
+                    </div>
+                </div>
             </div>
+
+            <div class="col-md-4 hideSearch">
+                <div class="box">
+                    <div class="imgBox">
+                        <a href="" title="Voir les match">
+                            <img src="/images/sport.png" alt="Image du sport">
+                            <div class="title name"> Prochaine Match </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4 hideSearch">
+                <div class="box">
+                    <div class="imgBox">
+                        <a href="" title="Voir les inscription">
+                            <img src="/images/inscription.jpg" alt="Image du sport">
+                            <div class="title name"> Vos Inscription </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
         </div>
     </div>
 @stop

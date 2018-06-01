@@ -29,7 +29,7 @@
 								@else
 									{{ $team->sport->name }},
 								@endif
-								
+
 							@endforeach
 					      </td>
 					    </tr>

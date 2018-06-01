@@ -36,13 +36,13 @@ class ProfileController extends Controller
 
     }
 
-    public function show()
+    public function show(Request $request)
     {
-
     }
 
     public function destry()
     {
 
     }
+
 }
