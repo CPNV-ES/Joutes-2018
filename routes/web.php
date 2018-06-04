@@ -52,11 +52,12 @@ Route::group(['middleware'=>'checkIsWriterOrAdmin', 'prefix'=>'admin', 'namespac
 });
 
 /* Authorization for Participant*/
-Route::group(['middleware'=>'checkIsParticipant', 'namespace' => 'Participant', 'prefix'=>'participant'],function(){
-    Route::resource('profile', 'ProfileController', ['only' => ['index', 'update']]);
+Route::group(['middleware'=>'checkIsParticipant', 'namespace' => 'Profile', 'prefix'=>'participant'],function(){
+    Route::resource('profile', 'ProfileController');
 });
 
 /* Authorization for Participant or Admin*/
 Route::group(['middleware'=>'checkIsParticipantOrAdmin', 'namespace' => 'Admin', 'prefix'=>'admin'],function(){
     Route::resource('teams', 'TeamController');
+    Route::resource('participant.teams', 'ParticipantController');
 });

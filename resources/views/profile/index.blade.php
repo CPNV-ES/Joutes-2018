@@ -12,7 +12,7 @@
             <div class="col-md-4 hideSearch">
                 <div class="box">
                     <div class="imgBox">
-                        <a href="" title="Voir l'événement">
+                        <a href="{{ route('profile.show', $participant->id) }}" title="Voir l'événement">
                             <img src="/images/teams.jpg" alt="Image du sport">
                             <div class="title name"> Vos Equipes </div>
                         </a>

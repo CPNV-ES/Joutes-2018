@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Participant;
+namespace App\Http\Controllers\Profile;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -18,7 +18,7 @@ class ProfileController extends Controller
     {
         $participant = Auth::user()->participant()->first();
         $teams = $participant->teams;
-        return view('profile.index')->with('teams', $teams);
+        return view('profile.index')->with('teams', $teams)->with('participant', $participant) ;
     }
 
     public function update()
@@ -36,8 +36,14 @@ class ProfileController extends Controller
 
     }
 
-    public function show(Request $request)
+    public function show(Request $request, $id)
     {
+        $participant = Auth::user()->participant()->first();
+        $teams = $participant->teams;
+        return view('team.index', array(
+            "teams" => $teams,
+        ));
+
     }
 
     public function destry()
