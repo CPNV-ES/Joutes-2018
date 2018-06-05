@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
 
 class Participant extends Model
 {
@@ -32,5 +33,11 @@ class Participant extends Model
         }
 
         return collect($tournaments)->unique("id");
+    }
+
+    public function isUnsigned($id)
+    {
+        $participant = Participant::where('id',$id)->first();
+         return (count ($participant->teams) == 0);
     }
 }
