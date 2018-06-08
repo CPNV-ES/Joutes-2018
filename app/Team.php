@@ -59,4 +59,20 @@ class Team extends Model
         $collection = $this->games_contender_1->merge($this->games_contender_2);
         return $collection->sortBy('start_time');
     }
+
+    /**
+     *
+     * Get team that match the name
+     *
+     * @param $query
+     * @param $name
+     * @return mixed
+     *
+     * @author Davide Carboni
+     */
+
+    public function scopeSearch($query, $name)
+    {
+        return $query->where('name', $name);
+    }
 }

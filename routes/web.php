@@ -19,6 +19,7 @@ Route::get('/', function () {
 Route::resource('events', 'EventController', ['only' => ['index', 'show']]);
 Route::resource('tournaments', 'TournamentController', ['only' => ['index', 'show']]);
 Route::resource('events.tournaments', 'EventTournamentController', [ 'only' => ['index', 'show']]);
+Route::resource('tournaments.teams', 'TournamentTeamController');
 Route::resource('tournaments.pools', 'TournamentPoolController');
 Route::resource('admin', 'SessionController', ['only' => ['store', 'destroy']]);
 Route::resource('tournaments.schedule', 'ScheduleController', ['only' => ['index']]);
@@ -27,8 +28,6 @@ Route::resource('tournaments.schedule', 'ScheduleController', ['only' => ['index
 Route::get('/download', function() {
     return view('download.index');
 });
-
-
 
 /* Routes who need authentification */
 // Prefix admin is here to have an url like that : .../admin/tournaments/create

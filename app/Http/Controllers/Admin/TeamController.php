@@ -84,8 +84,19 @@ class TeamController extends Controller
      *
      * @author Dessauges Antoine
      */
-    public function show($id)
+    public function show(Request $request, $id)
     {
+        // return the id for a username using ajax
+        if ($request->ajax())
+        {
+            $team = Team::where('name',$id)->first();
+
+            if ($team == null)
+                return -1;
+            else
+                return $team->id;
+        }
+
         $team = Team::find($id); 
         $error = $infos = null;
 
@@ -183,6 +194,4 @@ class TeamController extends Controller
         $team->delete();
         return redirect()->route('teams.index');
     }
-
-
 }

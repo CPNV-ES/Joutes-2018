@@ -27,5 +27,6 @@ elixir((mix) => {
             "custom/shiftMatch.js",
             "custom/import.js",
             "custom/close.pool.js",
+           "custom/profileCreateformValidate.js",
     	]);
 });

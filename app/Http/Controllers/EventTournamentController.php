@@ -18,6 +18,7 @@ class EventTournamentController extends Controller
      * @return \Illuminate\Http\Response
      *
      * @author Doran Kayoumi
+     * @edit Davide Carboni
      */
     public function index(Request $request, $event_id) {
         // check is it's an api request
@@ -28,6 +29,17 @@ class EventTournamentController extends Controller
             return $this->response->collection($tournaments, new TournamentTransformer, ['key' => 'tournaments']);
         }
 
+        $event = Event::findOrFail($event_id);
+        $tournaments = $event->tournaments;
+
+        // return a list of tournaments for a selected event using ajax
+        if ($request->ajax()) {
+            $list = array();
+            for ($i=0; $i < sizeof($tournaments); $i++) {
+                $list[$tournaments[$i]->id] = $tournaments[$i]->name;
+            }
+            return $list;
+        }
 
         $event = Event::findOrFail($event_id);
         $tournaments = $event->tournaments;

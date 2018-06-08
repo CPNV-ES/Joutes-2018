@@ -1,7 +1,8 @@
 $( document ).ready(function() {
 	/* FORM VALIDATIONS */
-	// @author Dessaules Loïc
+	// @author Dessaules Loïc and Davide Carboni
 	// @edit Davide Carboni
+
 	$('.formSend').click(function(){
 		var form = $(this).parent().parent();
 		var formId = form.attr('id');
