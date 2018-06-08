@@ -30,7 +30,7 @@ class TournamentSetup {
         $poolSize = $tournament->nbTeamPerPool;
 
         //TODO: Add a "nbMaxTeam" and "nbStage" to tournament table and delete these variable
-        $nbMaxTeam = 4;
+        $nbMaxTeam = 32;
         $nbStages = 4;
 
         $pools = $this->createPools($tournament, $poolSize, $nbMaxTeam, $nbStages);
@@ -39,6 +39,8 @@ class TournamentSetup {
     }
 
     /**
+     * Create all pools required for the tournament
+     *
      * @param $tournament   - Current tournament
      * @param $poolSize     - Number of teams in a pool
      * @param $maxTeamsNbr  - Total number of teams participating to the tournament
@@ -48,7 +50,6 @@ class TournamentSetup {
      * @author Quentin Neves
      */
     private function createPools($tournament, $poolSize, $maxTeamsNbr, $nbStages){
-
         // Calculate the required number of pools
         $nbPools = 1 / $poolSize * $maxTeamsNbr;
 
@@ -103,39 +104,43 @@ class TournamentSetup {
     public function createContenders($tournament) {
         // table fields : rank_in_pool, pool_id, team_id, pool_from_id
         $teams = $tournament->teams;
-        $pools = $tournament->pools;
+        $pools = $this->createPools($tournament, 4, 32, 4);  //$tournament->pools;
+
+        $teamPerPool = $tournament->teamPerPool;
 
         $stages = 4; //$tournament->stages;
-        $nbPool = 4; // 1 / $tournament->poolSize * $tournament->maxTeamNbr;
+        $count = 1; // Count the number of iterations in team for loop
 
-        $poolIndex = 0; // defines the index of the pool to get the id from
+        $poolIndex = 1; // defines the index of the pool to get the id from
         $rank = 1; // defines the contender's rank in the current pool
 
-
-        for ($s = 0; $s <= $stages; $s++) {
-            for ($t = 0; $t < count($teams); $t++) {
-                $contender = new Contender;
-
+        for ($s = 0; $s < $stages; $s++){
+            for ($t = 0; $t < 32; $t++) { // Replace 32 by count($teams) but with seed there is 35 teams in a tournament for 32, really guys ?
+                $contender = new Contender();
                 $contender->rank_in_pool = ($s == 0) ? null : $rank; // in first stage, the rank in pool must be null
-
                 $contender->team_id = ($s == 0) ? $teams[$t]->id : null;
 
-                //dd(count($pools));
+                $contender->pool_id = $pools[$s+1][$poolIndex]->id;
+                $contender->pool_from_id = ($s > 0) ? $pools[$s][$poolIndex]->id : null;
 
-                $contender->pool_id = $pools[$poolIndex]->id; // $rank - 1 correspond to pool index in $pools
-                $contender->pool_from_id = null;
+                if ($count >= 8) {
+                    $rank++;
+                    $count = 1;
+                }
+                else $count++;
+                if ($rank > 4) $rank = 1;
+
+                ($poolIndex >= 8) ? $poolIndex = 1 : $poolIndex++;
 
                 $contender->save();
 
-                $contenders[$s][$rank - 1][$t] = $contender;
-                $rank++;
-                if($rank > $nbPool) {
-                    $rank = 1;
-                    $poolIndex++;
-                }
+                $contenders[$s][$t] = $contender;
             }
+            $rank = 1;
+
         }
-        dd($contenders);
+
+        dd($contenders[1]);
     }
 
     private function createGame(){
