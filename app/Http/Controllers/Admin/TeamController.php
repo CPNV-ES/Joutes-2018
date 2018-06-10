@@ -19,9 +19,15 @@ class TeamController extends Controller
      *
      * @author Dessauges Antoine
      */
-    public function index()
+    public function index(Request $request)
     {
-        $teams = Team::all();
+        if ($request->input('split') == null)
+            $teams = Team::all();
+        else
+        {
+            $participant = Auth::user()->participant()->first();
+            $teams = $participant->teams;
+        }
         return view('team.index', array(
             "teams" => $teams,
         ));
@@ -58,7 +64,7 @@ class TeamController extends Controller
         } else {
             $team = new Team();
             $team->name = $request->input('name');
-            $team->tournament_id = null;
+            $team->tournament_id = $request->input('tournament');
             $team-> validation = 0;
             $team->owner_id = Auth::user()->id;
             $team->save();

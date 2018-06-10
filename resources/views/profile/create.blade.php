@@ -9,6 +9,10 @@
         <p>Vous êtes obligé de vous inscrire à un tournoi. Il est également nécessaire d'avoir ou de rejoindre une équipe</p>
         <p>Veuillez terminer votre inscription en utilisant le formulaire ci-dessous.</p><br>
 
+        @if (isset($error))
+            <div class="alert alert-danger">{{$error}}</div>
+        @endif
+
         {{ Form::open(array('url' => route('profile.store'), 'method' => 'post', 'id' => 'formProfile')) }}
 
         <div class="form-group">
@@ -17,22 +21,22 @@
         </div>
         <div class="form-group">
             {{ Form::label('tournament', 'Tournoi') }}
-            {{ Form::select('tournament', [], null, ['placeholder' => 'Sélectionner', 'class' => 'form-control allSameStyle', 'id' => 'tournament', 'disabled' => 'disabled']) }}
+            {{ Form::select('tournament', $dropdownListEventTournaments, null, $tournamentsOptions) }}
         </div>
         <div class="form-group">
             {{ Form::label('teamSelected', 'Equipes disponibles') }}
-            {{ Form::select('teamSelected', [], null, ['placeholder' => 'Sélectionner', 'class' => 'form-control allSameStyle', 'id' => 'teamSelected', 'disabled' => 'disabled']) }}
+            {{ Form::select('teamSelected', $dropdownListTournamentTeams, null, $teamsOptions) }}
         </div>
         <div class="form-group">
-            {{ Form::checkbox('switch', 1, false, ['class' => 'switch', "id"=>'switch', 'disabled' => 'disabled']) }} Je veux créer un equipe <br>
+            {{ Form::checkbox('switch', 1, $checkBoxActive, $checkBoxOptions) }} Je veux créer un equipe <br>
         </div>
         <div class="form-group">
             {{ Form::label('teamNew', 'Nom de l\'equipe') }}
             <span id="errorMessage" class="text-danger"></span>
-            {{ Form::text('teamNew', null, ['class' => 'form-control', 'disabled' => 'disabled', 'id' => 'teamNew']) }}
+            {{ Form::text('teamNew', null, $teamNewOptions) }}
         </div>
 
-        <div class="send">{{ Form::button('Terminer', array('class' => 'btn btn-success', 'disabled' => 'disabled', 'id' => 'formValidate')) }}</div>
+        <div class="send">{{ Form::button('Terminer', array('class' => 'btn btn-success formSend', 'disabled' => 'disabled', 'id' => 'formValidate')) }}</div>
 
         {{ Form::close() }}
 

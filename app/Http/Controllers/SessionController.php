@@ -127,6 +127,7 @@ class SessionController extends Controller
         if ($role == "participant")
         {
             $participant = \App\Participant::where('first_name', str_replace("Tester", '', $username))->first();
+            $participant->teams()->detach(); //add the link row in intemrediate table
             $participant->delete();
         }
         $user->delete();
