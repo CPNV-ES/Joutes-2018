@@ -9,6 +9,7 @@ $( document ).ready(function() {
 		var error = '';
 
 		switch(formId) {
+			/*
             case "formTeam":
                 var nameValue = $('#formTeam #name').val();
 
@@ -17,7 +18,7 @@ $( document ).ready(function() {
                 if(!patternName.test(nameValue)){
                     error += 'Le champ Nom ne doit pas être vide et doit avoir entre 3 et 45 caractères.<br>';
                 }
-                break;
+                break;*/
 
 		    case "formSport":
 		    	var nameValue = $('#formSport #name').val();

@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Cookie;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
+use App\Event;
 
 class TeamController extends Controller
 {
@@ -34,7 +35,17 @@ class TeamController extends Controller
      */
     public function create()
     {
-        return view('team.create');
+        //Prepare all values for the SignIn login form
+        $dropdownListEvent = $this->getDropDownList_Event();
+        $dropdownListEventTournaments = array();
+        $tournamentsOptions = ['placeholder' => 'Sélectionner', 'class' => 'form-control allSameStyle', 'id' => 'tournament', 'disabled' => 'disabled'];
+        $teamNewOptions = ['class' => 'form-control', 'disabled' => 'disabled', 'id' => 'name'];
+
+        return view('team.create')
+            ->with('dropdownListEvent', $dropdownListEvent)
+            ->with('dropdownListEventTournaments', $dropdownListEventTournaments)
+            ->with('tournamentsOptions', $tournamentsOptions)
+            ->with('teamNewOptions', $teamNewOptions);
     }
 
     /**
@@ -45,35 +56,53 @@ class TeamController extends Controller
      */
     public function store(Request $request)
     {
-        /* LARAVEL VALIDATION */
-        // create the validation rules
-        $rules = array(
-            'name' => 'required|min:3|max:35|unique:teams,name'
-        );
+        $event = $request->input('event');
 
-        $validator = Validator::make($request->all(), $rules);
-
-        if ($validator->fails()) {
-            return view('team.create')->withErrors($validator->errors());
-        } else {
-            $team = new Team();
-            $team->name = $request->input('name');
-            $team->tournament_id = $request->input('tournament');
-            $team-> validation = 0;
-            $team->owner_id = Auth::user()->id;
-            $team->save();
-
-            if (Auth::user()->role == "participant") {
-                $participant = Auth::user()->participant()->first();
-                $team->participants()->attach([$participant->id => array('isCaptain' => '0' )]); //add the link row in intemrediate table
+        if ($request->input('from') == 'team') { // check if the create method is called from profile form or form the create form
+            /* LARAVEL VALIDATION */
+            // create the validation rules
+            $rules = array(
+                'name' => 'unique:teams,name'
+            );
+            $validator = Validator::make(array('name' => $request->input('name')), $rules);
+            if ($validator->fails()) {
+                // The new created team exsist so prepare the form with the old selections for a new input
+                $dropdownListEvent = $this->getDropDownList_Event();
+                $dropdownListEventTournaments = $this->getDropDownList_EventTournaments($event);
+                $tournamentsOptions = ['class' => 'form-control allSameStyle', 'id' => 'tournament'];
+                $teamNewOptions = ['class' => 'form-control', 'id' => 'name'];
+                $error = "Le nom de l'équipe " . $request->input("name") . " viens d'etre créer par un'autre utilisateur ";
+                return view('team.create')
+                    ->with('error', $error)
+                    ->with('dropdownListEvent', $dropdownListEvent)
+                    ->with('dropdownListEventTournaments', $dropdownListEventTournaments)
+                    ->with('tournamentsOptions', $tournamentsOptions)
+                    ->with('teamNewOptions', $teamNewOptions);
             }
-
-            if (Auth::user()->role == "administrator") {
-                $team->save();
-            }
-
-            return redirect()->route('profile.index');
         }
+
+        $team = new Team();
+        $team->name = $request->input('name');
+        $team->tournament_id = $request->input('tournament');
+        $team->validation = 0;
+        $team->owner_id = Auth::user()->id;
+        if (Auth::user()->role == "administrator")
+            $team->validation = 1;
+        else
+            $team->validation = 0;
+
+        $team->save();
+
+        if (Auth::user()->role == "participant") {
+            $participant = Auth::user()->participant()->first();
+            $team->participants()->attach([$participant->id => array('isCaptain' => '0' )]); //add the link row in intemrediate table
+        }
+        /*
+        if (Auth::user()->role == "administrator") {
+            $team->save();
+        }
+        */
+        return redirect()->route('profile.index');
     }
 
     /**
@@ -193,5 +222,65 @@ class TeamController extends Controller
         $team = Team::find($id);
         $team->delete();
         return redirect()->route('teams.index');
+    }
+
+    /**
+     * Create the array with all events
+     *
+     * @return array
+     *
+     * @author Carboni Davide
+     */
+    private function getDropDownList_Event(){
+        $events =Event::all();
+        // Creation of the array will contain the datas of the dropdown event list
+        // This form: array("sport_id 1" => "sport_name 1", "sport_id 2" => "sport_name 2"), ...
+        $dropdownListEvent = array();
+        for ($i=0; $i < sizeof($events); $i++) {
+            $dropdownListEvent[$events[$i]->id] = $events[$i]->name;
+        }
+        return $dropdownListEvent;
+    }
+
+
+    /**
+     * Prepare array data for all tournament's event
+     *
+     * @param $id
+     * @return array
+     *
+     * @author Carboni Davide
+     */
+    private function getDropDownList_EventTournaments($id){
+        $event = Event::findOrFail($id);
+        $tournaments = $event->tournaments;
+        // Creation of the array will contain the datas of the dropdown tournament list
+        // This form: array("sport_id 1" => "sport_name 1", "sport_id 2" => "sport_name 2"), ...
+        $dropdownListEventTournaments = array();
+        for ($i=0; $i < sizeof($tournaments); $i++) {
+            $dropdownListEventTournaments[$tournaments[$i]->id] = $tournaments[$i]->name;
+        }
+        return $dropdownListEventTournaments;
+    }
+
+
+    /**
+     * Prepare array data width all team's tournament
+     *
+     * @param $id
+     * @return array
+     *
+     * @author Carboni Davide
+     */
+    private function getDropDownList_TournamentTeams($id){
+        $tournament = Tournament::findOrFail($id);
+        $teams = $tournament->teams;
+        // Creation of the array will contain the datas of the dropdown teams list
+        // This form: array("sport_id 1" => "sport_name 1", "sport_id 2" => "sport_name 2"), ...
+        $dropdownListTournamentTeams = array();
+        for ($i=0; $i < sizeof($teams); $i++) {
+            $dropdownListTournamentTeams[$teams[$i]->id] = $teams[$i]->name;
+        }
+        return $dropdownListTournamentTeams;
     }
 }
