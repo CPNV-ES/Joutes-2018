@@ -27,7 +27,9 @@
 				<thead>
 					<tr>
 						<th>Nom de l'équipe</th>
-						<th>Actions</th>
+						@if (($participant->user_id == Auth::user()->id) || Auth::user()->role == "administrator")
+							<th>Actions</th>
+						@endif
 					</tr>
 				</thead>
 
@@ -36,15 +38,16 @@
 				  	@foreach ($participant->teams as $team)
 						<tr>
 					      <td data-id="{{$team->id}}" class="clickable"> {{ $team->name }} </td>
-					      <td class="action">
-						      {{ Form::open(array('url' => route('teams.participants.destroy', [$team->pivot['participant_id'], $team->pivot['team_id']]), 'method' => 'delete')) }}
-						      	<button type="submit" class="button-delete" data-type="memberTeam" data-name='"{{ $participant->last_name }} {{ $participant->first_name }}" de "{{ $team->name }}"'>
-						      		<i class="fa fa-trash-o fa-lg action" aria-hidden="true"></i>
-						      	</button>
-						      {{ Form::close() }}
-					      </td>
+							@if (($participant->user_id == Auth::user()->id) || Auth::user()->role == "administrator")
+							  <td class="action">
+									  {{ Form::open(array('url' => route('teams.participants.destroy', [$team->pivot['participant_id'], $team->pivot['team_id']]), 'method' => 'delete')) }}
+										<button type="submit" class="button-delete" data-type="memberTeam" data-name='"{{ $participant->last_name }} {{ $participant->first_name }}" de "{{ $team->name }}"'>
+											<i class="fa fa-trash-o fa-lg action" aria-hidden="true"></i>
+										</button>
+									  {{ Form::close() }}
+							  </td>
+							@endif
 					    </tr>
-
 					@endforeach
 
 			  	</tbody>
@@ -52,23 +55,19 @@
 			</table>
 		@endif
 
-
-		<h2>Ajouter ce membre à une équipe</h2>
-		@if (isset($error))
-			<div class="alert alert-danger">
-				{{ $error }}
-			</div>
-		@else
-			{{ Form::open(array('url' => route('teams.participants.store',  $participant->id), 'method' => 'post')) }}
-
+		@if (($participant->user_id == Auth::user()->id) || Auth::user()->role == "administrator")
+			<h2>Ajouter ce membre à une équipe</h2>
+			@if (isset($error))
+				<div class="alert alert-danger">
+					{{ $error }}
+				</div>
+			@else
+				{{ Form::open(array('url' => route('teams.participants.store',  $participant->id), 'method' => 'post')) }}
 				{{ Form::checkbox('isCaptain', true) }} Captain
 				{{ Form::select('team', $dropdownList, null, ['placeholder' => 'Sélectionner', 'class' => 'form-control addMember']) }}
-
-
-			{{ Form::close() }}
-
+				{{ Form::close() }}
+			@endif
 		@endif
-
 	</div>
 
 @stop

@@ -21,12 +21,11 @@ class ProfileController extends Controller
     public function index()
     {
         $participant = Auth::user()->participant()->first();
-        $teams = $participant->teams;
         // Verify users if have any teams
         if ($participant->isUnsigned($participant->id))
             return redirect()->route('profile.create');
 
-        return view('profile.index')->with('teams', $teams)->with('participant', $participant) ;
+        return redirect()->route('profile.show',$participant->id);
     }
 
     /**
@@ -136,12 +135,11 @@ class ProfileController extends Controller
      *
      * @author Carboni Davide
      */
-    public function show(Request $request, $id)
+    public function show($id)
     {
         $participant = Auth::user()->participant()->first();
         $teams = $participant->teams;
-        //$request = Request::create('', 'POST', array('participant' => $participant->id));
-        return redirect()->route('teams.index',['split' => 1]);
+        return view('profile.index')->with('teams', $teams)->with('participant', $participant) ;
     }
 
     public function destroy()

@@ -27,7 +27,9 @@
 					      <td data-id="{{$team->id}}" class="clickable">{{ $team->name }}</td>
 					      <td>{{ $team->sport->name }}</td><td><i class="{{ $team->validation ? 'fa fa-check' : 'fa fa-close' }}" aria-hidden="true"></i></td>
 					      <td class="action">
-						      <a href="{{ route('teams.edit', $team->id) }}" alt="Modifier la team"> <i class="fa fa-pencil fa-lg action" aria-hidden="true"></i> </a>
+							  @if (($team->owner_id == Auth::user()->id) || Auth::user()->role == "administrator")
+						      	<a href="{{ route('teams.edit', $team->id) }}" alt="Modifier la team"> <i class="fa fa-pencil fa-lg action" aria-hidden="true"></i> </a>
+							  @endif
 						      {{-- {{ Form::open(array('url' => route('teams.destroy', $team->id), 'method' => 'delete')) }}
 						      	<button type="submit" class="button-delete">
 						      		<i class="fa fa-lg fa-trash-o action" aria-hidden="true"></i>

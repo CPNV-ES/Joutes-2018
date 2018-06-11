@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Team extends Model
 {
     public $timestamps = false;
-    protected $fillable = ['name','isCaptain'];
+    protected $fillable = ['name','isCaptain','owner_id','validation'];
 
     /**
      * Get team participants

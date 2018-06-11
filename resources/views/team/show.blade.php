@@ -26,7 +26,9 @@
 				<thead>
 					<tr>
 						<th>Nom du membre</th>
-						<th>Actions</th>
+						@if (($team->owner_id == Auth::user()->id) || Auth::user()->role == "administrator")
+							<th>Actions</th>
+						@endif
 					</tr>
 				</thead>
 
@@ -39,14 +41,15 @@
 							@else
 								<td data-id="{{$participant->id}}" class="clickable"> {{ $participant->last_name }} {{ $participant->first_name }}</td>
 							@endif
-
-					      	<td class="action">
-						      	{{ Form::open(array('url' => route('teams.participants.destroy', [$participant->pivot['participant_id'], $participant->pivot['team_id']]), 'method' => 'delete')) }}
-					      			<button type="submit" class="button-delete" data-type="teamMember" data-name="{{ $participant->last_name }} {{ $participant->first_name }}">
-						      		<i class="fa fa-lg fa-trash-o action" aria-hidden="true"></i>
-						      		</button>
-						      	{{ Form::close() }}
-					      	</td>
+							@if (($team->owner_id == Auth::user()->id) || Auth::user()->role == "administrator")
+								<td class="action">
+									{{ Form::open(array('url' => route('teams.participants.destroy', [$participant->pivot['participant_id'], $participant->pivot['team_id']]), 'method' => 'delete')) }}
+										<button type="submit" class="button-delete" data-type="teamMember" data-name="{{ $participant->last_name }} {{ $participant->first_name }}">
+										<i class="fa fa-lg fa-trash-o action" aria-hidden="true"></i>
+										</button>
+									{{ Form::close() }}
+								</td>
+							@endif
 					    </tr>
 					@endforeach
 
@@ -55,19 +58,21 @@
 			</table>
 		@endif
 
-		<h2>Ajouter un membre</h2>
-		@if (isset($error))
-			<div class="alert alert-danger">
-				{{ $error }}
-			</div>
-		@else
-			{{ Form::open(array('url' => route('teams.participants.store',  $team->id), 'method' => 'post')) }}
+		@if (($team->owner_id == Auth::user()->id) || Auth::user()->role == "administrator")
+			<h2>Ajouter un membre</h2>
+			@if (isset($error))
+				<div class="alert alert-danger">
+					{{ $error }}
+				</div>
+			@else
+				{{ Form::open(array('url' => route('teams.participants.store',  $team->id), 'method' => 'post')) }}
 
-				{{ Form::checkbox('isCaptain', true) }} Captain
-				{{ Form::select('pepole', $dropdownList, null, ['placeholder' => 'Sélectionner', 'class' => 'form-control addMember']) }}
+					{{ Form::checkbox('isCaptain', true) }} Captain
+					{{ Form::select('pepole', $dropdownList, null, ['placeholder' => 'Sélectionner', 'class' => 'form-control addMember']) }}
 
-			{{ Form::close() }}
+				{{ Form::close() }}
 
+			@endif
 		@endif
 
 	</div>

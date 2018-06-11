@@ -1,6 +1,12 @@
 <?php
+/**
+ * Created by PhpStorm.
+ * User: Davide
+ * Date: 10/06/2018
+ * Time: 18:42
+ */
 
-namespace App\Http\Controllers\Admin;
+namespace App\Http\Controllers\Profile;
 
 use App\Http\Controllers\Controller;
 use App\Team;
@@ -10,7 +16,8 @@ use Cookie;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
 
-class TeamController extends Controller
+
+class ProfileTeamsController
 {
     /**
      * Display a listing of the resource.
@@ -21,9 +28,12 @@ class TeamController extends Controller
      */
     public function index()
     {
-        $teams = Team::all();
+        $participant = Auth::user()->participant()->first();
+        $teams = $participant->teams;
+        //$teams = $participant->teams->where('owner_id', Auth::user()->id);
         return view('team.index', array(
             "teams" => $teams,
+            "participant" => $participant
         ));
     }
 
@@ -84,20 +94,12 @@ class TeamController extends Controller
      *
      * @author Dessauges Antoine
      */
-    public function show(Request $request, $id)
+    public function show(Request $request, $id, $id2)
     {
+        $participant = Auth::user()->participant()->first();
         // return the id for a username using ajax
-        if ($request->ajax())
-        {
-            $team = Team::where('name',$id)->first();
 
-            if ($team == null)
-                return -1;
-            else
-                return $team->id;
-        }
-
-        $team = Team::find($id); 
+        $team = Team::find($id2);
         $error = $infos = null;
 
         $pepoleNoTeam = Participant::doesntHave('teams')->get();
@@ -122,6 +124,7 @@ class TeamController extends Controller
             "dropdownList" => $dropdownList,
             "error"        => $error,
             "infos"        => $infos,
+            "participant"  => $participant
         ));
     }
 
@@ -147,7 +150,7 @@ class TeamController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @param  int $id
      * @return \Illuminate\Http\Response
-     * 
+     *
      * @author Dessauges Antoine
      */
     public function update(Request $request, $id)
@@ -194,4 +197,5 @@ class TeamController extends Controller
         $team->delete();
         return redirect()->route('teams.index');
     }
+
 }

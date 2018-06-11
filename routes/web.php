@@ -39,7 +39,7 @@ Route::group(['middleware'=>'checkIsAdmin', 'prefix'=>'admin', 'namespace' => 'A
 	Route::resource('sports', 'SportController');
 	Route::resource('courts', 'CourtController');
 	//Route::resource('teams', 'TeamController');
-	Route::resource('participants', 'ParticipantController');
+	//Route::resource('participants', 'ParticipantController');
 	Route::resource('teams.participants', 'TeamParticipantController', ['only' => ['destroy', 'store']]);
     Route::resource('events.import', 'EventImportController', ['only' => ['store']]);
 });
@@ -53,10 +53,11 @@ Route::group(['middleware'=>'checkIsWriterOrAdmin', 'prefix'=>'admin', 'namespac
 /* Authorization for Participant*/
 Route::group(['middleware'=>'checkIsParticipant', 'namespace' => 'Profile', 'prefix'=>'participant'],function(){
     Route::resource('profile', 'ProfileController');
+    Route::resource('profile.teams', 'ProfileTeamsController');
 });
 
 /* Authorization for Participant or Admin*/
 Route::group(['middleware'=>'checkIsParticipantOrAdmin', 'namespace' => 'Admin', 'prefix'=>'admin'],function(){
     Route::resource('teams', 'TeamController');
-    Route::resource('participant.teams', 'ParticipantController');
+    Route::resource('participants', 'ParticipantController');
 });

@@ -11,7 +11,7 @@
             <div class="col-md-4 hideSearch">
                 <div class="box">
                     <div class="imgBox">
-                        <a href="{{ route('profile.show', $participant->id) }}" title="Voir l'événement">
+                        <a href="{{ route('profile.teams.index', $participant->id) }}" title="Voir l'événement">
                             <img src="/images/teams.jpg" alt="Image du sport">
                             <div class="title name"> Vos Equipes </div>
                         </a>
@@ -35,7 +35,7 @@
                     <div class="imgBox">
                         <a href="" title="Voir les inscription">
                             <img src="/images/inscription.jpg" alt="Image du sport">
-                            <div class="title name"> Vos Inscription </div>
+                            <div class="title name"> Comunications </div>
                         </a>
                     </div>
                 </div>
