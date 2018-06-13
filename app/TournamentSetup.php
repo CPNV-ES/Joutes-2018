@@ -47,7 +47,23 @@ class TournamentSetup {
         for ($s = 0; $s < $nbStages; $s++) {
             // Pool creation
             for ($p = 0; $p < $nbPoolsPerStage; $p++) {
-                
+
+                $pool = new Pool;
+
+                $pool->start_time = $startTime;
+                $pool->end_time = $endTime;
+                $pool->poolName = $poolsName[$s][$p];
+                $pool->stage = $s;
+                $pool->poolSize = $nbTeamsPerPool;
+                $pool->isFinished = false;
+                $pool->tournament_id = $tournament->id;
+                $pool->mode_id = 1;
+                $pool->gameType_id = 1;
+
+                $pool->save();
+
+                array_push($pools, $pool);
+
             }
 
             // Contenders creation
