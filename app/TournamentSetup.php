@@ -32,6 +32,9 @@ class TournamentSetup {
         $nbStages = 4; // $tournament->nbStages;
         $nbPoolsPerStage = 8; // $tournament->nbPoolsPerStage
         $nbTeamsPerPool = 4; // $tournament->nbTeamsPerPool
+        $nbGamesPerStage = 0;
+        for ($i = 1; $i <= $nbTeamsPerPool; $i++) $nbGamesPerStage =+ $nbTeamsPerPool - $i; // Calculates the number of games in a pool
+
 
         // Readability variables
         // TODO: $startTime and $endTime need to be ajusted accordingly to the current stage
@@ -40,7 +43,23 @@ class TournamentSetup {
 
         $poolsName = $this->createPoolsName($nbPoolsPerStage, $nbStages, $tournament);
 
-        
+        // For each stage
+        for ($s = 0; $s < $nbStages; $s++) {
+            // Pool creation
+            for ($p = 0; $p < $nbPoolsPerStage; $p++) {
+                
+            }
+
+            // Contenders creation
+            for ($c = 0; $c < ($nbTeamsPerPool*$nbPoolsPerStage); $c++) {
+
+            }
+
+            // Game creation
+            for ($g = 0; $g < $nbGamesPerStage; $g++) {
+
+            }
+        }
     }
 
     /**
