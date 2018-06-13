@@ -45,6 +45,11 @@ class TournamentSetup {
 
         // For each stage
         for ($s = 0; $s < $nbStages; $s++) {
+            // reseting variables
+            $pools = array();
+            $rank = 0;
+            $poolIndex = 0;
+
             // Pool creation
             for ($p = 0; $p < $nbPoolsPerStage; $p++) {
 
@@ -63,11 +68,22 @@ class TournamentSetup {
                 $pool->save();
 
                 array_push($pools, $pool);
-
             }
 
             // Contenders creation
             for ($c = 0; $c < ($nbTeamsPerPool*$nbPoolsPerStage); $c++) {
+
+                $contender = new Contender();
+
+                if ($c % $nbPoolsPerStage == 0) $rank++;
+                $contender->rank_in_pool = ($s) ? $rank : null;
+                $contender->team_id = ($s) ? $tournament->teams[$c]->id : null;
+
+                $contender->pool_id = $pools[$poolIndex]->id;
+                if ($c % $nbTeamsPerPool == 0) $poolIndex++;
+
+                // TODO: do not reset $pools and keep every created pool to get his id
+                $contender->pool_from_id = ($s) $previousStagePoolId : null;
 
             }
 
@@ -93,7 +109,7 @@ class TournamentSetup {
 
         // create each pool name, i.e. "Badminton 1-3"
         for ($stage = 0; $stage < $nbStages; $stage++) { for ($pool = 0; $pool < $nbPools; $pool++) { $poolsName[$stage][$pool] = $tournament->getSport() ." ".($stage + 1)."-".($pool + 1); } }
-        dd($poolsName);
+        //dd($poolsName);
 
         return $poolsName;
     }
