@@ -150,7 +150,7 @@ class TournamentController extends Controller
                 File::delete(public_path().'/uploads/'.$oldFile);
 
                 //add new file
-                $imageName = date('Y_m_d-H_i_s').'.'.pathinfo($_FILES['img']['name'], PATHINFO_EXTENSION);  
+                $imageName = date('YmdHis').'.'.pathinfo($_FILES['img']['name'], PATHINFO_EXTENSION);
                 File::move($_FILES['img']['tmp_name'], public_path().'/tournament_img/'.$imageName);
                 $tournament->img = $imageName;
             }

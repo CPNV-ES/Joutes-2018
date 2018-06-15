@@ -98,7 +98,7 @@ class EventTournamentController extends Controller
         } else {
 
             //move and rename img
-            $imageName = date('Y_m_d-H_i_s').'.'.pathinfo($_FILES['img']['name'], PATHINFO_EXTENSION);  
+            $imageName = date('YmdHis').'.'.pathinfo($_FILES['img']['name'], PATHINFO_EXTENSION);
             File::move($_FILES['img']['tmp_name'], public_path().'/tournament_img/'.$imageName);
 
             //Save the tournament
