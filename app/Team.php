@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Participant;
 
 class Team extends Model
 {
@@ -74,5 +75,29 @@ class Team extends Model
     public function scopeSearch($query, $name)
     {
         return $query->where('name', $name);
+    }
+
+    /**
+     * Verify if the teams have all participants required to be full
+     *
+     * @author Davide Carboni
+     */
+    public function isComplete(){
+        if ($this->participants()->count() >= $this->sport->max_participant) return true;
+        else return false;
+    }
+
+    public function isValide(){
+        if (($this->participants()->count() >= $this->sport->min_participant) && ($this->participants()->count() <= $this->sport->max_participant)) return true;
+        else return false;
+
+    }
+
+    public function isOwner($id)
+    {
+        $participant = Participant::find($id);
+        $user_id = $participant->user->id;
+        if ($this->owner_id == $user_id) return true;
+        else return false;
     }
 }

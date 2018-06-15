@@ -25,6 +25,14 @@
 				{{ Form::label('description', 'Description') }}
 				{{ Form::text('description', null, array('class' => 'form-control')) }}
 			</div>
+			<div class="form-group">
+				{{ Form::label('min_participant', 'Min Participant') }}
+				{{ Form::text('min_participant', null, array('class' => 'form-control')) }}
+			</div>
+			<div class="form-group">
+				{{ Form::label('max_participant', 'Max participant') }}
+				{{ Form::text('max_participant', null, array('class' => 'form-control')) }}
+			</div>
 			<div class="send">{{ Form::button('Créer', array('class' => 'btn btn-success formSend')) }}</div>
 
 		{{ Form::close() }}

@@ -55,7 +55,7 @@
 			</table>
 		@endif
 
-		@if (($participant->user_id == Auth::user()->id) || Auth::user()->role == "administrator")
+		@if (Auth::user()->role == "administrator")
 			<h2>Ajouter ce membre à une équipe</h2>
 			@if (isset($error))
 				<div class="alert alert-danger">

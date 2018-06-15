@@ -49,7 +49,9 @@ class SportController extends Controller
         // create the validation rules
         $rules = array(
             'name' => 'required|min:3|max:35|unique:sports,name',
-            'description' => 'max:45' 
+            'description' => 'max:45',
+            'min_participant' => 'required|integer',
+            'max_participant' => 'required|integer'
         );
 
         $validator = Validator::make($request->all(), $rules);
@@ -57,7 +59,12 @@ class SportController extends Controller
         if ($validator->fails()) {
             return view('sport.create')->withErrors($validator->errors());
         } else {
-            Sport::create($request->all());
+            $sport = new Sport();
+            $sport->name = $request->input("name");
+            $sport->description = $request->input("description");
+            $sport->min_participant = $request->input("min_participant");
+            $sport->max_participant = $request->input("max_participant");
+            $sport->save();
             return redirect()->route('sports.index');
         }
     }

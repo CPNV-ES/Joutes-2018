@@ -15,7 +15,7 @@ class Sport extends Model
 	// I added this because when I try to save() Sport value an updated_At "xy" error appears
 	// And with this that work
 	public $timestamps = false;
-	protected $fillable = array('name', 'description'); // -> We have to define all data we use on our sport table (For use ->all())
+	protected $fillable = array('name', 'description','max_participant','min_participant'); // -> We have to define all data we use on our sport table (For use ->all())
 
 	/**
 	 * Create a new has many relationship instance between Court and Sport

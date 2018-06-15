@@ -24,6 +24,15 @@ class EventController extends Controller
             return $events;
         }
 
+        // return a list of events using ajax
+        if ($request->ajax()) {
+            $list = array();
+            for ($i=0; $i < sizeof($events); $i++) {
+                    $list[$events[$i]->id] = $events[$i]->name;
+            }
+            return $list;
+        }
+
         foreach ($events as $event) {
             if (empty($event->img)) {
                 $event->img = 'default.jpg';

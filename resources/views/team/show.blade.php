@@ -43,11 +43,13 @@
 							@endif
 							@if (($team->owner_id == Auth::user()->id) || Auth::user()->role == "administrator")
 								<td class="action">
+									@if( (Auth::user()->role != "administrator") && ($participant->id != Auth::user()->participant->id))
 									{{ Form::open(array('url' => route('teams.participants.destroy', [$participant->pivot['participant_id'], $participant->pivot['team_id']]), 'method' => 'delete')) }}
-										<button type="submit" class="button-delete" data-type="teamMember" data-name="{{ $participant->last_name }} {{ $participant->first_name }}">
+											<button type="submit" class="button-delete" data-type="teamMember" data-name="{{ $participant->last_name }} {{ $participant->first_name }}">
 										<i class="fa fa-lg fa-trash-o action" aria-hidden="true"></i>
 										</button>
 									{{ Form::close() }}
+									@endif
 								</td>
 							@endif
 					    </tr>
@@ -58,7 +60,7 @@
 			</table>
 		@endif
 
-		@if (($team->owner_id == Auth::user()->id) || Auth::user()->role == "administrator")
+		@if (Auth::user()->role == "administrator")
 			<h2>Ajouter un membre</h2>
 			@if (isset($error))
 				<div class="alert alert-danger">

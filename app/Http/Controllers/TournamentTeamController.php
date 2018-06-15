@@ -27,7 +27,8 @@ class TournamentTeamController extends Controller
         if ($request->ajax()) {
             $list = array();
             for ($i=0; $i < sizeof($teams); $i++) {
-                $list[$teams[$i]->id] = $teams[$i]->name;
+                if ($teams[$i]->isComplete() == false) // teams complete
+                    $list[$teams[$i]->id] = $teams[$i]->name;
             }
             return $list;
         }

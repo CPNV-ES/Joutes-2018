@@ -5,33 +5,21 @@
 
     <div class="container">
 
-        @if (isset($from) && ($from == null))
-            <h1> Bienvenue {{ Auth::user()->first_name }} dans les Joutes du CPNV</h1>
-        @else
-            <h1> Bienvenue dans la procedure de changement d'équipe</h1>
-        @endif
-
-        @if ($toFinish == null)
-            <p>Vous êtes obligés de vous inscrire à un tournoi. Il est également nécessaire d'avoir ou de rejoindre une équipe</p>
-            <p>Veuillez terminer votre inscription en utilisant le formulaire ci-dessous.</p><br>
-        @else
-            @if ($toFinish == "requiredMorning")
-                <p>ATTENTION! Il ne vous reste plus qu'à choisir une équipe pour le matin</p>
-            @endif
-            @if ($toFinish == "requiredAfternoon")
-                <p>ATTENTION! Il ne vous reste plus qu'à choisir une equipe pour l'aprés-midi</p>
-            @endif
-        @endif
+        <h1> Bienvenue dans la procedure de changement d'équipe</h1>
 
         @if (isset($error))
             <div class="alert alert-danger">{{$error}}</div>
         @endif
 
-        {{ Form::open(array('url' => route('profile.store'), 'method' => 'post', 'id' => 'formProfile')) }}
+        {{ Form::open(array('url' => route('profile.update',$id), 'method' => 'put', 'id' => 'formProfileChangeTeam')) }}
 
         <div class="form-group">
+            {{ Form::label('personalTeams', 'Equipe à changer') }}
+            {{ Form::select('personalTeams', $dropdownListPersonalTeams, null, ['placeholder' => 'Sélectionner', 'class' => 'form-control allSameStyle', 'id' => 'personalTeams']) }}
+        </div>
+        <div class="form-group">
             {{ Form::label('event', 'Evénements disponbles') }}
-            {{ Form::select('event', $dropdownListEvent, null, ['placeholder' => 'Sélectionner', 'class' => 'form-control allSameStyle', 'id' => 'event']) }}
+            {{ Form::select('event', $dropdownListEvent, null, $eventOptions) }}
         </div>
         <div class="form-group">
             {{ Form::label('tournament', 'Tournois disponibles') }}
@@ -57,11 +45,6 @@
 
         {{ Form::close() }}
 
-        <br>
-
-        {{ Form::open(array('url' => route('profile.destroy', Auth::user()->participant->id), 'method' => 'delete')) }}
-            <button class="btn btn-success  button-delete"  data-type="participantSigin">Reset</button>
-        {{ Form::close() }}
 
         </div>
 

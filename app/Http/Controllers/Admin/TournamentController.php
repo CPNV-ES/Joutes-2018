@@ -78,6 +78,9 @@ class TournamentController extends Controller
         if(!preg_match($patternTime, $request->input('startTime'))){
             $customErrors[] =  "Le champ Heure de début doit être sous la forme : hh:mm.";
         }
+        if(!preg_match($patternTime, $request->input('endTime'))){
+            $customErrors[] =  "Le champ Heure de fin doit être sous la forme : hh:mm.";
+        }
         // The date must be jj:mm:YYYY (laravel cast in YYYY-jj-mm)
         if(!preg_match($patternDate, $request->input('startDate'))){
             $customErrors[] = "Le champ Date de début doit être sous la forme : jj.mm.YYYY.";
@@ -108,7 +111,8 @@ class TournamentController extends Controller
         $rules = array(
             'name' => 'required|min:3|max:40',
             'sport' => 'required',
-            'img' => 'image|mimes:jpeg,png,jpg'
+            'img' => 'image|mimes:jpeg,png,jpg',
+            'maxTeams' => 'required|integer'
         );
 
         $validator = Validator::make($request->all(), $rules);
@@ -154,7 +158,9 @@ class TournamentController extends Controller
             //Save the tournament
             $tournament->name = $request->input('name');
             $tournament->start_date = $request->input('startDate')." ". $request->input('startTime').":00";
+            $tournament->end_date = $request->input('startDate')." ". $request->input('endTime').":00";
             $tournament->sport_id = $request->input('sport');
+            $tournament->max_teams = $request->input('maxTeams');
             $tournament->update();
 
             // Dissociate all teams linked to the tournament

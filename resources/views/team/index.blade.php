@@ -6,7 +6,9 @@
 	<div class="container">
 
 		<h1 id="titleTeam">Equipes
-		<a href="{{route('teams.create')}}" class="greenBtn" title="Créer un equipes">Céer</a>
+		@if (Auth::user()->role == "administrator")
+			<a href="{{route('teams.create')}}" class="greenBtn" title="Créer un equipes">Céer</a>
+		@endif
 		</h1>
 
 		<table id="teams-table" class="table table-striped table-bordered table-hover" cellspacing="0" width="100%">
@@ -15,7 +17,7 @@
 				<tr>
 					<th>Nom de l'équipe</th>
 					<th>Sport</th>
-					<th>Validate</th>
+					<th>Complet</th>
 					<th>Actions</th>
 				</tr>
 			</thead>
@@ -25,7 +27,7 @@
 				  	@foreach ($teams as $team)
 						<tr>
 					      <td data-id="{{$team->id}}" class="clickable">{{ $team->name }}</td>
-					      <td>{{ $team->sport->name }}</td><td><i class="{{ $team->validation ? 'fa fa-check' : 'fa fa-close' }}" aria-hidden="true"></i></td>
+					      <td>{{ $team->sport->name }}</td><td><i class="{{ $team->isComplete() ? 'fa fa-check' : 'fa fa-close' }}" aria-hidden="true"></i></td>
 					      <td class="action">
 							  @if (($team->owner_id == Auth::user()->id) || Auth::user()->role == "administrator")
 						      	<a href="{{ route('teams.edit', $team->id) }}" alt="Modifier la team"> <i class="fa fa-pencil fa-lg action" aria-hidden="true"></i> </a>

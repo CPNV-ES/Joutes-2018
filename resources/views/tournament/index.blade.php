@@ -37,7 +37,7 @@
 
 							<div class="infos">
 								<div class="sport"> {{ $tournament->sport->name }} </div>
-								<div class="date"> {{$tournament->start_date->format('d.m.Y à H:i')}} </div>
+								<div class="date"> {{$tournament->start_date->format('d.m.Y')}} | {{$tournament->start_date->format('H:i')}}-{{$tournament->end_date->format('H:i')}}</div>
 
 								@if(Auth::check())
 									@if(Auth::user()->role == 'administrator')

@@ -18,8 +18,61 @@ class Tournament extends Model
     // I added this because when I try to save() Sport value an updated_At "xy" error appears
     // And with this that work
     public $timestamps = false;
-    protected $fillable = array('name', 'start_date', 'end_date', 'start_time', 'event_id'); // -> We have to define all data we use on our sport table (For use ->all())
+    protected $fillable = array('name', 'start_date', 'end_date', 'start_time', 'event_id','max_teams'); // -> We have to define all data we use on our sport table (For use ->all())
     protected $dates = ['start_date', 'end_date']; //need to user convert format date
+
+    /**
+     *
+     * Check if the Tournament is in the time range
+     *
+     * @author Carboni Davide
+     *
+     * @param Carbon $from
+     * @param Carbon $to
+     * @return bool
+     */
+    public function isBetween(Carbon $from, Carbon $to) {
+        if (($this->start_date  >= $from) && ($this->end_date <= $to)) return true;
+        else return false;
+    }
+
+    /**
+     *
+     * Verify if the tournament take play in all the morning
+     *
+     * @author Carboni Davide
+     * @return bool
+     */
+    public function takesPlaceInTheMorning() {
+        if (($this->end_date->format('H:i:s') <= "13:00")) return true;
+        else return false;
+    }
+
+    /**
+     * Verify if the tournament take play in all the afternoon
+     *
+     * @author Carboni Davide
+     *
+     * @return bool
+     */
+    public function takesPlaceInTheAfternoon() {
+        if (($this->start_date->format('H:i:s') >= "13:00")) return true;
+        else return false;
+    }
+
+    /**
+     *
+     * Verify if the tournament take play in all the day
+     *
+     * @author Carboni Davide
+     *
+     * @return bool
+     */
+    public function takesPlaceAllTheDay() {
+        if (($this->takesPlaceInTheMorning() == false) && ($this->takesPlaceInTheAfternoon() == false)) return true;
+        //if ((($this->start_date->format('H:i:s') >= "09:00")) && (($this->end_date->format('H:i:s') <= "18:00")))  return true;
+        else return false;
+    }
 
     /**
      * Create a new belongs to relationship instance between Tournament and Event
@@ -174,5 +227,16 @@ class Tournament extends Model
         }
 
         return $tournament_games->sortBy('start_time')->take($limit);
+    }
+
+
+    /**
+     * Verify if the tornament have all teams required to be full
+     *
+     * @author Davide Carboni
+     */
+    public function isComplete(){
+        if ($this->teams->count() >= $this->max_teams) return true;
+        else return false;
     }
 }

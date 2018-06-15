@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Tournament;
 use App\Pool;
+use App\Team;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -41,9 +42,18 @@ class TournamentController extends Controller
      *
      * @author Dessaules Loïc
      */
-    public function show($id)
+    public function show(Request $request, $id)
     {
         $tournament = Tournament::find($id);
+
+        if ($request->ajax())
+        {
+            $team = Team::find($id);
+            if ($team->tournament->takesPlaceInTheMorning()) return (["inTheMorning"]);
+            if ($team->tournament->takesPlaceInTheAfternoon()) return (["inTheAfternoon"]);
+            if ($team->tournament->takesPlaceAllTheDay()) return (["inTheDay"]);
+        }
+
         $pools = $tournament->pools;
         $totalStage = 0;
         foreach ($pools as $pool) {

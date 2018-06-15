@@ -36,7 +36,7 @@ $( document ).ready(function() {
                 $( "#formProfile #tournament option" ).remove();
                 $('#tournament').append('<option selected = "selected" disabled = "disabled" hidden="hidden">Sélectionner</option>'); // append an option tag for the array item
                 for(var key in data) {
-                    $('#tournament').append('<option value ="'+ key + '">' + data[key] + '</option>'); // append an option tag for the array item
+                    $('#tournament').append('<option value ="'+ data[key]['id'] + '">' + data[key]['name'] + '</option>'); // append an option tag for the array item
                 }
                 enableTournamensSelections();
             }

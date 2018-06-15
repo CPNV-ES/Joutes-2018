@@ -28,6 +28,7 @@ elixir((mix) => {
             "custom/import.js",
             "custom/close.pool.js",
            	"custom/profileCreateformValidate.js",
+           "custom/profileChangeFormValidate.js",
 		   	"custom/teamCreate.js"
     	]);
 });

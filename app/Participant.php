@@ -35,9 +35,17 @@ class Participant extends Model
         return collect($tournaments)->unique("id");
     }
 
+    /**
+     * Varify if the user is registered
+     *
+     * @author Carboni Davide
+     *
+     * @param $id
+     * @return bool
+     */
     public function isUnsigned($id)
     {
         $participant = Participant::where('id',$id)->first();
-         return (count ($participant->teams) == 0);
+         return (count ($participant->teams) < 2);
     }
 }

@@ -13,6 +13,9 @@ $( document ).ready(function() {
 		var form = $(this).parent();
 
 		switch(type) {
+            case "participantSigin":
+                title = "Voulez-vous vraiment réfaire l'inscription ?";
+                break;
 		    case "sport":
 		    	title = "Voulez-vous vraiment supprimer le sport \""+name+"\"?";
 		        text = "La suppression de ce sport va entrainer la suppression des courts liés";
@@ -29,6 +32,8 @@ $( document ).ready(function() {
 		    case "memberTeam":
 		    	title = "Voulez-vous vraiment retirer "+name+" ?";
 		        break;
+
+
 		}
 		
 		alertConfirm(form, title, text);

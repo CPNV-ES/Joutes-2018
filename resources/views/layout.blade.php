@@ -94,6 +94,7 @@
                         <a href="#" class="show-devs">Développeurs</a>
 
                         <div class="dev-names hide">
+                            <a href="#" class="dev">Davide Carboni</a>
                             <a href="#" class="dev">Doran Kayoumi</a>
                             <a href="#" class="dev">Loïc Dessaules</a>
                             <a href="#" class="dev">Antoine Dessauges</a>

@@ -45,6 +45,14 @@
 				{{ Form::text('startTime', date("H:i", strtotime($tournament->start_date)), array('placeholder' => 'hh:mm', 'class' => 'form-control')) }}
 			</div>
 			<div class="form-group">
+				{{ Form::label('endTime', 'Heure de fin') }}
+				{{ Form::text('endTime', date("H:i", strtotime($tournament->end_date)), array('placeholder' => 'hh:mm', 'class'=>'form-control')) }}
+			</div>
+			<div class="form-group">
+				{{ Form::label('maxTeams', 'Nombre max d\'equipes') }}
+				{{ Form::text('maxTeams', $tournament->max_teams, array('class'=>'form-control')) }}
+			</div>
+			<div class="form-group">
 				{{ Form::label('teams', 'Équipes participantes') }}
 				@if(!empty($teamsAreParticipatingId))
 					{{ Form::select('teams[]', $dropdownListTeams, $teamsAreParticipatingId, array('class' => 'form-control allSameStyle', 'id' => 'multiple-teams-select', 'multiple')) }}
