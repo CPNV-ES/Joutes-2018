@@ -123,7 +123,9 @@ class SportController extends Controller
         // create the validation rules
         $rules = array(
             'name' => 'required|min:3|max:35',
-            'description' => 'max:45' 
+            'description' => 'max:45',
+            'min_participant' => 'required|integer',
+            'max_participant' => 'required|integer'
         );
 
         $validator = Validator::make($request->all(), $rules);

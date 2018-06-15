@@ -30,6 +30,14 @@
 				{{ Form::label('description', 'Description : ') }}
 				{{ Form::text('description', $sport->description, array('class' => 'form-control')) }}
 			</div>
+			<div class="form-group">
+				{{ Form::label('min_participant', 'Min Participant') }}
+				{{ Form::text('min_participant',$sport->min_participant , array('class' => 'form-control')) }}
+			</div>
+			<div class="form-group">
+				{{ Form::label('max_participant', 'Max participant') }}
+				{{ Form::text('max_participant', $sport->max_participant, array('class' => 'form-control')) }}
+			</div>
 
 			<div class="send">{{ Form::button('Enregistrer', array('class' => 'btn btn-success formSend')) }}</div>
 
