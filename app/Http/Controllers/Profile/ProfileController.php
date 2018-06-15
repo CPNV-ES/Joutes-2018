@@ -210,6 +210,7 @@ class ProfileController extends Controller
                 $checkBoxOptions = ['class' => 'switch', "id"=>'switch'];
                 $checkBoxActive = true;
                 $teamNewOptions = ['class' => 'form-control', 'id' => 'teamNew'];
+                $from = $request->input('from');
 
                 $error = "Le nom de l'équipe " . $request->input("teamNew") . " viens d'etre créer par un'autre utilisateur ";
                 return view('profile.create')
@@ -222,7 +223,7 @@ class ProfileController extends Controller
                     ->with('checkBoxOptions', $checkBoxOptions)
                     ->with('checkBoxActive', $checkBoxActive)
                     ->with('teamNewOptions', $teamNewOptions)
-                    ->with('from', null)
+                    ->with('from', $from)
                     ->with('toFinish', $toFinish);
             }
             else {

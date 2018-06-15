@@ -5,10 +5,10 @@
 
     <div class="container">
 
-        @if (isset($from) && ($from == null))
-            <h1> Bienvenue {{ Auth::user()->first_name }} dans les Joutes du CPNV</h1>
-        @else
+        @if (isset($from) && ($from != null))
             <h1> Bienvenue dans la procedure de changement d'équipe</h1>
+        @else
+            <h1> Bienvenue {{ Auth::user()->first_name }} dans les Joutes du CPNV</h1>
         @endif
 
         @if ($toFinish == null)
@@ -51,6 +51,9 @@
         </div>
         <div class="form-group hidden">
             {{ Form::text('toFinish', $toFinish, ['id' => 'toFinish']) }}
+        </div>
+        <div class="form-group hidden">
+            {{ Form::text('from', $from, ['id' => '$from']) }}
         </div>
 
         <div class="send">{{ Form::button('Terminer', array('class' => 'btn btn-success formSend', 'disabled' => 'disabled', 'id' => 'formValidate')) }}</div>
