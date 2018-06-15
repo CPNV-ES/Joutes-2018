@@ -40,13 +40,14 @@ class TournamentSetup {
         // TODO: $startTime and $endTime need to be ajusted accordingly to the current stage
         $startTime = date("H:i:s", strtotime($tournament->startTime));
         $endTime = date('H:i:s', strtotime('+2 hours', strtotime($startTime)));
+        $pools = array();
+        $contenders = array();
 
         $poolsName = $this->createPoolsName($nbPoolsPerStage, $nbStages, $tournament);
 
         // For each stage
         for ($s = 0; $s < $nbStages; $s++) {
             // reseting variables
-            $pools = array();
             $rank = 0;
             $poolIndex = 0;
 
@@ -67,7 +68,7 @@ class TournamentSetup {
 
                 $pool->save();
 
-                array_push($pools, $pool);
+                $pools[$s][$p] = $pool;
             }
 
             // Contenders creation
@@ -77,14 +78,16 @@ class TournamentSetup {
 
                 if ($c % $nbPoolsPerStage == 0) $rank++;
                 $contender->rank_in_pool = ($s) ? $rank : null;
+
                 $contender->team_id = ($s) ? $tournament->teams[$c]->id : null;
 
-                $contender->pool_id = $pools[$poolIndex]->id;
-                if ($c % $nbTeamsPerPool == 0) $poolIndex++;
+                $contender->pool_id = $pools[$s][$poolIndex]->id;
+                $contender->pool_from_id = ($s) ? $pools[$s-1][$poolIndex]->id : null;
+                if (($c+1) % $nbTeamsPerPool == 0) $poolIndex++;
 
-                // TODO: do not reset $pools and keep every created pool to get his id
-                $contender->pool_from_id = ($s) $previousStagePoolId : null;
+                $contender->save();
 
+                $contenders[$s][$c] = $contender;
             }
 
             // Game creation
