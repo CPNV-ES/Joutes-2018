@@ -55,8 +55,6 @@ $( document ).ready(function() {
         resetContent(2);
         disableTeamsSelections();
         disableTeamNew();
-        enableSwitch();
-        resetSwitch();
         disableButtonValidate();
         readListTeams(val);
     });
@@ -133,16 +131,16 @@ $( document ).ready(function() {
                         if (timeZone == 'inTheAfternoon') {
                             // Get only the tournaments that takes place in the afternoon
                             if (data[key]['start_date']['date'].substr(11, 2) >= "13")
-                                $('#tournament').append('<option value ="' + data[key]['id'] + '">' + data[key]['name'] + '</option>'); // append an option tag for the array item
+                                $('#tournament').append('<option value ="' + data[key]['id'] + '"tournamentIsFull="' +  data[key]['isMaxLimiTeams'] +'">' + data[key]['name'] + '</option>'); // append an option tag for the array item
                         }else
                         if (timeZone == 'inTheMorning') {
                             // Get only the tournaments that takes place in the morning
                             if (data[key]['end_date']['date'].substr(11, 2) <= "13")
-                                $('#tournament').append('<option value ="' + data[key]['id'] + '">' + data[key]['name'] + '</option>'); // append an option tag for the array item
+                                $('#tournament').append('<option value ="' + data[key]['id'] + '"tournamentIsFull="' +  data[key]['isMaxLimiTeams'] +'">' + data[key]['name'] + '</option>'); // append an option tag for the array item
                         }
                         if (timeZone == "inTheDay")
                             // Get all the tournaments that takes place in the morning and in the afternoon
-                            $('#tournament').append('<option value ="' + data[key]['id'] + '">' + data[key]['name'] + '</option>'); // append an option tag for the array item
+                            $('#tournament').append('<option value ="' + data[key]['id'] + '"tournamentIsFull="' +  data[key]['isMaxLimiTeams'] +'">' + data[key]['name'] + '</option>'); // append an option tag for the array item
                     }
                     enableTournamensSelections();
                 }
@@ -152,6 +150,15 @@ $( document ).ready(function() {
 
     // Read all tems for an tournaments with ajax request
     function  readListTeams(data) {
+        var isTournamentParentFull =  $('#tournament option:selected').attr('tournamentIsFull');
+        if (isTournamentParentFull.localeCompare("false") == 0){
+            enableSwitch();
+            resetSwitch();
+        }else{
+            disableSwitch();
+            resetSwitch();
+            $("#teamNew").val("Pas de création possible");
+        }
         $.ajax({
             type:'GET',
             url:'/tournaments/' + data + '/teams',

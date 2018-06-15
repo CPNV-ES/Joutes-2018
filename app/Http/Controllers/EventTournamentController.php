@@ -36,12 +36,11 @@ class EventTournamentController extends Controller
         if ($request->ajax()) {
             $list = array();
             for ($i=0; $i < sizeof($tournaments); $i++) {
-                if ($tournaments[$i]->isComplete() == false) { // tournament complete
-                    $list[] = ['id' => $tournaments[$i]->id, 'name' => $tournaments[$i]->name, 'start_date' => $tournaments[$i]->start_date, 'end_date' => $tournaments[$i]->end_date];
-                    //$list[$tournaments[$i]->id] = $tournaments[$i]->name;
+                $isMaxLimit = $tournaments[$i]->isComplete(); // tournament complete
+                $list[] = ['id' => $tournaments[$i]->id, 'name' => $tournaments[$i]->name, 'start_date' => $tournaments[$i]->start_date, 'end_date' => $tournaments[$i]->end_date, 'isMaxLimiTeams' => $isMaxLimit];
                 }
-            }
             return $list;
+
         }
 
         $event = Event::findOrFail($event_id);
