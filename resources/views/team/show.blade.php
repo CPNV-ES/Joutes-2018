@@ -26,9 +26,8 @@
 				<thead>
 					<tr>
 						<th>Nom du membre</th>
-						@if (($team->owner_id == Auth::user()->id) || Auth::user()->role == "administrator")
-							<th>Actions</th>
-						@endif
+						<th>Mail</th>
+						<th>Actions</th>
 					</tr>
 				</thead>
 
@@ -41,15 +40,16 @@
 							@else
 								<td data-id="{{$participant->id}}" class="clickable"> {{ $participant->last_name }} {{ $participant->first_name }}</td>
 							@endif
-							@if (($team->owner_id == Auth::user()->id) || Auth::user()->role == "administrator")
+								<td><a href="mailto:{{$participant->user->email}}">{{$participant->user->email}}</a></td>
 								<td class="action">
+									@if ((($team->owner_id == Auth::user()->id) && ($participant->user->id != Auth::user()->id)) || Auth::user()->role == "administrator")
 									{{ Form::open(array('url' => route('teams.participants.destroy', [$participant->pivot['participant_id'], $participant->pivot['team_id']]), 'method' => 'delete')) }}
 											<button type="submit" class="button-delete" data-type="teamMember" data-name="{{ $participant->last_name }} {{ $participant->first_name }}">
 										<i class="fa fa-lg fa-trash-o action" aria-hidden="true"></i>
 										</button>
+									@endif
 									{{ Form::close() }}
 								</td>
-							@endif
 					    </tr>
 					@endforeach
 

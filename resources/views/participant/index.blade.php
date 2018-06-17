@@ -12,6 +12,7 @@
 			<thead>
 				<tr>
 					<th>Nom du participant</th>
+					<th>Mail</th>
 					<th>Sport(s)</th>
 				</tr>
 			</thead>
@@ -21,6 +22,7 @@
 				  	@foreach ($participants as $participant)
 						<tr>
 					      <td data-id="{{$participant->id}}" class="clickable">{{ $participant->last_name }} {{ $participant->first_name }}</td>
+							<td><a href="mailto:{{$participant->user->email}}">{{$participant->user->email}}</a></td>
 					      <td>
 							@foreach ($participant->teams as $team)
 								
