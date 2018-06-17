@@ -60,16 +60,12 @@ class ProfileController extends Controller
     public function update(Request $request, $id)
     {
         $isNewEquipe = $request->input('switch');
-        $participant = Auth::user()->participant()->first();
-        $event = $request->input('event');
         $tournament = $request->input('tournament');
-        $toFinish = $request->input("toFinish");
         $oldTeamID = $request->input('personalTeams');
         $oldTeam = Team::find($oldTeamID);
 
         // Verify if the user want to SignIn in the Tournament with a new personal team or with a exsist team
         if ($isNewEquipe == null) {
-
             $participant = Participant::find($id);
             $participant->teams()->detach($oldTeamID);
             if ($oldTeam->isOwner($participant->id)) {
@@ -87,57 +83,23 @@ class ProfileController extends Controller
             $team->participants()->attach([$participant->id => array('isCaptain' => '0' )]); //add the link row in intemrediate table
         }
         else {
-            $rules = array('teamNew' => 'unique:teams,name');
-            // Verify if the new created team already exsist in the DB
-            $validator = Validator::make(array('teamNew'=>$request->input('teamNew')), $rules);
-            if ($validator->fails()) {
-                // The new created team exsist so prepare the form with the old selections for a new input
-                $dropdownListPersonalTeams = $this->getDropList_ParticipantTeams($participant->id);
-                $dropdownListEvent = $this->getDropDownList_Event();
-                $dropdownListEventTournaments = $this->getDropDownList_EventTournaments($event);
-                $dropdownListTournamentTeams = $this->getDropDownList_TournamentTeams($tournament);
-                $eventOptions = ['placeholder' => 'Sélectionner', 'class' => 'form-control allSameStyle', 'id' => 'event'];
-                $tournamentsOptions = ['class' => 'form-control allSameStyle', 'id' => 'tournament'];
-                $teamsOptions = ['class' => 'form-control allSameStyle', 'id' => 'teamSelected', 'disabled' => 'disabled'];
-                $checkBoxOptions = ['class' => 'switch', "id"=>'switch'];
-                $checkBoxActive = true;
-                $teamNewOptions = ['class' => 'form-control', 'id' => 'teamNew'];
-
-                $error = "Le nom de l'équipe " . $request->input("teamNew") . " viens d'etre créer par un'autre utilisateur ";
-                return view('profile.edit')
-                    ->with('error',$error)
-                    ->with('dropdownListPersonalTeams', $dropdownListPersonalTeams)
-                    ->with('dropdownListEvent', $dropdownListEvent)
-                    ->with('dropdownListEventTournaments', $dropdownListEventTournaments)
-                    ->with('dropdownListTournamentTeams', $dropdownListTournamentTeams)
-                    ->with('tournamentsOptions', $tournamentsOptions)
-                    ->with('eventOptions', $eventOptions)
-                    ->with('teamsOptions', $teamsOptions)
-                    ->with('checkBoxOptions', $checkBoxOptions)
-                    ->with('checkBoxActive', $checkBoxActive)
-                    ->with('teamNewOptions', $teamNewOptions)
-                    ->with('id', $id)
-                    ->with('toFinish', $toFinish);
-            }
-            else {
-                // The team do not exsist so call the TeamController to store the new team
-                $participant = Participant::find($id);
-                $participant->teams()->detach($oldTeamID);
-                if ($oldTeam->isOwner($participant->id)) {
-                    $participants = $oldTeam->participants;
-                    if ($participants->count() == 0) {
-                        $oldTeam->delete();
-                    }
-                    else{
-                        $first = $participants->first();
-                        $oldTeam->owner_id = $first->user->id;
-                        $oldTeam->save();
-                    }
+            // The team do not exsist so call the TeamController to store the new team
+            $participant = Participant::find($id);
+            $participant->teams()->detach($oldTeamID);
+            if ($oldTeam->isOwner($participant->id)) {
+                $participants = $oldTeam->participants;
+                if ($participants->count() == 0) {
+                    $oldTeam->delete();
                 }
-                $teamName = $request->input('teamNew');
-                $newRequest = Request::create('', 'POST', array('name' => $teamName, 'tournament' => $tournament));
-                app('App\Http\Controllers\Admin\TeamController')->store($newRequest);
+                else{
+                    $first = $participants->first();
+                    $oldTeam->owner_id = $first->user->id;
+                    $oldTeam->save();
+                }
             }
+            $teamName = $request->input('teamNew');
+            $newRequest = Request::create('', 'POST', array('name' => $teamName, 'tournament' => $tournament));
+            app('App\Http\Controllers\Admin\TeamController')->store($newRequest);
         }
 
         return redirect()->route('profile.index',['from' => "changeTeam"]);
@@ -153,24 +115,10 @@ class ProfileController extends Controller
     {
         //Prepare all values for the SignIn login form
         $dropdownListEvent = $this->getDropDownList_Event();
-        $dropdownListEventTournaments = array();
-        $dropdownListTournamentTeams = array();
-        $tournamentsOptions = ['placeholder' => 'Sélectionner', 'class' => 'form-control allSameStyle', 'id' => 'tournament', 'disabled' => 'disabled'];
-        $teamsOptions = ['placeholder' => 'Sélectionner', 'class' => 'form-control allSameStyle', 'id' => 'teamSelected', 'disabled' => 'disabled'];
-        $checkBoxOptions = ['class' => 'switch', "id"=>'switch', 'disabled' => 'disabled'];
-        $checkBoxActive = false;
-        $teamNewOptions = ['class' => 'form-control', 'disabled' => 'disabled', 'id' => 'teamNew'];
         $toFinish = $request->input("toFinish");
 
         return view('profile.create')
             ->with('dropdownListEvent', $dropdownListEvent)
-            ->with('dropdownListEventTournaments', $dropdownListEventTournaments)
-            ->with('dropdownListTournamentTeams', $dropdownListTournamentTeams)
-            ->with('tournamentsOptions', $tournamentsOptions)
-            ->with('teamsOptions', $teamsOptions)
-            ->with('checkBoxOptions', $checkBoxOptions)
-            ->with('checkBoxActive', $checkBoxActive)
-            ->with('teamNewOptions', $teamNewOptions)
             ->with('from', $request->input("from"))
             ->with('toFinish', $toFinish);
     }
@@ -187,51 +135,18 @@ class ProfileController extends Controller
     {
         $isNewEquipe = $request->input('switch');
         $participant = Auth::user()->participant()->first();
-        $event = $request->input('event');
         $tournament = $request->input('tournament');
-        $toFinish = $request->input("toFinish");
 
-        // Verify if the user want to SignIn in the Tournament with a new personal team or with a exsist team
-        if ($isNewEquipe == null) {
+        if (($isNewEquipe == null)) {
             $team = Team::where('id',$request->input('teamSelected'))->first();
             $team->participants()->attach([$participant->id => array('isCaptain' => '0' )]); //add the link row in intemrediate table
-        }
-        else {
-            $rules = array('teamNew' => 'unique:teams,name');
-            // Verify if the new created team already exsist in the DB
-            $validator = Validator::make(array('teamNew'=>$request->input('teamNew')), $rules);
-            if ($validator->fails()) {
-                // The new created team exsist so prepare the form with the old selections for a new input
-                $dropdownListEvent = $this->getDropDownList_Event();
-                $dropdownListEventTournaments = $this->getDropDownList_EventTournaments($event);
-                $dropdownListTournamentTeams = $this->getDropDownList_TournamentTeams($tournament);
-                $tournamentsOptions = ['class' => 'form-control allSameStyle', 'id' => 'tournament'];
-                $teamsOptions = ['class' => 'form-control allSameStyle', 'id' => 'teamSelected', 'disabled' => 'disabled'];
-                $checkBoxOptions = ['class' => 'switch', "id"=>'switch'];
-                $checkBoxActive = true;
-                $teamNewOptions = ['class' => 'form-control', 'id' => 'teamNew'];
-                $from = $request->input('from');
 
-                $error = "Le nom de l'équipe " . $request->input("teamNew") . " viens d'etre créer par un'autre utilisateur ";
-                return view('profile.create')
-                    ->with('error',$error)
-                    ->with('dropdownListEvent', $dropdownListEvent)
-                    ->with('dropdownListEventTournaments', $dropdownListEventTournaments)
-                    ->with('dropdownListTournamentTeams', $dropdownListTournamentTeams)
-                    ->with('tournamentsOptions', $tournamentsOptions)
-                    ->with('teamsOptions', $teamsOptions)
-                    ->with('checkBoxOptions', $checkBoxOptions)
-                    ->with('checkBoxActive', $checkBoxActive)
-                    ->with('teamNewOptions', $teamNewOptions)
-                    ->with('from', $from)
-                    ->with('toFinish', $toFinish);
-            }
-            else {
-                // The team do not exsist so call the TeamController to store the new team
-                $teamName = $request->input('teamNew');
-                $request = Request::create('', 'POST', array('name' => $teamName, 'tournament' => $tournament));
-                app('App\Http\Controllers\Admin\TeamController')->store($request);
-            }
+        }
+
+        if ($isNewEquipe != null) {
+            $teamName = $request->input('teamNew');
+            $request = Request::create('', 'POST', array('name' => $teamName, 'tournament' => $tournament));
+            app('App\Http\Controllers\Admin\TeamController')->store($request);
         }
 
         return redirect()->route('profile.index');
@@ -265,28 +180,10 @@ class ProfileController extends Controller
     public function edit(Request $request, $id){
         //Prepare all values for the SignIn login form
         $dropdownListPersonalTeams = $this->getDropList_ParticipantTeams($id);
-        $dropdownListEvent = $this->getDropDownList_Event();
-        $dropdownListEventTournaments = array();
-        $dropdownListTournamentTeams = array();
-        $eventOptions = ['placeholder' => 'Sélectionner', 'class' => 'form-control allSameStyle', 'id' => 'event', 'disabled' => 'disabled'];
-        $tournamentsOptions = ['placeholder' => 'Sélectionner', 'class' => 'form-control allSameStyle', 'id' => 'tournament', 'disabled' => 'disabled'];
-        $teamsOptions = ['placeholder' => 'Sélectionner', 'class' => 'form-control allSameStyle', 'id' => 'teamSelected', 'disabled' => 'disabled'];
-        $checkBoxOptions = ['class' => 'switch', "id"=>'switch', 'disabled' => 'disabled'];
-        $checkBoxActive = false;
-        $teamNewOptions = ['class' => 'form-control', 'disabled' => 'disabled', 'id' => 'teamNew'];
         $toFinish = $request->input("toFinish");
 
         return view('profile.edit')
             ->with('dropdownListPersonalTeams', $dropdownListPersonalTeams)
-            ->with('dropdownListEvent', $dropdownListEvent)
-            ->with('dropdownListEventTournaments', $dropdownListEventTournaments)
-            ->with('dropdownListTournamentTeams', $dropdownListTournamentTeams)
-            ->with('eventOptions', $eventOptions)
-            ->with('tournamentsOptions', $tournamentsOptions)
-            ->with('teamsOptions', $teamsOptions)
-            ->with('checkBoxOptions', $checkBoxOptions)
-            ->with('checkBoxActive', $checkBoxActive)
-            ->with('teamNewOptions', $teamNewOptions)
             ->with('toFinish', $toFinish)
             ->with('id', $id);
     }
@@ -362,27 +259,6 @@ class ProfileController extends Controller
         return $dropdownListEventTournaments;
     }
 
-
-    /**
-     * Prepare array data width all team's tournament
-     *
-     * @param $id
-     * @return array
-     *
-     * @author Carboni Davide
-     */
-    private function getDropDownList_TournamentTeams($id){
-        $tournament = Tournament::findOrFail($id);
-        $teams = $tournament->teams;
-        // Creation of the array will contain the datas of the dropdown teams list
-        // This form: array("sport_id 1" => "sport_name 1", "sport_id 2" => "sport_name 2"), ...
-        $dropdownListTournamentTeams = array();
-        for ($i=0; $i < sizeof($teams); $i++) {
-            $dropdownListTournamentTeams[$teams[$i]->id] = $teams[$i]->name;
-        }
-        return $dropdownListTournamentTeams;
-    }
-
     private function getDropList_ParticipantTeams($id){
         $participant = Participant::find($id);
         $teams = $participant->teams;
@@ -394,4 +270,5 @@ class ProfileController extends Controller
         }
         return $dropdownListPersonalTeams;
     }
+
 }

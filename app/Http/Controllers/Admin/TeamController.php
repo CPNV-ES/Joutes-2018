@@ -118,12 +118,24 @@ class TeamController extends Controller
         // return the id for a username using ajax
         if ($request->ajax())
         {
-            $team = Team::where('name',$id)->first();
+            if ($request->input("isFull") == "isFull"){
+                $team = Team::find($id);
+                if ($team->isComplete())return 1;
+                else return 0;
+            }
 
-            if ($team == null)
-                return -1;
-            else
-                return $team->id;
+            if ($request->input("timeZone") == "timeZone"){
+                $team = Team::find($id);
+                if ($team->tournament->takesPlaceInTheMorning()) return (["inTheMorning"]);
+                if ($team->tournament->takesPlaceInTheAfternoon()) return (["inTheAfternoon"]);
+                if ($team->tournament->takesPlaceAllTheDay()) return (["inTheDay"]);
+            }
+
+            if ($request->input("teamExisistName") == "teamExisistName"){
+                $team = Team::where('name', $id)->first();
+                if ($team == null) return 0;
+                else return 1;
+            }
         }
 
         $team = Team::find($id); 

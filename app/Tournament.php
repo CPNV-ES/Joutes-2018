@@ -239,4 +239,21 @@ class Tournament extends Model
         if ($this->teams->count() >= $this->max_teams) return true;
         else return false;
     }
+
+
+    /**
+     * @return bool
+     *
+     *
+     * @author Davide Carboni
+     */
+    public function haveTeamsEmpty()
+    {
+        $teams = $this->teams;
+        foreach ($teams as $team)
+            if ($team->isComplete() == false)
+                return true;
+
+        return false;
+    }
 }

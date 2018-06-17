@@ -48,10 +48,10 @@ class TournamentController extends Controller
 
         if ($request->ajax())
         {
-            $team = Team::find($id);
-            if ($team->tournament->takesPlaceInTheMorning()) return (["inTheMorning"]);
-            if ($team->tournament->takesPlaceInTheAfternoon()) return (["inTheAfternoon"]);
-            if ($team->tournament->takesPlaceAllTheDay()) return (["inTheDay"]);
+            if ($request->input("isFull") == "isFull") {
+                if (($tournament->isComplete()) || ($tournament == null)) return 1;
+                else return 0;
+            }
         }
 
         $pools = $tournament->pools;

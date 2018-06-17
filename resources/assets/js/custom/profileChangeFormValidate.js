@@ -8,7 +8,7 @@ $( document ).ready(function() {
     $('#formProfileChangeTeam #switch').click(function() {
         //event.preventDefault(); // cancel the event click, needed to delte participant in team. Without the form is sumbit on icon click
         disableButtonValidate();
-        CheckifCanSubmit();
+        CheckifCanSubmit(false);
         if ($('input[name="switch"]').is(':checked')){
             disableTeamsSelections();
             enabledTeamNew();
@@ -22,7 +22,7 @@ $( document ).ready(function() {
 
     $('#formProfileChangeTeam #personalTeams').change(function (e) {
         e.preventDefault();
-        var val =  $('#personalTeams option:selected').val();
+        var val =  $('#formProfileChangeTeam #personalTeams option:selected').val();
         resetContent(4);
         disableListEvents();
         disableTournamensSelections();
@@ -61,11 +61,15 @@ $( document ).ready(function() {
 
     $('#formProfileChangeTeam #teamSelected').change(function (e) {
         e.preventDefault();
-        CheckifCanSubmit();
+        CheckifCanSubmit(false);
     });
 
     $("#formProfileChangeTeam #teamNew").on("change paste keyup", function() {
         CheckifCanSubmit();
+    });
+
+    $('#formProfileChangeTeam #formValidate').click(function(){
+        GotoSubmit();
     });
 
 
@@ -73,16 +77,17 @@ $( document ).ready(function() {
     function  readtimeZone(id) {
         $.ajax({
             type:'GET',
-            url:'/tournaments/'+id,
+            url:'/admin/teams/' + id,
             dataType    : 'json',
             context     : this,
             cache       : false,
+            data:{timeZone:"timeZone"},
+            headers : {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
             success:function(data){
                 timeZone = data;
             }
         });
     }
-
 
     // Read all tems for an tournaments with ajax request
     function  readListEvent() {
@@ -97,12 +102,12 @@ $( document ).ready(function() {
                 if (data.length == 0)
                 {
                     //No teams availables => the team is full
-                    $('#event').append('<option selected = "selected" disabled = "disabled"  hidden="hidden">Pas d\'evenements disponibles</option>'); // append an option tag for the array item
+                    $('#formProfileChangeTeam #event').append('<option selected = "selected" disabled = "disabled"  hidden="hidden">Pas d\'evenements disponibles</option>'); // append an option tag for the array item
                 }else
                 {
-                    $('#event').append('<option selected = "selected" disabled = "disabled"  hidden="hidden">Sélectionner</option>'); // append an option tag for the array item
+                    $('#formProfileChangeTeam #event').append('<option selected = "selected" disabled = "disabled"  hidden="hidden">Sélectionner</option>'); // append an option tag for the array item
                     for (var key in data) {
-                        $('#event').append('<option value ="' + key + '">' + data[key] + '</option>'); // append an option tag for the array item
+                        $('#formProfileChangeTeam #event').append('<option value ="' + key + '">' + data[key] + '</option>'); // append an option tag for the array item
                     }
                 }
                 enableListEvents();
@@ -119,28 +124,28 @@ $( document ).ready(function() {
             context     : this,
             cache       : false,
             success:function(data){
-                $( "#formProfile #tournament option" ).remove();
+                $( "#formProfileChangeTeam #tournament option" ).remove();
                 if (data.length == 0)
                 {
                     // No tournaments availables=>it is complete
-                    $('#tournament').append('<option selected = "selected" disabled = "disabled"  hidden="hidden">Pas de tournois disponibles</option>'); // append an option tag for the array item
+                    $('#formProfileChangeTeam #tournament').append('<option selected = "selected" disabled = "disabled"  hidden="hidden">Pas de tournois disponibles</option>'); // append an option tag for the array item
                 }else
                 {
-                    $('#tournament').append('<option selected = "selected" disabled = "disabled" hidden="hidden">Sélectionner</option>'); // append an option tag for the array item
+                    $('#formProfileChangeTeam #tournament').append('<option selected = "selected" disabled = "disabled" hidden="hidden">Sélectionner</option>'); // append an option tag for the array item
                     for (var key in data) {
                         if (timeZone == 'inTheAfternoon') {
                             // Get only the tournaments that takes place in the afternoon
                             if (data[key]['start_date']['date'].substr(11, 2) >= "13")
-                                $('#tournament').append('<option value ="' + data[key]['id'] + '"tournamentIsFull="' +  data[key]['isMaxLimiTeams'] +'">' + data[key]['name'] + '</option>'); // append an option tag for the array item
+                                $('#formProfileChangeTeam #tournament').append('<option value ="' + data[key]['id'] + '"tournamentIsFull="' +  data[key]['isMaxLimiTeams'] +'">' + data[key]['name'] + '</option>'); // append an option tag for the array item
                         }else
                         if (timeZone == 'inTheMorning') {
                             // Get only the tournaments that takes place in the morning
                             if (data[key]['end_date']['date'].substr(11, 2) <= "13")
-                                $('#tournament').append('<option value ="' + data[key]['id'] + '"tournamentIsFull="' +  data[key]['isMaxLimiTeams'] +'">' + data[key]['name'] + '</option>'); // append an option tag for the array item
+                                $('#formProfileChangeTeam #tournament').append('<option value ="' + data[key]['id'] + '"tournamentIsFull="' +  data[key]['isMaxLimiTeams'] +'">' + data[key]['name'] + '</option>'); // append an option tag for the array item
                         }
                         if (timeZone == "inTheDay")
                             // Get all the tournaments that takes place in the morning and in the afternoon
-                            $('#tournament').append('<option value ="' + data[key]['id'] + '"tournamentIsFull="' +  data[key]['isMaxLimiTeams'] +'">' + data[key]['name'] + '</option>'); // append an option tag for the array item
+                            $('#formProfileChangeTeam #tournament').append('<option value ="' + data[key]['id'] + '"tournamentIsFull="' +  data[key]['isMaxLimiTeams'] +'">' + data[key]['name'] + '</option>'); // append an option tag for the array item
                     }
                     enableTournamensSelections();
                 }
@@ -150,14 +155,14 @@ $( document ).ready(function() {
 
     // Read all tems for an tournaments with ajax request
     function  readListTeams(data) {
-        var isTournamentParentFull =  $('#tournament option:selected').attr('tournamentIsFull');
+        var isTournamentParentFull =  $('#formProfileChangeTeam #tournament option:selected').attr('tournamentIsFull');
         if (isTournamentParentFull.localeCompare("false") == 0){
             enableSwitch();
             resetSwitch();
         }else{
             disableSwitch();
             resetSwitch();
-            $("#teamNew").val("Pas de création possible");
+            $("#formProfileChangeTeam #teamNew").val("Pas de création possible");
         }
         $.ajax({
             type:'GET',
@@ -170,12 +175,17 @@ $( document ).ready(function() {
                 if (data.length == 0)
                 {
                     //No teams availables => the team is full
-                    $('#teamSelected').append('<option selected = "selected" disabled = "disabled"  hidden="hidden">Pas d\'equpes disponibles</option>'); // append an option tag for the array item
+                    $('#formProfileChangeTeam #teamSelected').append('<option selected = "selected" disabled = "disabled"  hidden="hidden">Pas d\'equpes disponibles</option>'); // append an option tag for the array item
+                    if (isTournamentParentFull.localeCompare("false") == 0){
+                        SwitchON();
+                        disableSwitch();
+                        enabledTeamNew();
+                    }
                 }else
                 {
-                    $('#teamSelected').append('<option selected = "selected" disabled = "disabled"  hidden="hidden">Sélectionner</option>'); // append an option tag for the array item
+                    $('#formProfileChangeTeam #teamSelected').append('<option selected = "selected" disabled = "disabled"  hidden="hidden">Sélectionner</option>'); // append an option tag for the array item
                     for (var key in data) {
-                        $('#teamSelected').append('<option value ="' + key + '">' + data[key] + '</option>'); // append an option tag for the array item
+                        $('#formProfileChangeTeam #teamSelected').append('<option value ="' + key + '">' + data[key] + '</option>'); // append an option tag for the array item
                         enableTeamsSelections();
                     }
                 }
@@ -184,44 +194,124 @@ $( document ).ready(function() {
         });
     }
 
+    // Read if the Selected teams is Full
+    function  VerifyTeamSelected() {
+        var val =  $('#formProfileChangeTeam #teamSelected option:selected').val();
+        $.ajax({
+            type:'GET',
+            url:'/admin/teams/' + val,
+            dataType    : 'json',
+            context     : this,
+            cache       : false,
+            data:{isFull:"isFull"},
+            headers : {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+            success:function(data){
+                if (data == true){ // team complete
+                    errorMessageTeam(true);
+                    var val =  $('#formProfileChangeTeam #tournament option:selected').val();
+                    disableTeamsSelections();
+                    disableTeamNew();
+                    disableButtonValidate();
+                    readListTeams(val);
+                }
+                else
+                {
+                    enableSwitch();
+                    $("#formProfileChangeTeam").submit();
+                }
+            }
+        });
+    }
+
+
+    //Verify if the created team exists then submit the form
+    function  VerifyTeamCreated() {
+        var val =  $('#formProfileChangeTeam #tournament option:selected').val();
+        $.ajax({
+            type:'GET',
+            url:'/tournaments/' + val,
+            dataType    : 'json',
+            context     : this,
+            cache       : false,
+            data:{isFull:"isFull"},
+            headers : {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+            success:function(data){
+                if (data == true){ // team complete
+                    errorMessage(true,2);
+                    var val =  $('#formProfileChangeTeam #tournament option:selected').val();
+                    $('#formProfileChangeTeam #tournament option:selected').attr('tournamentIsFull',"true");
+                    disableTeamsSelections();
+                    disableTeamNew();
+                    disableButtonValidate();
+                    disableSwitch();
+                    readListTeams(val);
+                }
+                else{
+                    CheckifCanSubmit(true);
+                }
+            }
+        });
+    }
+
+
     // Read if the Teams already exsist
-    function  TeamAlreadyExsist(data) {
+    function  TeamAlreadyExsist(data,action) {
         $.ajax({
             type:'GET',
             url:'/admin/teams/' + data,
             dataType    : 'json',
             context     : this,
             cache       : false,
-            //data:{searchTerm:data},
-            //headers : {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+            data:{teamExisistName:"teamExisistName"},
+            headers : {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
             success:function(data){
-                if (data == '-1')
+                if (data == '0')
                 {
-                    enableButtonValidate();
-                    errorMessage(false);
+                    if (action)
+                    {
+                        enableSwitch();
+                        $("#formProfileChangeTeam").submit();
+                    }else {
+                        enableButtonValidate();
+                        errorMessage(false, 1);
+                    }
                 }
                 else {
                     disableButtonValidate();
-                    errorMessage(true);
+                    errorMessage(true,1);
                 }
             }
         });
     }
 
-    // Check if the form is valid then enable then Button to Submit
-    function CheckifCanSubmit()
+    // Check if the form is valid then Submit
+    function GotoSubmit()
     {
         disableButtonValidate();
-        if ($('input[name="switch"]').is(':checked')) {
-            var val = $('#teamNew').val();
-            if (val.length === 0)
-                disableButtonValidate();
-            else
-                TeamAlreadyExsist(val);
+        if ($('#formProfileChangeTeam input[name="switch"]').is(':checked')) {
+            VerifyTeamCreated();
         }
         else
         {
-            var val = $('#teamSelected option:selected').val();
+            VerifyTeamSelected();
+        }
+    }
+
+
+    // Check if the form is valid then enable then Button to Submit
+    function CheckifCanSubmit(action)
+    {
+        disableButtonValidate();
+        if ($('#formProfileChangeTeam input[name="switch"]').is(':checked')) {
+            var val = $('#formProfileChangeTeam #teamNew').val();
+            if (val.length === 0)
+                disableButtonValidate();
+            else
+                TeamAlreadyExsist(val,action);
+        }
+        else
+        {
+            var val = $('#formProfileChangeTeam #teamSelected option:selected').val();
             var patternSelect = /^[0-9]+$/;
             if (patternSelect.test(val)) {
                 enableButtonValidate();
@@ -230,12 +320,23 @@ $( document ).ready(function() {
     }
 
     // Enable-Disable the error message if the team already exsist
-    function errorMessage(value)
+    function errorMessage(value,type)
     {
         if (value)
-            $('#errorMessage').text(" - ATTENTION! Le noms de l'equipe est dèja utilisé");
+            if (type == 1)
+                $('#formProfileChangeTeam #errorMessage').text(" - ATTENTION! Le noms de l'equipe est dèja utilisé");
+            else
+                $('#formProfileChangeTeam #errorMessage').text(" - ATTENTION! Le tournoi est complet ! Pas possible de créer 'equipe");
         else
-            $('#errorMessage').text("");
+            $('#formProfileChangeTeam #errorMessage').text("");
+    }
+
+    function errorMessageTeam(value)
+    {
+        if (value)
+            $('#formProfileChangeTeam #errorMessageTeam').text(" - ATTENTION! L'équipe est dèja au complet");
+        else
+            $('#formProfileChangeTeam #errorMessageTeam').text("");
     }
 
     // Enabled list event
@@ -247,30 +348,30 @@ $( document ).ready(function() {
     // Enabled button to validate the form
     function enableButtonValidate()
     {
-        $('#formValidate').removeAttr('disabled','disabled');
+        $('#formProfileChangeTeam #formValidate').removeAttr('disabled','disabled');
     }
 
     // Enabled tournaments select input field
     function enableTournamensSelections()
     {
-        $('#tournament').removeAttr('disabled','disabled');
+        $('#formProfileChangeTeam #tournament').removeAttr('disabled','disabled');
     }
 
     // Enabled teams select input field
     function enableTeamsSelections()
     {
-        $('#teamSelected').removeAttr('disabled','disabled');
+        $('#formProfileChangeTeam #teamSelected').removeAttr('disabled','disabled');
     }
 
     // Enabled teamsNew text input field
     function enabledTeamNew() {
-        $('#teamNew').removeAttr('disabled','disabled');
+        $('#formProfileChangeTeam #teamNew').removeAttr('disabled','disabled');
     }
 
 
     // Enable checkbox
     function enableSwitch() {
-        $('#switch').removeAttr('disabled','disabled');
+        $('#formProfileChangeTeam #switch').removeAttr('disabled','disabled');
     }
 
     // Disable list event
@@ -281,52 +382,65 @@ $( document ).ready(function() {
 
     // Disable checkbox
     function disableSwitch() {
-        $('#switch').attr('disabled','disabled');
+        $('#formProfileChangeTeam #switch').attr('disabled','disabled');
     }
 
     // Disabled tournaments select input field
     function disableTournamensSelections()
     {
-        $('#tournament').attr('disabled','disabled');
+        $('#formProfileChangeTeam #tournament').attr('disabled','disabled');
     }
 
     // Disabled teams new input text field
     function disableTeamNew()
     {
-        $('#teamNew').attr('disabled','disabled');
+        $('#formProfileChangeTeam #teamNew').attr('disabled','disabled');
     }
 
     // Disabled button to validate the form
     function disableButtonValidate()
     {
-        $('#formValidate').attr('disabled','disabled');
+        $('#formProfileChangeTeam #formValidate').attr('disabled','disabled');
     }
 
     // Disabled teams select input field
     function disableTeamsSelections()
     {
-        $('#teamSelected').attr('disabled','disabled');
+        $('#formProfileChangeTeam #teamSelected').attr('disabled','disabled');
+    }
+
+    //Reset the checkbox switch
+    function SwitchON()
+    {
+        $('#formProfileChangeTeam input[name="switch"]').prop('checked', true);
     }
 
     //Reset the checkbox switch
     function resetSwitch()
     {
-        $('input[name="switch"]').prop('checked', false);
+        $('#formProfileChangeTeam input[name="switch"]').prop('checked', false);
+    }
+
+    function resetError()
+    {
+        $("#formProfileChangeTeam #errorMessage").text("");
+        $("#formProfileChangeTeam #errorMessageTeam").text("");
     }
 
     // reset content values in the input fields
     function resetContent(level){
 
-        $("#teamNew").val("");
-        $("#errorMessage").text("");
+        $("#formProfileChangeTeam #teamNew").val("");
+        $("#formProfileChangeTeam #errorMessage").text("");
+        $("#formProfileChangeTeam #errorMessageTeam").text("");
         if (level == 1) return;
-        $("#teamSelected option" ).remove();
-        $('#teamSelected').append('<option selected = "selected" disabled = "disabled"  hidden="hidden">Sélectionner</option>'); // append an option tag for the array item
+        $("#formProfileChangeTeam #teamSelected option" ).remove();
+        $('#formProfileChangeTeam #teamSelected').append('<option selected = "selected" disabled = "disabled"  hidden="hidden">Sélectionner</option>'); // append an option tag for the array item
         if (level == 2) return;
-        $("#tournament option" ).remove();
-        $('#tournament').append('<option selected = "selected" disabled = "disabled"  hidden="hidden">Sélectionner</option>'); // append an option tag for the array item
+        $("#formProfileChangeTeam #tournament option" ).remove();
+        $('#formProfileChangeTeam #tournament').append('<option selected = "selected" disabled = "disabled"  hidden="hidden">Sélectionner</option>'); // append an option tag for the array item
         if (level == 3) return;
-        $("#event option" ).remove();
-        $('#event').append('<option selected = "selected" disabled = "disabled"  hidden="hidden">Sélectionner</option>'); // append an option tag for the array item
+        $("#formProfileChangeTeam #event option" ).remove();
+        $('#formProfileChangeTeam #event').append('<option selected = "selected" disabled = "disabled"  hidden="hidden">Sélectionner</option>'); // append an option tag for the array item
     }
 });
