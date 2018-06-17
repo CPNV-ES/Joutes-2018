@@ -77,6 +77,7 @@ class ProfileController extends Controller
                     $first = $participants->first();
                     $oldTeam->owner_id = $first->user->id;
                     $oldTeam->save();
+                    $oldTeam->participants()->updateExistingPivot($first->id,['isCaptain'=>'1']);
                 }
             }
             $team = Team::where('id',$request->input('teamSelected'))->first();
@@ -95,11 +96,17 @@ class ProfileController extends Controller
                     $first = $participants->first();
                     $oldTeam->owner_id = $first->user->id;
                     $oldTeam->save();
+                    $oldTeam->participants()->updateExistingPivot($first->id,['isCaptain'=>'1']);
                 }
             }
-            $teamName = $request->input('teamNew');
-            $newRequest = Request::create('', 'POST', array('name' => $teamName, 'tournament' => $tournament));
-            app('App\Http\Controllers\Admin\TeamController')->store($newRequest);
+            $team = new Team();
+            $team->name = $request->input('teamNew');
+            $team->tournament_id = $request->input('tournament');
+            $team->validation = 0;
+            $team->owner_id = Auth::user()->id;
+            $team->save();
+            $participant = Auth::user()->participant()->first();
+            $team->participants()->attach([$participant->id => array('isCaptain' => '1' )]); //add the link row in intemrediate table
         }
 
         return redirect()->route('profile.index',['from' => "changeTeam"]);
@@ -144,10 +151,15 @@ class ProfileController extends Controller
         }
 
         if ($isNewEquipe != null) {
-            $teamName = $request->input('teamNew');
-            $request = Request::create('', 'POST', array('name' => $teamName, 'tournament' => $tournament));
-            app('App\Http\Controllers\Admin\TeamController')->store($request);
-        }
+            $team = new Team();
+            $team->name = $request->input('teamNew');
+            $team->tournament_id = $request->input('tournament');
+            $team->validation = 0;
+            $team->owner_id = Auth::user()->id;
+            $team->save();
+            $participant = Auth::user()->participant()->first();
+            $team->participants()->attach([$participant->id => array('isCaptain' => '1' )]); //add the link row in intemrediate table
+            }
 
         return redirect()->route('profile.index');
     }
@@ -213,6 +225,7 @@ class ProfileController extends Controller
                     $first = $participants->first();
                     $team->owner_id = $first->user->id;
                     $team->save();
+                    $team->participants()->updateExistingPivot($first->id,['isCaptain'=>'1']);
                 }
             }
         }

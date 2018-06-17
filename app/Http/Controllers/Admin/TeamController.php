@@ -86,11 +86,6 @@ class TeamController extends Controller
         $team->tournament_id = $request->input('tournament');
         $team->validation = 0;
         $team->owner_id = Auth::user()->id;
-        if (Auth::user()->role == "administrator")
-            $team->validation = 1;
-        else
-            $team->validation = 0;
-
         $team->save();
 
         if (Auth::user()->role == "participant") {
