@@ -18,6 +18,7 @@
 					<th>Nom de l'équipe</th>
 					<th>Sport</th>
 					<th>Complet</th>
+					<th>Valide</th>
 					<th>Actions</th>
 				</tr>
 			</thead>
@@ -26,9 +27,11 @@
 				@if(count($teams) > 0)
 				  	@foreach ($teams as $team)
 						<tr>
-					      <td data-id="{{$team->id}}" class="clickable">{{ $team->name }}</td>
-					      <td>{{ $team->sport->name }}</td><td><i class="{{ $team->isComplete() ? 'fa fa-check' : 'fa fa-close' }}" aria-hidden="true"></i></td>
-					      <td class="action">
+					      	<td data-id="{{$team->id}}" class="clickable">{{ $team->name }}</td>
+					      	<td>{{ $team->sport->name }}</td>
+							<td><i class="{{ $team->isComplete() ? 'fa fa-check' : 'fa fa-close' }}" aria-hidden="true"></i></td>
+							<td><i class="{{ $team->isValid() ? 'fa fa-check' : 'fa fa-close' }}" aria-hidden="true"></i></td>
+					      	<td class="action">
 							  @if (($team->owner_id == Auth::user()->id) || Auth::user()->role == "administrator")
 						      	<a href="{{ route('teams.edit', $team->id) }}" alt="Modifier la team"> <i class="fa fa-pencil fa-lg action" aria-hidden="true"></i> </a>
 							  @endif
@@ -37,7 +40,7 @@
 						      		<i class="fa fa-lg fa-trash-o action" aria-hidden="true"></i>
 						      	</button>
 						      {{ Form::close() }} --}}
-					      </td>
+					      	</td>
 					    </tr>
 
 					@endforeach
