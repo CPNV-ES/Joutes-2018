@@ -29,11 +29,12 @@ class TournamentSetup {
 
         // Count variables init
         $tournament = Tournament::find($id);
-        $nbStages = 4; // $tournament->nbStages;
-        $nbPoolsPerStage = 8; // $tournament->nbPoolsPerStage
-        $nbTeamsPerPool = 4; // $tournament->nbTeamsPerPool
+        $nbStages = $tournament->nb_stages;
+        $nbTeamsPerPool = $tournament->nbTeamsPerPool;
+        $nbPoolsPerStage = (count($tournament->teams)/$nbTeamsPerPool);
         $nbGamesPerStage = 0;
-        for ($i = 1; $i <= $nbTeamsPerPool; $i++) $nbGamesPerStage =+ $nbTeamsPerPool - $i; // Calculates the number of games in a pool
+        for ($i = 1; $i <= $nbTeamsPerPool; $i++) $nbGamesPerStage += $nbTeamsPerPool - $i; // Calculates the number of games in a pool
+
 
 
         // Readability variables
@@ -90,11 +91,35 @@ class TournamentSetup {
                 $contenders[$s][$c] = $contender;
             }
 
+            $gamesCount = 0;
             // Game creation
-            for ($g = 0; $g < $nbGamesPerStage; $g++) {
+            for ($p = 0; $p < $nbPoolsPerStage; $p++) {
+                for ($t = 0; $t < $nbTeamsPerPool; $t++) {
+                    for ($g = 1; $g < $nbTeamsPerPool - $t; $g++) {
 
+                        $game = new Game();
+
+                        // TODO : adapt time
+                        $game->date = date('Y-m-d', strtotime('06/18/2018')); // date('Y-m-d', $tournament->start_date);
+                        $game->start_time = date('H:i:s',time());
+
+                        $game->contender1_id = $contenders[$s][$t+($p * $nbTeamsPerPool)]->id;
+                        $game->contender2_id = $contenders[$s][$t+$g+($p * $nbTeamsPerPool)]->id;
+
+                        $game->score_contender1 = null;
+                        $game->score_contender2 = null;
+
+                        // TODO : select a unused court
+                        $game->court_id = 1;
+
+                        $game->save();
+                        $gamesCount++;
+                        $games[$s][$gamesCount] = $game;
+                    }
+                }
             }
         }
+        dd($games);
     }
 
     /**
@@ -112,7 +137,6 @@ class TournamentSetup {
 
         // create each pool name, i.e. "Badminton 1-3"
         for ($stage = 0; $stage < $nbStages; $stage++) { for ($pool = 0; $pool < $nbPools; $pool++) { $poolsName[$stage][$pool] = $tournament->getSport() ." ".($stage + 1)."-".($pool + 1); } }
-        //dd($poolsName);
 
         return $poolsName;
     }
