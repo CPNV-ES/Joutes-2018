@@ -12,6 +12,9 @@
 			@if (Auth::check() && (Auth::user()->role == 'administrator' || Auth::user()->role == 'writer'))
 				<a href="{{ route('tournaments.schedule.index', $tournament->id) }}" class="greenBtn big-screen" title="Affichage écran géant">Affichage écran geant</i></a>
 			@endif
+		@if (Auth::user()->role == "administrator")
+			<a href="{{route('tournaments.export', $tournament->id)}}" class="greenBtn">Exporter les équipes en CSV</a>
+		@endif
 		</h1>
 
 		<div class="right">

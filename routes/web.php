@@ -59,6 +59,8 @@ Route::group(['middleware'=>'checkIsParticipant', 'namespace' => 'Profile', 'pre
 /* Authorization for Participant or Admin*/
 Route::group(['middleware'=>'checkIsParticipantOrAdmin', 'namespace' => 'Admin', 'prefix'=>'admin'],function(){
     Route::resource('teams', 'TeamController');
+    Route::get('participants/export', 'ParticipantController@export')->name('participants.export');
     Route::resource('participants', 'ParticipantController');
     Route::resource('teams.participants', 'TeamParticipantController', ['only' => ['destroy', 'store']]);
+    Route::get('tournaments/{tournament}/export', 'TournamentController@export')->name('tournaments.export');
 });

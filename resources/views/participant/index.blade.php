@@ -5,7 +5,11 @@
 
 	<div class="container">
 
-		<h1 id="titleParticipant">Participants</h1>
+		<h1 id="titleParticipant">Participants
+		@if (Auth::user()->role == "administrator")
+			<a href="{{route('participants.export')}}" class="greenBtn">Exporter en CSV</a>
+		@endif
+        </h1>
 
 		<table id="participants-table" class="table table-striped table-bordered table-hover" cellspacing="0" width="100%">
 

@@ -27,6 +27,30 @@ class ParticipantController extends Controller
     }
 
     /**
+    * Export a listing of the resource.
+    *
+    * @return \Illuminate\Http\Response
+    *
+    * @author Dessauges Antoine
+    */
+   public function export(Request $request)
+   {
+       $participants = Participant::all();
+       
+       $exporter = new \Laracsv\Export();
+       $csv = $exporter->getCsv();
+       $csv->setDelimiter("\t");
+
+       $exporter->beforeEach(function ($participant) {
+           $participant->team_names = $participant->teams->implode('name', ', ');
+           $participant->sport_names = $participant->teams->implode('sport.name', ', ');
+       });
+       $output = $exporter->build($participants, ['first_name', 'last_name', 'team_names', 'sport_names']);
+       
+       return response(\League\Csv\Reader::BOM_UTF16_LE . mb_convert_encoding($csv->getContent(), 'UTF-16LE', 'UTF-8'))->header('Content-Type', 'text/csv');
+   }
+
+    /**
      * Show the form for creating a new resource.
      *
      * @return \Illuminate\Http\Response
