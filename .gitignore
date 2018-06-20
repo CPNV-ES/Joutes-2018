@@ -12,3 +12,5 @@ public/event_img/
 public/tournament_img/
 
 package-lock\.json
+
+/config/*_rsa*
