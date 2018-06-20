@@ -62,4 +62,5 @@ Route::group(['middleware'=>'checkIsParticipantOrAdmin', 'namespace' => 'Admin',
     Route::get('participants/export', 'ParticipantController@export')->name('participants.export');
     Route::resource('participants', 'ParticipantController');
     Route::resource('teams.participants', 'TeamParticipantController', ['only' => ['destroy', 'store']]);
+    Route::get('tournaments/{tournament}/export', 'TournamentController@export')->name('tournaments.export');
 });

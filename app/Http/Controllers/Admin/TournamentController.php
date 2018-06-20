@@ -294,4 +294,25 @@ class TournamentController extends Controller
     }
 
 
+    /**
+     * Export the tournament's teams.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     *
+     * @author Dessaules Loïc
+     */
+    public function export(Request $request, $id)
+    {
+        $tournament = Tournament::findOrFail($id);
+
+        $exporter = new \Laracsv\Export();
+        $csv = $exporter->getCsv();
+        $csv->setDelimiter("\t");
+
+        $output = $exporter->build($tournament->teams, ['name']);
+       
+        return response(\League\Csv\Reader::BOM_UTF16_LE . mb_convert_encoding($csv->getContent(), 'UTF-16LE', 'UTF-8'))->header('Content-Type', 'text/csv');
+    }
+
 }
