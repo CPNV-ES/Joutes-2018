@@ -1,5 +1,5 @@
 $( document ).ready(function() {
-    // Switch teams selecetion between a filed list and a text field
+    // Check if the form team create is have elements to be submit
     // @author Davide Carboni
 
     $('#formTeam #event').change(function (e) {

@@ -61,6 +61,7 @@ $( document ).ready(function() {
 
     $('#formProfileChangeTeam #teamSelected').change(function (e) {
         e.preventDefault();
+        resetError();
         CheckifCanSubmit(false);
     });
 
@@ -421,6 +422,7 @@ $( document ).ready(function() {
         $('#formProfileChangeTeam input[name="switch"]').prop('checked', false);
     }
 
+    // Delete all errors messages
     function resetError()
     {
         $("#formProfileChangeTeam #errorMessage").text("");
