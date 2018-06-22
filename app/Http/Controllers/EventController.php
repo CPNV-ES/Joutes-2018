@@ -13,7 +13,7 @@ class EventController extends Controller
      * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      *
-     * @author Doran Kayoumi
+     * @author Doran Kayoumi, Davide Carboni
      */
     public function index(Request $request) {
 

@@ -1,5 +1,5 @@
 // @author Davide Carboni
-// Validation for profile SigIn form
+// Validation for profile change teams form
 
 $( document ).ready(function() {
 
@@ -241,7 +241,7 @@ $( document ).ready(function() {
     }
 
 
-    // Check if the form is valid then enable then Button to Submit
+    // Check if the form is valid then enable the Button to Submit
     function CheckifCanSubmit(action)
     {
         disableButtonValidate();
@@ -352,6 +352,7 @@ $( document ).ready(function() {
     }
 
 
+    // Delete all errors messages
     function resetError()
     {
         $("#formProfile #errorMessage").text("");

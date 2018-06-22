@@ -25,7 +25,7 @@ class ProfileController extends Controller
     {
         $participant = Auth::user()->participant()->first();
 
-        // Verify users if have any teams
+        // Verify if the users is Unsigned, so they are not registered for any tournament
         if ($participant->isUnsigned($participant->id))
         {
             $teams = $participant->teams;
@@ -34,7 +34,7 @@ class ProfileController extends Controller
             if ($teams->count() == 0)
                 return redirect()->route('profile.create');
 
-            //Verify if the team play in the morning and in the afternoon or only in the morning or only in the afternoon
+            //Verify if the team play in the morning and in the afternoon, or only in the morning or only in the afternoon
             if ($teams->count() == 1) {
                 $team = $participant->teams->first();
                 $tournament = $team->tournament;
@@ -53,7 +53,7 @@ class ProfileController extends Controller
     }
 
     /**
-     * Update data
+     *  Update the specified resource in storage.
      *
      * @author Carboni Davide
      */
@@ -131,7 +131,7 @@ class ProfileController extends Controller
     }
 
     /**
-     * Store and verify the new participant for the first time
+     * Store the new participant for the first time
      *
      * @param Request $request
      * @return $this|\Illuminate\Http\RedirectResponse
@@ -144,12 +144,14 @@ class ProfileController extends Controller
         $participant = Auth::user()->participant()->first();
         $tournament = $request->input('tournament');
 
+        // store participant in a exisist teams
         if (($isNewEquipe == null)) {
             $team = Team::where('id',$request->input('teamSelected'))->first();
             $team->participants()->attach([$participant->id => array('isCaptain' => '0' )]); //add the link row in intemrediate table
 
         }
 
+        // create a new team to store participant
         if ($isNewEquipe != null) {
             $team = new Team();
             $team->name = $request->input('teamNew');
@@ -234,7 +236,7 @@ class ProfileController extends Controller
     }
 
     /**
-     * Create the array with all events
+     * Create the array with all events to use in the field event in form
      *
      * @return array
      *
@@ -243,7 +245,7 @@ class ProfileController extends Controller
     private function getDropDownList_Event(){
         $events =Event::all();
         // Creation of the array will contain the datas of the dropdown event list
-        // This form: array("sport_id 1" => "sport_name 1", "sport_id 2" => "sport_name 2"), ...
+        // Example: array("sport_id 1" => "sport_name 1", "sport_id 2" => "sport_name 2"), ...
         $dropdownListEvent = array();
         for ($i=0; $i < sizeof($events); $i++) {
             $dropdownListEvent[$events[$i]->id] = $events[$i]->name;
@@ -264,7 +266,7 @@ class ProfileController extends Controller
         $event = Event::findOrFail($id);
         $tournaments = $event->tournaments;
         // Creation of the array will contain the datas of the dropdown tournament list
-        // This form: array("sport_id 1" => "sport_name 1", "sport_id 2" => "sport_name 2"), ...
+        // Example: array("sport_id 1" => "sport_name 1", "sport_id 2" => "sport_name 2"), ...
         $dropdownListEventTournaments = array();
         for ($i=0; $i < sizeof($tournaments); $i++) {
             $dropdownListEventTournaments[$tournaments[$i]->id] = $tournaments[$i]->name;
@@ -272,11 +274,19 @@ class ProfileController extends Controller
         return $dropdownListEventTournaments;
     }
 
+    /**
+     * Prepare array data wich have all participant's team
+     *
+     * @param $id
+     * @return array
+     *
+     * @author Carboni Davide
+     */
     private function getDropList_ParticipantTeams($id){
         $participant = Participant::find($id);
         $teams = $participant->teams;
         // Creation of the array will contain the datas of the dropdown teams list
-        // This form: array("sport_id 1" => "sport_name 1", "sport_id 2" => "sport_name 2"), ...
+        // Example: array("sport_id 1" => "sport_name 1", "sport_id 2" => "sport_name 2"), ...
         $dropdownListPersonalTeams = array();
         for ($i=0; $i < sizeof($teams); $i++) {
             $dropdownListPersonalTeams[$teams[$i]->id] = $teams[$i]->name;

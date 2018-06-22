@@ -106,19 +106,21 @@ class TeamController extends Controller
      * @param  int $id
      * @return \Illuminate\Http\Response
      *
-     * @author Dessauges Antoine
+     * @author Dessauges Antoine, Davide Carboni
      */
     public function show(Request $request, $id)
     {
-        // return the id for a username using ajax
+
         if ($request->ajax())
         {
+            // Check if the team is Full, no more participant are accepted
             if ($request->input("isFull") == "isFull"){
                 $team = Team::find($id);
                 if ($team->isComplete())return 1;
                 else return 0;
             }
 
+            // Check at what time of day thacke place the team
             if ($request->input("timeZone") == "timeZone"){
                 $team = Team::find($id);
                 if ($team->tournament->takesPlaceInTheMorning()) return (["inTheMorning"]);
@@ -126,6 +128,7 @@ class TeamController extends Controller
                 if ($team->tournament->takesPlaceAllTheDay()) return (["inTheDay"]);
             }
 
+            // Check if the team exists
             if ($request->input("teamExisistName") == "teamExisistName"){
                 $team = Team::where('name', $id)->first();
                 if ($team == null) return 0;
