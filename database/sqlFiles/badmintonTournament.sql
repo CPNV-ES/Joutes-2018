@@ -24,7 +24,7 @@ INSERT INTO courts(NAME, sport_id) VALUES ('Terrain A', 1),('Terrain B', 1),('Te
 --  Insert Data in tournaments
 --
 
-INSERT INTO tournaments(NAME, start_date, event_id, sport_id) VALUES ('Tournoi de Bad', '2017-06-11', 1, 1);
+INSERT INTO tournaments(NAME, start_date, event_id, sport_id, nbTeamPerPool, nb_stages) VALUES ('Tournoi de Bad', '2017-06-11', 1, 1, 4, 4);
 
 --
 --  Insert Data in gameTypes
