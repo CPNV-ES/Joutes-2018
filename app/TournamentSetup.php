@@ -1,50 +1,42 @@
 <?php
 /**
  * User: quentin.neves
- * Date: 12.06.2018
+ * Date: 19.06.2018
  * Description:
  *      After tournament validation, this model is used to create all pools, contenders and games of the tournament
+ *
+ * Warning:
+ *      This generation is not implemented yet, it needs to be tested with different tournaments setups and
+ *      tournament creation form need to be updated with the validations rules
  */
 
 namespace App;
 
-use Faker\Provider\DateTime;
-use Illuminate\Database\Eloquent\Model;
-use App\Tournament;
-use Mockery\Exception;
-use PhpParser\Node\Expr\Array_;
-
 class TournamentSetup {
 
     /**
-     * Main function that decide how to create a tournament
+     * Decide how to create a tournament based on a few data
      *
-     * @param $tournament       - Current tournament
-     * @param $poolSize         - Number of teams in a pool
-     * @param $pools            - Array of created pools, used in contenders creation
+     * @param $id       - Current tournament id
      *
      * @author Quentin Neves
      */
     public function generateTournament($id){
 
-        // Count variables init
         $tournament = Tournament::find($id);
+
         $nbStages = $tournament->nb_stages;
-        $nbTeamsPerPool = $tournament->nbTeamsPerPool;
+        $nbTeamsPerPool = $tournament->nbTeamPerPool;
         $nbPoolsPerStage = (count($tournament->teams)/$nbTeamsPerPool);
-        $nbGamesPerStage = 0;
-        for ($i = 1; $i <= $nbTeamsPerPool; $i++) $nbGamesPerStage += $nbTeamsPerPool - $i; // Calculates the number of games in a pool
-
-
-
-        // Readability variables
-        // TODO: $startTime and $endTime need to be ajusted accordingly to the current stage
-        $startTime = date("H:i:s", strtotime($tournament->startTime));
-        $endTime = date('H:i:s', strtotime('+2 hours', strtotime($startTime)));
-        $pools = array();
-        $contenders = array();
 
         $poolsName = $this->createPoolsName($nbPoolsPerStage, $nbStages, $tournament);
+
+        // TODO: $startTime and $endTime need to be ajusted accordingly to the current stage
+        $startTime = date("H:i:s", strtotime($tournament->startTime));
+        $endTime = date('H:i:s', strtotime('+3 hours', strtotime($startTime)));
+
+        $pools = array();
+        $contenders = array();
 
         // For each stage
         for ($s = 0; $s < $nbStages; $s++) {
@@ -77,13 +69,19 @@ class TournamentSetup {
 
                 $contender = new Contender();
 
+                // TODO : adapt for each pool configuration (sometimes there's 2 Pools of each rank)
+                // Set the rank required in the previous pool to join this one
                 if ($c % $nbPoolsPerStage == 0) $rank++;
                 $contender->rank_in_pool = ($s) ? $rank : null;
 
-                $contender->team_id = ($s) ? $tournament->teams[$c]->id : null;
+                // Set the team ids only for the first stage
+                $contender->team_id = ($s) ? null : $tournament->teams[$c]->id;
 
+                // Set the pool_id for the current pool and the one which the team comes from
                 $contender->pool_id = $pools[$s][$poolIndex]->id;
-                $contender->pool_from_id = ($s) ? $pools[$s-1][$poolIndex]->id : null;
+                $contender->pool_from_id = ($s) ? $pools[$s-1][$poolIndex]->id : null; // -1 to select pool from the previous stage
+
+                // Increase the poolIndex after setting it to avoid index undefined
                 if (($c+1) % $nbTeamsPerPool == 0) $poolIndex++;
 
                 $contender->save();
@@ -91,20 +89,21 @@ class TournamentSetup {
                 $contenders[$s][$c] = $contender;
             }
 
-            $gamesCount = 0;
             // Game creation
-            for ($p = 0; $p < $nbPoolsPerStage; $p++) {
-                for ($t = 0; $t < $nbTeamsPerPool; $t++) {
-                    for ($g = 1; $g < $nbTeamsPerPool - $t; $g++) {
+
+            for ($p = 0; $p < $nbPoolsPerStage; $p++) { // For each Pool
+                for ($c = 0; $c < $nbTeamsPerPool; $c++) {  // For each team in this pool
+                    for ($g = 1; $g < $nbTeamsPerPool - $c; $g++) { // For each not already created match for this contender
 
                         $game = new Game();
 
                         // TODO : adapt time
-                        $game->date = date('Y-m-d', strtotime('06/18/2018')); // date('Y-m-d', $tournament->start_date);
-                        $game->start_time = date('H:i:s',time());
+                        $game->date = $tournament->start_date->format("Y/m/d");
+                        $game->start_time = $tournament->start_date->format("h:i:s");
 
-                        $game->contender1_id = $contenders[$s][$t+($p * $nbTeamsPerPool)]->id;
-                        $game->contender2_id = $contenders[$s][$t+$g+($p * $nbTeamsPerPool)]->id;
+                        // Define which contender id to use
+                        $game->contender1_id = $contenders[$s][$c + ($p * $nbTeamsPerPool)]->id; // +($p * $nbTPP) to use another "set" of contender, see documentation for more details
+                        $game->contender2_id = $contenders[$s][$c + $g + ($p * $nbTeamsPerPool)]->id; // +$g to ignore already created games
 
                         $game->score_contender1 = null;
                         $game->score_contender2 = null;
@@ -113,13 +112,10 @@ class TournamentSetup {
                         $game->court_id = 1;
 
                         $game->save();
-                        $gamesCount++;
-                        $games[$s][$gamesCount] = $game;
                     }
                 }
             }
         }
-        dd($games);
     }
 
     /**
@@ -140,4 +136,6 @@ class TournamentSetup {
 
         return $poolsName;
     }
+
+
 }
