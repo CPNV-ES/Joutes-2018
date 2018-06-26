@@ -40,7 +40,7 @@ class TournamentController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      *
-     * @author Dessaules Loïc
+     * @author Dessaules Loïc, Davide Carboni
      */
     public function show(Request $request, $id)
     {
@@ -48,6 +48,7 @@ class TournamentController extends Controller
 
         if ($request->ajax())
         {
+            // Check if the tornament is Full, no more teams are accepted
             if ($request->input("isFull") == "isFull") {
                 if (($tournament->isComplete()) || ($tournament == null)) return 1;
                 else return 0;

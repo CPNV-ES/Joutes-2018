@@ -93,6 +93,16 @@ class Team extends Model
 
     }
 
+    /**
+     *
+     * Check if the participant is the owner of the team
+     *
+     * @author Davide Carboni
+     *
+     * @param $id
+     * @return bool
+     */
+
     public function isOwner($id)
     {
         $participant = Participant::find($id);

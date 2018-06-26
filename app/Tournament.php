@@ -38,7 +38,7 @@ class Tournament extends Model
 
     /**
      *
-     * Verify if the tournament take play in all the morning
+     * Verify if the tournament take place in all the morning
      *
      * @author Carboni Davide
      * @return bool
@@ -49,7 +49,7 @@ class Tournament extends Model
     }
 
     /**
-     * Verify if the tournament take play in all the afternoon
+     * Verify if the tournament take place in all the afternoon
      *
      * @author Carboni Davide
      *
@@ -62,7 +62,7 @@ class Tournament extends Model
 
     /**
      *
-     * Verify if the tournament take play in all the day
+     * Verify if the tournament take place in all the day
      *
      * @author Carboni Davide
      *
@@ -244,6 +244,7 @@ class Tournament extends Model
     /**
      * @return bool
      *
+     * Check if the tournament have empty teams without participant
      *
      * @author Davide Carboni
      */
