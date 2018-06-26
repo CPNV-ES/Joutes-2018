@@ -32,10 +32,10 @@ INSERT INTO courts(name, sport_id) VALUES ('Terrain A', 1),('Terrain B', 1);
 INSERT INTO tournaments(name, start_date, event_id, sport_id) VALUES ('Tournoi de Foot', '2017-06-11', 1, 1);
 
 --
---  Insert Data in gameTypes
+--  Insert Data in game_types
 --
 
-INSERT INTO gameTypes(gameTypeDescription) values ('Match de 12 minutes'), ('2x10 minutes');
+INSERT INTO game_types(game_type_description) values ('Match de 12 minutes'), ('2x10 minutes');
 
 --
 --  Insert Data in poolModes
@@ -103,7 +103,7 @@ INSERT INTO participant_team(participant_id, team_id, isCaptain) select id, id%1
 -- ================= stage 1 =====================
 
 -- Four random pools
-INSERT INTO pools (tournament_id, start_time, end_time, poolName, mode_id, gameType_id, poolSize, stage, isFinished)
+INSERT INTO pools (tournament_id, start_time, end_time, poolName, mode_id, game_type_id, poolSize, stage, isFinished)
 VALUES
   (1, '08:00', '12:00', 'A', 2, 1, 4, 1, 0), (1, '08:00', '12:00', 'B', 2, 1, 5, 1, 0),
   (1, '08:00', '12:00', 'C', 2, 1, 5, 1, 0), (1, '08:00', '12:00', 'D', 2, 1, 5, 1, 0);
@@ -114,7 +114,7 @@ INSERT INTO contenders(pool_id,team_id) select id%4+1,id FROM teams;
 -- ================= stage 2 =====================
 
 -- Four pools by level
-INSERT INTO pools (tournament_id, start_time, end_time, poolName, mode_id, gameType_id, poolSize, stage, isFinished)
+INSERT INTO pools (tournament_id, start_time, end_time, poolName, mode_id, game_type_id, poolSize, stage, isFinished)
 VALUES
   (1, '13:30', '15:30', 'Poule A, Niveau 1', 1, 1, 5, 2, 0), (1, '13:30', '15:30', 'Poule B, Niveau 1', 1, 1, 5, 2, 0),
   (1, '13:30', '15:30', 'Poule A, Niveau 2', 1, 1, 5, 2, 0), (1, '13:30', '15:30', 'Poule B, Niveau 2', 1, 1, 4, 2, 0);
@@ -144,7 +144,7 @@ VALUES
 -- ================= stage 3 =====================
 
 -- finals
-INSERT INTO pools (tournament_id, start_time, end_time, poolName, mode_id, gameType_id, poolSize, stage, isFinished)
+INSERT INTO pools (tournament_id, start_time, end_time, poolName, mode_id, game_type_id, poolSize, stage, isFinished)
 VALUES
   (1, '16:00', '16:30', 'Finale 17-18', 4, 2, 2, 3, 0),
   (1, '16:00', '16:30', 'Finale 15-16', 4, 2, 2, 3, 0),
@@ -185,11 +185,11 @@ SELECT
   poolName,
   poolSize,
   modeDescription,
-  gameTypeDescription,
+  game_type_description,
   team_id,
   rank_in_pool,
   pool_from_id
 FROM pools
   INNER JOIN contenders ON pools.id = contenders.pool_id
   INNER JOIN poolModes ON pools.mode_id = poolModes.id
-  INNER JOIN gameTypes ON pools.gameType_id = gameTypes.id
+  INNER JOIN game_types ON pools.game_type_id = game_types.id

@@ -28,7 +28,7 @@ class Joutes2018Seeder extends Seeder
     // Common stuff
     private function basics()
     {
-        (new \App\Gametype(['gameTypeDescription' => 'Modalités de jeu']))->save();
+        (new \App\GameType(['game_type_description' => 'Modalités de jeu']))->save();
 
         (new \App\Poolmode([
             'modeDescription' => 'Matches simples',
@@ -82,7 +82,7 @@ class Joutes2018Seeder extends Seeder
             'end_time' => '11:45',
             'poolName' => 'A',
             'mode_id' => 1,
-            'gameType_id' => 1,
+            'game_type_id' => 1,
             'poolSize' => 6,
             'stage' => 1,
             'isFinished' => 0
@@ -96,7 +96,7 @@ class Joutes2018Seeder extends Seeder
             'end_time' => '11:45',
             'poolName' => 'B',
             'mode_id' => 1,
-            'gameType_id' => 1,
+            'game_type_id' => 1,
             'poolSize' => 6,
             'stage' => 1,
             'isFinished' => 0

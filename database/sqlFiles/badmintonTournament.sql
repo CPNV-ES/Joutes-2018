@@ -27,10 +27,10 @@ INSERT INTO courts(NAME, sport_id) VALUES ('Terrain A', 1),('Terrain B', 1),('Te
 INSERT INTO tournaments(NAME, start_date, event_id, sport_id) VALUES ('Tournoi de Bad', '2017-06-11', 1, 1);
 
 --
---  Insert Data in gameTypes
+--  Insert Data in game_types
 --
 
-INSERT INTO gameTypes(gameTypeDescription) VALUES ('Modalités de jeu');
+INSERT INTO game_types(game_type_description) VALUES ('Modalités de jeu');
 
 --
 --  Insert Data in poolModes
@@ -103,7 +103,7 @@ INSERT INTO participant_team(participant_id, team_id, isCaptain) SELECT id, ROUN
 -- ================= stage 1 =====================
 
 -- pools id 1-8
-INSERT INTO pools (tournament_id, start_time, end_time, poolName, mode_id, gameType_id, poolSize, stage, isFinished)
+INSERT INTO pools (tournament_id, start_time, end_time, poolName, mode_id, game_type_id, poolSize, stage, isFinished)
 VALUES
   (1, '08:00', '10:00', 'A', 1, 1, 4, 1, 0), (1, '08:00', '10:00', 'B', 1, 1, 4, 1, 0),
   (1, '08:00', '10:00', 'C', 1, 1, 4, 1, 0), (1, '08:00', '10:00', 'D', 1, 1, 4, 1, 0),
@@ -116,7 +116,7 @@ INSERT INTO contenders(pool_id,team_id) SELECT FLOOR((id+3)/4),id FROM teams LIM
 -- ================= stage 2 =====================
 
 -- pools id 9-16
-INSERT INTO pools (tournament_id, start_time, end_time, poolName, mode_id, gameType_id, poolSize, stage, isFinished)
+INSERT INTO pools (tournament_id, start_time, end_time, poolName, mode_id, game_type_id, poolSize, stage, isFinished)
 VALUES
   (1, '10:00', '12:00', 'Win1', 1, 1, 4, 2, 0), (1, '10:00', '12:00', 'Win2', 1, 1, 4, 2, 0),
   (1, '10:00', '12:00', 'Win3', 1, 1, 4, 2, 0), (1, '10:00', '12:00', 'Win4', 1, 1, 4, 2, 0),
@@ -161,7 +161,7 @@ VALUES
 -- ================= stage 3 =====================
 
 -- pools id 17-20
-INSERT INTO pools (tournament_id, start_time, end_time, poolName, mode_id, gameType_id, poolSize, stage, isFinished)
+INSERT INTO pools (tournament_id, start_time, end_time, poolName, mode_id, game_type_id, poolSize, stage, isFinished)
 VALUES
   (1, '13:30', '15:30', 'Best 1', 1, 1, 4, 3, 0), (1, '13:30', '15:30', 'Best 2', 1, 1, 4, 3, 0),
   (1, '13:30', '15:30', 'Good 1', 1, 1, 4, 3, 0), (1, '13:30', '15:30', 'Good 2', 1, 1, 4, 3, 0);
@@ -188,7 +188,7 @@ VALUES
 -- ================= stage 4 (finals) =====================
 
 -- pools id 21-24
-INSERT INTO pools (tournament_id, start_time, end_time, poolName, mode_id, gameType_id, poolSize, stage, isFinished)
+INSERT INTO pools (tournament_id, start_time, end_time, poolName, mode_id, game_type_id, poolSize, stage, isFinished)
 VALUES
   (1, '15:30', '16:30', 'Finale 1-2', 1, 1, 2, 4, 0), (1, '15:30', '16:30', 'Finale 3-4', 1, 1, 2, 4, 0),
   (1, '15:30', '16:30', 'Finale 5-6', 1, 1, 2, 4, 0), (1, '15:30', '16:30', 'Finale 7-8', 1, 1, 2, 4, 0);

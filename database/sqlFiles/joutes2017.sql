@@ -73,10 +73,10 @@ VALUES
   ('Unihockey', '2017-06-27 08:00:00', 1, 3);
 
 --
---  Insert Data in gameTypes
+--  Insert Data in game_types
 --
 
-INSERT INTO gameTypes (gameTypeDescription) VALUES ('Modalités de jeu');
+INSERT INTO game_types (game_type_description) VALUES ('Modalités de jeu');
 
 --
 --  Insert Data in poolModes
@@ -216,7 +216,7 @@ INSERT INTO participant_team (participant_id, team_id, isCaptain) SELECT
 -- ================= stage 1 =====================
 
 -- pools id 1-3
-INSERT INTO pools (tournament_id, start_time, end_time, poolName, mode_id, gameType_id, poolSize, stage, isFinished)
+INSERT INTO pools (tournament_id, start_time, end_time, poolName, mode_id, game_type_id, poolSize, stage, isFinished)
 VALUES
   (1, '09:30', '11:45', 'A', 1, 1, 4, 1, 0),
   (1, '09:30', '11:45', 'B', 1, 1, 4, 1, 0),
@@ -256,7 +256,7 @@ VALUES
 -- ================= stage 2 =====================
 
 -- pools id 4-5
-INSERT INTO pools (tournament_id, start_time, end_time, poolName, mode_id, gameType_id, poolSize, stage, isFinished)
+INSERT INTO pools (tournament_id, start_time, end_time, poolName, mode_id, game_type_id, poolSize, stage, isFinished)
 VALUES
   (1, '11:45', '16:00', 'Winners', 1, 1, 6, 2, 0), (1, '11:45', '16:00', 'Fun', 1, 1, 6, 2, 0);
 
@@ -328,7 +328,7 @@ CREATE PROCEDURE AddBadmintonTournament()
     DECLARE firstContender INT;
 
     -- Stage 1
-    INSERT INTO pools (tournament_id, start_time, end_time, poolName, mode_id, gameType_id, poolSize, stage, isFinished)
+    INSERT INTO pools (tournament_id, start_time, end_time, poolName, mode_id, game_type_id, poolSize, stage, isFinished)
     VALUES
       ((SELECT id
         FROM tournaments
@@ -452,7 +452,7 @@ CREATE PROCEDURE AddBadmintonTournament()
       ('2017-06-27', '14:40', firstContender + 1, firstContender + 2, 8);
 
     -- Stage 2
-    INSERT INTO pools (tournament_id, start_time, end_time, poolName, mode_id, gameType_id, poolSize, stage, isFinished)
+    INSERT INTO pools (tournament_id, start_time, end_time, poolName, mode_id, game_type_id, poolSize, stage, isFinished)
     VALUES
       ((SELECT id
         FROM tournaments
@@ -604,7 +604,7 @@ CREATE PROCEDURE AddBadmintonTournament()
       ('2017-06-27', '15:55', firstContender + 1, firstContender + 2, 8);
 
     -- Stage 3: finals
-    INSERT INTO pools (tournament_id, start_time, end_time, poolName, mode_id, gameType_id, poolSize, stage, isFinished)
+    INSERT INTO pools (tournament_id, start_time, end_time, poolName, mode_id, game_type_id, poolSize, stage, isFinished)
     VALUES
       ((SELECT id
         FROM tournaments
