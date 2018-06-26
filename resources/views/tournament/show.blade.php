@@ -35,6 +35,9 @@
 					<thead>
 						<tr>
 							<th>Liste des équipes participantes</th>
+							<th>Nb participants</th>
+							<th>Complet</th>
+							<th>Valide</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -46,6 +49,9 @@
 									@else
 										<td data-id="{{$team->id}}">{{$team->name}}</td>
 									@endif
+									<td>{{$team->participants()->count()}}</td>
+        							<td><i class="{{ $team->isComplete() ? 'fa fa-check' : 'fa fa-close' }}" aria-hidden="true"></i></td>
+        							<td><i class="{{ $team->isValid() ? 'fa fa-check' : 'fa fa-close' }}" aria-hidden="true"></i></td>
 								</tr>
 							@endforeach
 						@else
