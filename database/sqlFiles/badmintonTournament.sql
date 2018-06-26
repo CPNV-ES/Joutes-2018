@@ -33,10 +33,10 @@ INSERT INTO tournaments(NAME, start_date, event_id, sport_id) VALUES ('Tournoi d
 INSERT INTO game_types(game_type_description) VALUES ('Modalités de jeu');
 
 --
---  Insert Data in poolModes
+--  Insert Data in pool_modes
 --
 
-INSERT INTO poolModes(modeDescription,planningAlgorithm) VALUES ('Matches simples',1),('Aller-retour',2),('Elimination directe',3);
+INSERT INTO pool_modes(mode_description,planningAlgorithm) VALUES ('Matches simples',1),('Aller-retour',2),('Elimination directe',3);
 
 --
 --  Insert Data in participants

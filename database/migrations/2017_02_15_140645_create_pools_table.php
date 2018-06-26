@@ -27,7 +27,7 @@ class CreatePoolsTable extends Migration
             $table->integer('game_type_id')->unsigned();
 
             $table->foreign('tournament_id')->references('id')->on('tournaments');
-            $table->foreign('mode_id')->references('id')->on('poolModes');
+            $table->foreign('mode_id')->references('id')->on('pool_modes');
             $table->foreign('game_type_id')->references('id')->on('game_types');
         });
     }

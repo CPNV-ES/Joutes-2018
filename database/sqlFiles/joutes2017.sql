@@ -79,10 +79,10 @@ VALUES
 INSERT INTO game_types (game_type_description) VALUES ('Modalités de jeu');
 
 --
---  Insert Data in poolModes
+--  Insert Data in pool_modes
 --
 
-INSERT INTO poolModes (modeDescription, planningAlgorithm)
+INSERT INTO pool_modes (mode_description, planningAlgorithm)
 VALUES ('Matches simples', 1), ('Aller-retour', 2), ('Elimination directe', 3);
 
 --

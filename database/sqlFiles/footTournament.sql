@@ -38,10 +38,10 @@ INSERT INTO tournaments(name, start_date, event_id, sport_id) VALUES ('Tournoi d
 INSERT INTO game_types(game_type_description) values ('Match de 12 minutes'), ('2x10 minutes');
 
 --
---  Insert Data in poolModes
+--  Insert Data in pool_modes
 --
 
-INSERT INTO poolModes(modeDescription,planningAlgorithm) values ('Matches simples',1),('Aller-retour',2),('Elimination directe',3),('Finale de classement',4);
+INSERT INTO pool_modes(mode_description,planningAlgorithm) values ('Matches simples',1),('Aller-retour',2),('Elimination directe',3),('Finale de classement',4);
 
 --
 --  Insert Data in participants
@@ -184,12 +184,12 @@ SELECT
   start_time,
   poolName,
   poolSize,
-  modeDescription,
+  mode_description,
   game_type_description,
   team_id,
   rank_in_pool,
   pool_from_id
 FROM pools
   INNER JOIN contenders ON pools.id = contenders.pool_id
-  INNER JOIN poolModes ON pools.mode_id = poolModes.id
+  INNER JOIN pool_modes ON pools.mode_id = pool_modes.id
   INNER JOIN game_types ON pools.game_type_id = game_types.id

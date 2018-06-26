@@ -30,16 +30,16 @@ class Joutes2018Seeder extends Seeder
     {
         (new \App\GameType(['game_type_description' => 'Modalités de jeu']))->save();
 
-        (new \App\Poolmode([
-            'modeDescription' => 'Matches simples',
+        (new \App\PoolMode([
+            'mode_description' => 'Matches simples',
             'planningAlgorithm' => '1',
         ]))->save();
-        (new \App\Poolmode([
-            'modeDescription' => 'Aller-retour',
+        (new \App\PoolMode([
+            'mode_description' => 'Aller-retour',
             'planningAlgorithm' => '2',
         ]))->save();
-        (new \App\Poolmode([
-            'modeDescription' => 'Elimination directe',
+        (new \App\PoolMode([
+            'mode_description' => 'Elimination directe',
             'planningAlgorithm' => '3',
         ]))->save();
 

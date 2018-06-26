@@ -13,10 +13,10 @@ class CreatePoolModesTable extends Migration
      */
     public function up()
     {
-       Schema::create('poolModes', function (Blueprint $table) { 
+       Schema::create('pool_modes', function (Blueprint $table) { 
  
             $table->increments('id'); 
-            $table->string('modeDescription', 1000); 
+            $table->string('mode_description', 1000); 
             $table->integer('planningAlgorithm'); 
     
         }); 
@@ -29,6 +29,6 @@ class CreatePoolModesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('poolModes'); 
+        Schema::dropIfExists('pool_modes'); 
     }
 }
