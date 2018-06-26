@@ -305,12 +305,18 @@ class TournamentController extends Controller
     public function export(Request $request, $id)
     {
         $tournament = Tournament::findOrFail($id);
+        $participants = $tournament->teams->flatMap(function ($team) {
+            return $team->participants->each(function ($participant) use ($team) {
+                $participant->team_name = $team->name;
+                $participant->email = $participant->user ? $participant->user->email : '';
+            });
+        });
 
         $exporter = new \Laracsv\Export();
         $csv = $exporter->getCsv();
         $csv->setDelimiter("\t");
 
-        $output = $exporter->build($tournament->teams, ['name']);
+        $output = $exporter->build($participants, ['first_name', 'last_name', 'email', 'team_name']);
        
         return response(\League\Csv\Reader::BOM_UTF16_LE . mb_convert_encoding($csv->getContent(), 'UTF-16LE', 'UTF-8'))->header('Content-Type', 'text/csv');
     }
