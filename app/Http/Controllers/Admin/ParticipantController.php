@@ -44,8 +44,9 @@ class ParticipantController extends Controller
        $exporter->beforeEach(function ($participant) {
            $participant->team_names = $participant->teams->implode('name', ', ');
            $participant->sport_names = $participant->teams->implode('sport.name', ', ');
+           $participant->email = $participant->user ? $participant->user->email : '';
        });
-       $output = $exporter->build($participants, ['first_name', 'last_name', 'team_names', 'sport_names']);
+       $output = $exporter->build($participants, ['first_name', 'last_name', 'email', 'team_names', 'sport_names']);
        
        return response(\League\Csv\Reader::BOM_UTF16_LE . mb_convert_encoding($csv->getContent(), 'UTF-16LE', 'UTF-8'))->header('Content-Type', 'text/csv');
    }
