@@ -20,7 +20,7 @@ class SinglePoolTransformer extends TransformerAbstract
             'name'          => $pool->poolName,
             'idMode'        => $pool->mode_id,
             'stage'         => $pool->stage,
-            'idGameType'    => $pool->gameType_id,
+            'idGameType'    => $pool->game_type_id,
             'size'          => $pool->poolSize,
             'isFinished'    => $pool->isFinished,
             'ranking'       => $pool->rankings()
