@@ -10,7 +10,7 @@
         "dingo/api": "1.0.*@dev",
         "laravel/framework": "5.3.*",
         "laravelcollective/html": "^5.2.0",
-        "usmanhalalit/laracsv": "1.*@dev"
+        "usmanhalalit/laracsv": "dev-master"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",

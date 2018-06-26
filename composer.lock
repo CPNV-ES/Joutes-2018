@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "22059caa4aa22b43b79c3d5e404e0765",
-    "content-hash": "fe52346bf8ad19216c1577026585c1f5",
+    "hash": "7f7d0c511311509a3f530285c20692f8",
+    "content-hash": "365456e3d1484ff699cb1fb667242189",
     "packages": [
         {
             "name": "aacotroneo/laravel-saml2",
@@ -2562,16 +2562,16 @@
         },
         {
             "name": "usmanhalalit/laracsv",
-            "version": "1.x-dev",
+            "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/usmanhalalit/laracsv.git",
-                "reference": "f0c5e573643df739297d474111d89e8aa40a7460"
+                "reference": "4e3379463d63c84d89f832ec683d80b874290f9e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/usmanhalalit/laracsv/zipball/f0c5e573643df739297d474111d89e8aa40a7460",
-                "reference": "f0c5e573643df739297d474111d89e8aa40a7460",
+                "url": "https://api.github.com/repos/usmanhalalit/laracsv/zipball/4e3379463d63c84d89f832ec683d80b874290f9e",
+                "reference": "4e3379463d63c84d89f832ec683d80b874290f9e",
                 "shasum": ""
             },
             "require": {
@@ -2608,7 +2608,7 @@
                 "export",
                 "laravel"
             ],
-            "time": "2017-05-17 07:57:45"
+            "time": "2018-05-07 08:51:53"
         },
         {
             "name": "vlucas/phpdotenv",
