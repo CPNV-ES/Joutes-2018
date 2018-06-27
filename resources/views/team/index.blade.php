@@ -7,7 +7,7 @@
 
 		<h1 id="titleTeam">Equipes
 		@if (Auth::user()->role == "administrator")
-			<a href="{{route('teams.create')}}" class="greenBtn" title="Créer un equipes">Céer</a>
+			<a href="{{route('teams.create')}}" class="greenBtn" title="Créer une équipe">Créer</a>
 		@endif
 		</h1>
 
