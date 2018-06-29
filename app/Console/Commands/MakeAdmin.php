@@ -13,7 +13,7 @@ class MakeAdmin extends Command
      *
      * @var string
      */
-    protected $signature = 'make:admin {username} {password}';
+    protected $signature = 'make:admin {username} {password} {email}';
 
     /**
      * The console command description.
@@ -41,6 +41,7 @@ class MakeAdmin extends Command
     {
         $username = $this->argument('username');
         $password = Hash::make($this->argument('password'));
+        $email = $this->argument('email');
 
         if(User::where('username', '=', $username)->exists()){
             $this->line("Erreur: L'utilisateur $username existe déjà.");
@@ -48,6 +49,9 @@ class MakeAdmin extends Command
             $user = new User;
             $user->username = $username;
             $user->password = $password;
+            $user->email = $email;
+            $user->first_name = $username;
+            $user->last_name = $username;
             $user->role = 'administrator';
             $user->save();
             $this->line("L'administrateur $username a bien été créé.");
