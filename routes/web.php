@@ -41,7 +41,6 @@ Route::group(['middleware'=>'checkIsAdmin', 'prefix'=>'admin', 'namespace' => 'A
 	//Route::resource('teams', 'TeamController');
 	//Route::resource('participants', 'ParticipantController');
 	//Route::resource('teams.participants', 'TeamParticipantController', ['only' => ['destroy', 'store']]);
-    Route::resource('events.import', 'EventImportController', ['only' => ['store']]);
 });
 
 /* Authorization for Writer or Admin*/
