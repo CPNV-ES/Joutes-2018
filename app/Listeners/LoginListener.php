@@ -46,7 +46,7 @@ class LoginListener
 			$user = new \App\User;
 			$user->username = sprintf('%s %s', $userData['attributes']['sn'][0], $userData['attributes']['givenName'][0]);
 			$user->email = $userData['attributes']['mail'][0];
-			$user->password = bcrypt(str_random(8));
+			$user->password = "";
             $user->last_name = $userData['attributes']['sn'][0];
             $user->first_name = $userData['attributes']['givenName'][0];
 			$user->role = "participant";

@@ -13,7 +13,7 @@ class MakeWriter extends Command
      *
      * @var string
      */
-    protected $signature = 'make:writer {username} {password}';
+    protected $signature = 'make:writer {username} {password} {email}';
 
     /**
      * The console command description.
@@ -41,6 +41,7 @@ class MakeWriter extends Command
     {
         $username = $this->argument('username');
         $password = Hash::make($this->argument('password'));
+        $email = $this->argument('email');
 
         if(User::where('username', '=', $username)->exists()){
             $this->line("Error: The username \"".$username."\" already exists.");
@@ -48,6 +49,9 @@ class MakeWriter extends Command
             $user = new User;
             $user->username = $username;
             $user->password = $password;
+            $user->email = $email;
+            $user->first_name = $username;
+            $user->last_name = $username;
             $user->role = 'writer';
             $user->save();
             $this->line("The writer \"".$username."\" has been created.");

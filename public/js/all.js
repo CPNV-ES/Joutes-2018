@@ -247,24 +247,9 @@ $( document ).ready(function() {
     //Create the new user name in off-line version
     $("#login_popup .btn-login-form").click(function(event){
         event.preventDefault();
-        var role = $("input:radio[name ='role']:checked").val();
-        var username;
 
-        switch(role) {
-            case "administrator":
-                username = "ADMIN" + " Tester";
-                break;
-            case "writer":
-                username = "WRITER" + " Tester";
-                break;
-            case "participant":
-                username = "PARTICIPANT" + " Tester";
-                break;
-            default:
-        }
-
-        //$("#login-form #username").val(username);
-        //$("#login-form #password").val("none");
+        var username = $("#login-form #username").val();
+        var password = $("#login-form #password").val();
         var token = $("#login-form input[name=_token]").val();
 
         // Ajaj Posting data
@@ -275,8 +260,7 @@ $( document ).ready(function() {
             headers		: {'X-CSRF-TOKEN': token},
             data        : {
                 username: username,
-                password: "none",
-                role: role
+                password: password
             },
             success : function(data) {
                 var res = data.split("::");
@@ -1033,7 +1017,7 @@ function alertConfirmEndPool(title, text) {
 }
 
 // @author Davide Carboni
-// Validation for profile SigIn form
+// Validation for profile change teams form
 
 $( document ).ready(function() {
 
@@ -1275,7 +1259,7 @@ $( document ).ready(function() {
     }
 
 
-    // Check if the form is valid then enable then Button to Submit
+    // Check if the form is valid then enable the Button to Submit
     function CheckifCanSubmit(action)
     {
         disableButtonValidate();
@@ -1386,6 +1370,7 @@ $( document ).ready(function() {
     }
 
 
+    // Delete all errors messages
     function resetError()
     {
         $("#formProfile #errorMessage").text("");
@@ -1470,6 +1455,7 @@ $( document ).ready(function() {
 
     $('#formProfileChangeTeam #teamSelected').change(function (e) {
         e.preventDefault();
+        resetError();
         CheckifCanSubmit(false);
     });
 
@@ -1830,6 +1816,7 @@ $( document ).ready(function() {
         $('#formProfileChangeTeam input[name="switch"]').prop('checked', false);
     }
 
+    // Delete all errors messages
     function resetError()
     {
         $("#formProfileChangeTeam #errorMessage").text("");
@@ -1855,7 +1842,7 @@ $( document ).ready(function() {
 });
 
 $( document ).ready(function() {
-    // Switch teams selecetion between a filed list and a text field
+    // Check if the form team create is have elements to be submit
     // @author Davide Carboni
 
     $('#formTeam #event').change(function (e) {
