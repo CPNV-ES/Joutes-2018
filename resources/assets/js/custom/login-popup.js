@@ -13,24 +13,9 @@ $( document ).ready(function() {
     //Create the new user name in off-line version
     $("#login_popup .btn-login-form").click(function(event){
         event.preventDefault();
-        var role = $("input:radio[name ='role']:checked").val();
-        var username;
 
-        switch(role) {
-            case "administrator":
-                username = "ADMIN" + " Tester";
-                break;
-            case "writer":
-                username = "WRITER" + " Tester";
-                break;
-            case "participant":
-                username = "PARTICIPANT" + " Tester";
-                break;
-            default:
-        }
-
-        //$("#login-form #username").val(username);
-        //$("#login-form #password").val("none");
+        var username = $("#login-form #username").val();
+        var password = $("#login-form #password").val();
         var token = $("#login-form input[name=_token]").val();
 
         // Ajaj Posting data
@@ -41,8 +26,7 @@ $( document ).ready(function() {
             headers		: {'X-CSRF-TOKEN': token},
             data        : {
                 username: username,
-                password: "none",
-                role: role
+                password: password
             },
             success : function(data) {
                 var res = data.split("::");

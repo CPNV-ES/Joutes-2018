@@ -24,13 +24,20 @@
             <div class="modal-content removeRaduis">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title">Connect as</h4>
+                    <h4 class="modal-title">Connexion</h4>
                 </div>
                 <div class="modal-body">
-                    {{ Form::open(array('url' => route('admin.store'), 'method' => 'post', 'id' => 'login-form')) }}
-                    {{ Form::radio('role', 'administrator', true, ['class' => 'roles']) }} Administrator <br>
-                    {{ Form::radio('role', 'participant', null, ['class' => 'roles']) }} Participant <br>
-                    {{ Form::radio('role', 'writer', null, ['class' => 'roles']) }} Writer <br>
+                {{ Form::open(array('url' => route('admin.store'), 'method' => 'post', 'id' => 'login-form')) }}
+                    {{ Form::label('username', 'Nom d\'utilisateur : ') }}
+                    @if(isset($errorLogin))
+                        {{ Form::text('username', $errorLogin['username'], array('required' => '')) }}
+                    @else
+                        {{ Form::text('username', null, array('required' => '')) }}
+                    @endif
+                    <br>
+                    {{ Form::label('password', 'Mot de passe : ') }}
+                    {{ Form::password('password', null) }}
+                    <br>
 
                 </div>
                 <div class="modal-footer">
@@ -50,11 +57,9 @@
                 {{ Form::button('<i class="fa fa-power-off" aria-hidden="true"></i>', array('type' => 'submit','class' => 'logout')) }}
                 {{ Form::close() }}
             @else
-                @if (isset($_ENV['OFFLINE']) && $_ENV['OFFLINE'] == "YES")
-                    <span id="login_link">Off-Line Connexion</span>
-                @else
-                    <span><b><a href="/saml2/login">Connexion</a></b></span>
-                @endif
+                <span id="login_link" title="Connexion pour les gestionnaires"><i class="fa fa-sign-in" aria-hidden="true"></i> Gestionnaire</span>
+                &nbsp;&nbsp;
+                <span><b><a href="/saml2/login" title="Connexion pour les participants"><i class="fa fa-sign-in" aria-hidden="true"></i> Participant</a></b></span>
             @endif
         </div>
     </div>

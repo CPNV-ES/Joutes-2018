@@ -43,5 +43,11 @@ class User extends Model implements Authenticatable
         return $teams;
         //return $this->hasManyThrough('App\Team', 'App\Participant', 'team_id','user_id' );
     }
+    
+    // Returns whether the user is locally authenticated or remotely (SAML)
+    public function isLocal()
+    {
+        return !empty($this->password);
+    }
 
 }
