@@ -21,10 +21,16 @@ class Joutes2018Seeder extends Seeder
         if (!$event) die ("L'événement n'existe pas\n");
         $this->eventid = $event->id;
 
+        // make room
+        \Illuminate\Support\Facades\DB::statement('delete from games;');
+        \Illuminate\Support\Facades\DB::statement('delete from contenders;');
+        \Illuminate\Support\Facades\DB::statement('delete from pools;');
+
         $this->basics();
         $this->BeachVolley();
         $this->Basket();
         $this->UniHockey();
+        $this->Badminton();
     }
 
     // Common stuff
@@ -44,6 +50,70 @@ class Joutes2018Seeder extends Seeder
             'mode_description' => 'Elimination directe',
             'planningAlgorithm' => '3',
         ]))->save();
+    }
+
+    private function Badminton()
+    {
+        echo "Badminton\n";
+        $bv = \App\Tournament::where('name', 'like', '%Badmin%')->first();
+        if (!$bv) {
+            echo "Le tournoi de badminton n'existe pas\n";
+            return;
+        }
+        $tournamentid = $bv->id;
+        $sportid = $bv->sport_id;
+
+        $teams = \App\Team::where('tournament_id', '=', $tournamentid)->get();
+
+        echo "Tournoi #$tournamentid, " . $teams->count() . " équipes inscrites\n";
+        //================================================================================================================
+        echo "Championnat\n";
+
+        $pool = new \App\Pool([
+            'tournament_id' => $tournamentid,
+            'start_time' => '09:30',
+            'end_time' => '16:00',
+            'poolName' => 'The Battle',
+            'mode_id' => 1,
+            'game_type_id' => 1,
+            'poolSize' => 13,
+            'stage' => 1,
+            'isFinished' => 0
+        ]);
+        $pool->save();
+        $firstpoolStage1 = $pool->id; // we'll need that to put teams into pools
+
+
+        foreach ($teams as $team)
+        {
+            (new \App\Contender([
+                'pool_id' => $firstpoolStage1,
+                'team_id' => $team->id
+            ]))->save();
+        }
+        $firstcontender = \App\Contender::where('pool_id', '=', $firstpoolStage1)->first()->id;
+
+        $firstcourt = \App\Court::where('sport_id', '=', $sportid)->first()->id;
+
+        // Thank you https://nrich.maths.org/1443
+        // Games of pool A
+        $times = array ("09:30","10:00","10:30","11:00","11:30","13:00","13:30","14:00","14:30","15:00","15:30","16:00");
+        $conteams = array (0,1,2,3,4,5,6,7,8,9,10,11,12);
+
+        foreach ($times as $time)
+        {
+            (new \App\Game(['date' => '2017-06-27', 'start_time' => $time, 'contender1_id' => $firstcontender + $conteams[1], 'contender2_id' => $firstcontender + $conteams[12], 'court_id' => $firstcourt]))->save();
+            (new \App\Game(['date' => '2017-06-27', 'start_time' => $time, 'contender1_id' => $firstcontender + $conteams[2], 'contender2_id' => $firstcontender + $conteams[11], 'court_id' => $firstcourt]))->save();
+            (new \App\Game(['date' => '2017-06-27', 'start_time' => $time, 'contender1_id' => $firstcontender + $conteams[3], 'contender2_id' => $firstcontender + $conteams[10], 'court_id' => $firstcourt]))->save();
+            (new \App\Game(['date' => '2017-06-27', 'start_time' => $time, 'contender1_id' => $firstcontender + $conteams[4], 'contender2_id' => $firstcontender + $conteams[9], 'court_id' => $firstcourt]))->save();
+            (new \App\Game(['date' => '2017-06-27', 'start_time' => $time, 'contender1_id' => $firstcontender + $conteams[5], 'contender2_id' => $firstcontender + $conteams[8], 'court_id' => $firstcourt]))->save();
+            (new \App\Game(['date' => '2017-06-27', 'start_time' => $time, 'contender1_id' => $firstcontender + $conteams[6], 'contender2_id' => $firstcontender + $conteams[7], 'court_id' => $firstcourt]))->save();
+
+            $save = $conteams[0];
+            for ($i = 0; $i < 11; $i++) $conteams[$i] = $conteams[$i+1];
+            $conteams[11] = $save;
+        }
+
     }
 
     private function UniHockey()
