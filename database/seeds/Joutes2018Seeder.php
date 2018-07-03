@@ -95,25 +95,53 @@ class Joutes2018Seeder extends Seeder
 
         $firstcourt = \App\Court::where('sport_id', '=', $sportid)->first()->id;
 
-        // Thank you https://nrich.maths.org/1443
-        // Games of pool A
-        $times = array ("09:30","10:00","10:30","11:00","11:30","13:00","13:30","14:00","14:30","15:00","15:30","16:00");
-        $conteams = array (0,1,2,3,4,5,6,7,8,9,10,11,12);
+        $teams = array(0,1,2,3,4,5,6,7,8,9,10,11,12); // Offsets from database id of first contender
 
-        foreach ($times as $time)
+        $nbTeams = count($teams);
+        $evenNumberOfTeams = ($nbTeams % 2 == 0); // it matters....
+
+        // There will be N-1 rounds (each team will play N-1 games) if the number of teams is even,
+        // N rounds if it is odd: each team will play N-1 games and rest during one round
+        // Build an array so that it's easy to later define rounds in a richer way than just a number
+        $rounds = array();
+        for ($i=0; $i < $nbTeams-1; $i++) $rounds[] = $i+1;
+        if (!$evenNumberOfTeams) $rounds[] = $i+1;
+
+        $timeoffset = 0; // in minutes
+
+        // Ok, let's generate...
+        foreach ($rounds as $round)
         {
-            (new \App\Game(['date' => '2017-06-27', 'start_time' => $time, 'contender1_id' => $firstcontender + $conteams[1], 'contender2_id' => $firstcontender + $conteams[12], 'court_id' => $firstcourt]))->save();
-            (new \App\Game(['date' => '2017-06-27', 'start_time' => $time, 'contender1_id' => $firstcontender + $conteams[2], 'contender2_id' => $firstcontender + $conteams[11], 'court_id' => $firstcourt]))->save();
-            (new \App\Game(['date' => '2017-06-27', 'start_time' => $time, 'contender1_id' => $firstcontender + $conteams[3], 'contender2_id' => $firstcontender + $conteams[10], 'court_id' => $firstcourt]))->save();
-            (new \App\Game(['date' => '2017-06-27', 'start_time' => $time, 'contender1_id' => $firstcontender + $conteams[4], 'contender2_id' => $firstcontender + $conteams[9], 'court_id' => $firstcourt]))->save();
-            (new \App\Game(['date' => '2017-06-27', 'start_time' => $time, 'contender1_id' => $firstcontender + $conteams[5], 'contender2_id' => $firstcontender + $conteams[8], 'court_id' => $firstcourt]))->save();
-            (new \App\Game(['date' => '2017-06-27', 'start_time' => $time, 'contender1_id' => $firstcontender + $conteams[6], 'contender2_id' => $firstcontender + $conteams[7], 'court_id' => $firstcourt]))->save();
+            $poolHour = 13+intdiv($timeoffset,60);
+            $poolMinute = $timeoffset % 60;
 
-            $save = $conteams[0];
-            for ($i = 0; $i < 11; $i++) $conteams[$i] = $conteams[$i+1];
-            $conteams[11] = $save;
+            $team1Index = 1;
+            $team2Index = $evenNumberOfTeams ? $nbTeams-2 : $nbTeams-1;
+            // "draw the horizontal lines in the polygon", leaving the first team out
+            while ($team1Index < $team2Index)
+            {
+                (new \App\Game(['date' => '2018-07-03', 'start_time' => "$poolHour:$poolMinute", 'contender1_id' => $firstcontender + $teams[$team1Index], 'contender2_id' => $firstcontender + $teams[$team2Index], 'court_id' => $firstcourt]))->save();
+                $team1Index++;
+                $team2Index--;
+            }
+            // One extra game for the first and last teams
+            if ($evenNumberOfTeams) echo "Game: {$teams[0]} vs {$teams[$nbTeams-1]}<br>";
+
+            // prepare for next round
+            $teams = $this->rotate($teams);
+            $timeoffset += 15;
         }
 
+    }
+
+    private function rotate($arr)
+        // return the array rotated by one slot. If the number of elements is even, the last item is kept out of the rotation
+    {
+        $lastIndex = (count($arr) % 2 == 0) ? count($arr) - 2 : count($arr) - 1;
+        $first = $arr[0];
+        for ($i=0; $i < $lastIndex; $i++) $arr[$i] = $arr[$i+1];
+        $arr[$lastIndex] = $first;
+        return $arr;
     }
 
     private function UniHockey()
