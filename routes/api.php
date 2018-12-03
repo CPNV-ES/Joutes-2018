@@ -39,6 +39,14 @@ $api->version('v1', function ($api) {
             'index', 'show'
         ]]);
 
+        $api->resource('participants.notifications', 'App\Http\Controllers\API\ParticipantNotificationController', [ 'only' => [
+            'index'
+        ]]);
+        
+        $api->resource('notifications', 'App\Http\Controllers\NotificationController', [ 'only' => [
+            'update'
+        ]]);
+        
         $api->resource('tournaments.schedule', 'App\Http\Controllers\API\ScheduleController', [ 'only' => [
             'index'
         ]]);
