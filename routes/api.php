@@ -50,5 +50,9 @@ $api->version('v1', function ($api) {
         $api->resource('tournaments.schedule', 'App\Http\Controllers\API\ScheduleController', [ 'only' => [
             'index'
         ]]);
+
+       $api->resource('profil', 'App\Http\Controllers\API\ProfilController', [ 'only' => [
+           'index'
+       ]]);
     });
 });
