@@ -9,19 +9,20 @@ class ProfilController extends Controller
 {
     //
 
-    public function index(Request $request){
-        try{
-            $user = \Auth::user();
+    public function index(Request $request)
+    {
+        $user = \Auth::user();
+        $teams = null;
+
+        if (!$user === null) {
+            try {
+                $teams = \Auth::user()->participant()->first()->teams;
+            } catch (\Exception $e) {
+                $teams = null;
+            }
         }
-        catch(\Exception $e){
-            $user = null;
-        }
-        try{
-            $teams = \Auth::user()->participant()->first()->teams;
-        }
-        catch(\Exception $e){
-            $teams = null;
-        }
+
+
         return [
             'user' => $user,
             'teams' => $teams,
