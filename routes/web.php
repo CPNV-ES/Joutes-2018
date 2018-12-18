@@ -23,6 +23,7 @@ Route::resource('tournaments.teams', 'TournamentTeamController');
 Route::resource('tournaments.pools', 'TournamentPoolController');
 Route::resource('admin', 'SessionController', ['only' => ['store', 'destroy']]);
 Route::resource('tournaments.schedule', 'ScheduleController', ['only' => ['index']]);
+Route::resource('notification', 'NotificationController', ['only' => ['create', 'store']]);
 
 # Route to download apk
 Route::get('/download', function() {
