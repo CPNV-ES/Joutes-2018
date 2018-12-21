@@ -56,5 +56,9 @@ $api->version('v1', function ($api) {
         ]]);
 
         $api->resource('login', 'Aacotroneo\Saml2\Http\Controllers\Saml2Controller@login');
+
+        $api->resource('/','App\Http\Controllers\API\HomeController', ['only' => [
+            'index'
+        ]]);
     });
 });
