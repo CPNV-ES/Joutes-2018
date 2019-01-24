@@ -144,7 +144,7 @@ class CourtController extends Controller
         // create the validation rules
         $rules = array(
             'name' => 'required|min:1|max:20',
-            'acronym' => 'required|min:1|max:3',
+            'acronym' => 'required|min:1|max:5',
             'sport' => 'required',
         );
 
