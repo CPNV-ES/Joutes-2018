@@ -14,7 +14,7 @@ class ProfilController extends Controller
         $user = \Auth::user();
         $teams = null;
 
-        if (!$user === null) {
+        if ($user != null) {
             try {
                 $teams = \Auth::user()->participant()->first()->teams;
             } catch (\Exception $e) {
