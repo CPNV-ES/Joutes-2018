@@ -48,7 +48,7 @@ class SportController extends Controller
         /* LARAVEL VALIDATION */
         // create the validation rules
         $rules = array(
-            'name' => 'required|regex:/^[a-zA-ZÀ-ÿ-. ]*$/|min:3|max:35|unique:sports,name',
+            'name' => 'required|min:3|max:35|unique:sports,name',
             'description' => 'max:45',
             'min_participant' => 'required|integer',
             'max_participant' => 'required|integer'
@@ -122,7 +122,7 @@ class SportController extends Controller
         /* LARAVEL VALIDATION */
         // create the validation rules
         $rules = array(
-            'name' => 'required|regex:/^[a-zA-ZÀ-ÿ-. ]*$/|min:3|max:35',
+            'name' => 'required|min:3|max:35',
             'description' => 'max:45',
             'min_participant' => 'required|integer',
             'max_participant' => 'required|integer'
