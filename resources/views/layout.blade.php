@@ -103,6 +103,9 @@
                             <a href="#" class="dev">Doran Kayoumi</a>
                             <a href="#" class="dev">Loïc Dessaules</a>
                             <a href="#" class="dev">Antoine Dessauges</a>
+                            <a href="#" class="dev">Jérémy Gfeller</a>
+                            <a href="#" class="dev">Senistan Jegarajasingam</a>
+                            <a href="#" class="dev">Quentin Rossier</a>
                         </div>
                     </div>
                 </footer>
