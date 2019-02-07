@@ -20,7 +20,7 @@ class CourtController extends Controller
      */
     public function index()
     {
-        $courts = Court::all();
+        $courts = Court::withTrashed()->get();
         return view('court.index')->with('courts',$courts);
     }
 
