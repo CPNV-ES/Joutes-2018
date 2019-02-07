@@ -14,7 +14,7 @@ class Court extends Model
     use SoftDeletes;
     // I added this because when I try to save() Sport value an updated_At "xy" error appears
 	// And with this that work
-	public $timestamps = false;
+	public $timestamps = true;
 	protected $fillable = ['fk_sports', 'name']; // -> We have to define all data we use on our courts table (For use : ->all())
 
     /**
