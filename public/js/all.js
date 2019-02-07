@@ -105,16 +105,15 @@ $( document ).ready(function() {
 		var error = '';
 
 		switch(formId) {
-			/*
             case "formTeam":
                 var nameValue = $('#formTeam #name').val();
 
-                var patternName = /^[a-zA-Z0-9-_ ]{3,20}$/;
+                var patternName = /^[a-zA-ZÀ-ÖØ-öø-ÿ0-9-_ ]{3,30}$/;
 
                 if(!patternName.test(nameValue)){
-                    error += 'Le champ Nom ne doit pas être vide et doit avoir entre 3 et 45 caractères.<br>';
+                    error += 'Le champ Nom ne doit pas être vide et doit avoir entre 3 et 30 caractères.<br>';
                 }
-                break;*/
+                break;
 
 		    case "formSport":
 		    	var nameValue = $('#formSport #name').val();

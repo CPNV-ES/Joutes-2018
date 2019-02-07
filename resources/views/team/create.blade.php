@@ -7,8 +7,17 @@
 		<a href=""><i class="fa fa-4x fa-arrow-circle-left return" aria-hidden="true"></i></a>	
 		<h1>Créer une equipe</h1>
 
-		@if (isset($error))
-			<div class="alert alert-danger">{{$error}}</div>
+		@if ($errors->any() || isset($customError))
+			<div class="alert alert-danger">
+				@if ($errors->any())
+					@foreach ($errors->all() as $error)
+						{{ $error }}<br>
+					@endforeach
+				@endif
+				@if (isset($customError))
+					{{ $customError}}
+				@endif
+			</div>
 		@endif
 
 		{{ Form::open(array('url' => route('teams.store'), 'method' => 'post', 'id' => 'formTeam')) }}
@@ -26,10 +35,7 @@
 				<span id="errorMessage" class="text-danger"></span>
 				{{ Form::text('name', null, $teamNewOptions) }}
 			</div>
-            <div class="form-group hidden">
-                {{ Form::text('from', "team") }}
-            </div>
-			<div class="send">{{ Form::button('Créer', array('class' => 'btn btn-success formSend', 'id' => 'formValidate', 'disabled' => 'disabled')) }}</div>
+			<div class="send">{{ Form::button('Créer', array('class' => 'btn btn-success formSend')) }}</div>
 
 		{{ Form::close() }}
 
