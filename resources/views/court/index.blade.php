@@ -23,12 +23,15 @@
 							<td>{{$court->name}}</td>
 							<td>{{$court->sport->name}}</td>
 							<td class="action">
-								<a href="{{route('courts.edit',$court->id)}}" title="Éditer le terrain" class="edit"><i class="fa fa-pencil fa-lg action" aria-hidden="true"></i></a>
-								{{-- {{ Form::open(array('url' => route('courts.destroy', $court->id), 'method' => 'delete')) }}
-									<button type="button" class="button-delete" data-name="{{ $court->name }}" data-type="court">
+								<a href="{{route('courts.edit',$court->id)}}" title="Éditer le terrain" class="edit">
+									<i class="fa fa-pencil fa-lg action" aria-hidden="true"></i>
+								</a>
+								
+								{{ Form::open(array('url' => route('courts.destroy', $court->id), 'method' => 'delete')) }}
+									<button type="submit" class="button-delete" data-name="{{ $court->name }}" data-type="court">
 					                    <i class="fa fa-trash-o fa-lg action" aria-hidden="true"></i>
 					                </button>
-								{{ Form::close() }} --}}
+								{{ Form::close() }}
 							</td>
 						</tr>
 					@endforeach

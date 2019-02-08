@@ -19,7 +19,7 @@ class CourtController extends Controller
      */
     public function index()
     {
-        $courts = Court::all();
+        $courts = Court::whereNull('deleted_at')->get();
         return view('court.index')->with('courts',$courts);
     }
 
