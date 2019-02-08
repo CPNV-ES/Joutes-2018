@@ -7,7 +7,6 @@ use App\Court; // This is the linked model
 use App\Sport; // This is the linked model
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Database\Eloquent\SoftDeletes;
 
 class CourtController extends Controller
 {
@@ -20,7 +19,7 @@ class CourtController extends Controller
      */
     public function index()
     {
-        $courts = Court::withTrashed()->get();
+        $courts = Court::whereNull('deleted_at')->get();
         return view('court.index')->with('courts',$courts);
     }
 
@@ -174,7 +173,7 @@ class CourtController extends Controller
     public function destroy($id)
     {
         $court = Court::findOrFail($id);
-        $court->softDeletes();
+        $court->delete();
         return redirect()->route('courts.index');
     }
 

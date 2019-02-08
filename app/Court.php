@@ -12,9 +12,17 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Court extends Model
 {
     use SoftDeletes;
+    
+    /**
+     * The attributes that should be mutated to dates.
+     *
+     * @var array
+     */
+    protected $dates = ['deleted_at'];
+
     // I added this because when I try to save() Sport value an updated_At "xy" error appears
 	// And with this that work
-	public $timestamps = true;
+	public $timestamps = false;
 	protected $fillable = ['fk_sports', 'name']; // -> We have to define all data we use on our courts table (For use : ->all())
 
     /**
@@ -27,11 +35,4 @@ class Court extends Model
     public function sport(){
         return $this->belongsTo(Sport::class);
     }
-    
-    /**
-     * The attributes that should be mutated to dates.
-     *
-     * @var array
-     */
-    protected $dates = ['deleted_at'];
 }
