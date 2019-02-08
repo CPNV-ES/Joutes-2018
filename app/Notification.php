@@ -6,10 +6,9 @@ use Illuminate\Database\Eloquent\Model;
 
 class Notification extends Model
 {
-    public $timestamps = false;
+    public $timestamps = true;
     //
-    public function participant()
-    {
-        return $this->belongsTo('App\Participant', 'participant_id');
+    public function team(){
+        return $this->belongsTo('App\Team', 'team_id');
     }
 }
