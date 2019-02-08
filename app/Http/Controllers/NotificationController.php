@@ -17,7 +17,8 @@ class NotificationController extends Controller
      */
     public function index()
     {
-        //
+        $notifications = Notification::all()->sortByDesc('created_at');
+        return view('notification.index')->with('notifications', $notifications);
     }
 
     /**
@@ -29,7 +30,7 @@ class NotificationController extends Controller
     {
         // get team for the first event
        $teams = Event::all()->first()->teams->sortBy('name');
-        return view('notification.create')->with('teams', $teams);
+       return view('notification.create')->with('teams', $teams);
     }
 
     /**
@@ -46,24 +47,17 @@ class NotificationController extends Controller
             'description'   => 'required|max:255',
             'team'          => 'exists:teams,id'
         ]);
-        $participants = Team::find( Input::get('team'))->participants;
 
-        foreach($participants as $participant)
-        {
-            $notif                  = new Notification();
-            $notif->title           = Input::get('title');
-            $notif->description     = Input::get('description');
-            $notif->participant_id  = $participant->id;
-            $notif->viewed          = false;
-            $notif->save();
-        }
+        $notif                  = new Notification();
+        $notif->title           = Input::get('title');
+        $notif->description     = Input::get('description');
+        $notif->team_id         = Input::get('team');
+        $notif->viewed          = false;
+        $notif->save();
         
-        $notifs     = Notification::all();
-        $message    = "La notification a été envoyée";
+        $notifs     = Notification::all()->sortByDesc('created_at');
     
-        // return view('notification.index')->with('notifications', $notifs)->with('message', $message);
-        $teams = Event::all()->first()->teams->sortBy('name');
-        return view('notification.create')->with('teams', $teams);
+        return redirect()->route('notification.index')->with('notifications', $notifs);
     }
 
     /**
