@@ -32,7 +32,16 @@
 			</div>
 			<div class="form-group">
 				{{ Form::label('Sport', 'Sport') }}
-				{{ Form::select('sport', $dropdownList, null, ['placeholder' => 'Sélectionner', 'class' => 'form-control allSameStyle', 'id' => 'sport']) }}
+				<select class="form-control allSameStyle" id="sport" name="sport">
+					<option selected>Sélectionner</option>
+					@foreach($dropdownList as $key => $value)
+						@if(isset(request()->id_sport) && request()->id_sport == $key)
+							<option value='{{ $key }}' selected>{{ $value }}</option>
+						@else
+							<option value='{{ $key }}'>{{ $value }}</option>
+						@endif
+					@endforeach
+				</select>
 			</div>
 
 			<div class="send">{{ Form::button('Créer', array('class' => 'btn btn-success formSend')) }}</div>
