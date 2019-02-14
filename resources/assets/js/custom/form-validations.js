@@ -52,7 +52,7 @@ $( document ).ready(function() {
 		    	var sportValue = $('#formCourt #sport').val(); // '' = empty, 1-2-3-... = sport
 
 		    	var patternName = /^[a-zA-Z0-9-_ ]{1,20}$/;
-		    	var patternAcronym = /^[a-zA-Z0-9-_ ]{1,3}$/;
+		    	var patternAcronym = /^[a-zA-Z0-9-_ ]{1,6}$/;
 		    	var patternSport = /^[0-9]+$/;
 
 		    	if(!patternName.test(nameValue)){
