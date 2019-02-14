@@ -35,7 +35,7 @@
 				<select class="form-control allSameStyle" id="sport" name="sport">
 					<option selected>Sélectionner</option>
 					@foreach($dropdownList as $key => $value)
-						@if(isset($_GET['id_sport']) && $_GET['id_sport'] == $key)
+						@if(isset(request()->id_sport) && request()->id_sport == $key)
 							<option value='{{ $key }}' selected>{{ $value }}</option>
 						@else
 							<option value='{{ $key }}'>{{ $value }}</option>
