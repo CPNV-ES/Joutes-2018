@@ -93,7 +93,7 @@
             <div class="nav navbar-nav navbar-bottom">
 
                 <footer class="footer">
-
+                    @include('partials.versiontag')
                     <div class="copyright">© CPNV - 2017</div>
                     <div class="devs">
                         <a href="#" class="show-devs">Développeurs</a>
