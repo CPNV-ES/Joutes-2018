@@ -122,14 +122,17 @@ class Joutes2019Seeder extends Seeder
     // build teams if necessary
     private function teams()
     {
-        $teamnb = 1000;
+        $syllables = collect(["le","rat","mus","qué","on","dat","ra","zib","eth","icus","ou","rat","dam","éri","que","est","un","rong","eur","de","la","fa","mil","le","des","cri","cét","idés","de","tren","te","à","qua","ran","te","cm","de","long","qui","pèse","sec","il","est","rép","uté","pou","voir","vi","vre","une","diz","aine","en","cap","ti","vi","té","mais","il","ne","dé","pas","se","que","ra","re","ment","tro","is","ou","qua","tre","ans","dans","la","nat","ure"]);
+
         foreach (["Bad", "Basket", "Beach", "Unihockey"] as $spname)
         {
             $t = \App\Tournament::where('name', 'like', "%" . $spname . "%")->where('start_date', '>=', '2019-01-01')->first();
             while ($t->teams()->count() < $t->min_teams)
             {
                 $team = new \App\Team();
-                $team->name = $spname . "Team" . $teamnb++;
+                $tname = "";
+                for ($i=0; $i<rand(3,7); $i++) $tname .= $syllables->random();
+                $team->name = ucfirst($tname);
                 $team->tournament()->associate($t);
                 $team->save();
             }
