@@ -41,6 +41,7 @@ class Joutes2019Seeder extends Seeder
         $this->Basket();
         $this->UniHockey();
         $this->Badminton();
+        $this->Tennis();
     }
 
     // Common stuff
@@ -68,7 +69,7 @@ class Joutes2019Seeder extends Seeder
 
     private function sports()
     {
-        foreach (["Badminton" => 32, "Basket" => 16, "Beach" => 12, "Unihockey" => 12] as $spname => $nbteams)
+        foreach (["Badminton" => 32, "Basket" => 16, "Beach" => 12, "Unihockey" => 12, "Tennis" => 32] as $spname => $nbteams)
         {
             if (!\App\Sport::where('name', 'like', "%" . $spname . "%")->exists())
             {
@@ -82,7 +83,7 @@ class Joutes2019Seeder extends Seeder
 
     private function courts()
     {
-        foreach (["Badminton" => 6, "Basket" => 2, "Beach" => 2, "Unihockey" => 2] as $spname => $nbcourts)
+        foreach (["Badminton" => 6, "Basket" => 2, "Beach" => 2, "Unihockey" => 2, "Tennis" => 2] as $spname => $nbcourts)
         {
             if (!\App\Court::where('name', 'like', "%" . $spname . "%")->exists())
             {
@@ -102,7 +103,7 @@ class Joutes2019Seeder extends Seeder
     {
         $event = \App\Event::where('name', 'like', '%2019%')->first();
 
-        foreach (["Badminton" => 32, "Basket" => 16, "Beach" => 12, "Unihockey" => 12] as $spname => $nbteams)
+        foreach (["Badminton" => 32, "Basket" => 16, "Beach" => 12, "Unihockey" => 12, "Tennis" => 32] as $spname => $nbteams)
         {
             if (!\App\Tournament::where('name', 'like', "%" . $spname . "%")->where('start_date', '>=', '2019-06-11')->exists())
             {
@@ -124,7 +125,7 @@ class Joutes2019Seeder extends Seeder
     {
         $syllables = collect(["le","rat","mus","qué","on","dat","ra","zib","eth","icus","ou","rat","dam","éri","que","est","un","rong","eur","de","la","fa","mil","le","des","cri","cét","idés","de","tren","te","à","qua","ran","te","cm","de","long","qui","pèse","sec","il","est","rép","uté","pou","voir","vi","vre","une","diz","aine","en","cap","ti","vi","té","mais","il","ne","dé","pas","se","que","ra","re","ment","tro","is","ou","qua","tre","ans","dans","la","nat","ure"]);
 
-        foreach (["Bad", "Basket", "Beach", "Unihockey"] as $spname)
+        foreach (["Bad", "Basket", "Beach", "Unihockey", "Tennis"] as $spname)
         {
             $t = \App\Tournament::where('name', 'like', "%" . $spname . "%")->where('start_date', '>=', '2019-01-01')->first();
             while ($t->teams()->count() < $t->min_teams)
@@ -395,6 +396,99 @@ class Joutes2019Seeder extends Seeder
         (new \App\Game(['date' => '2017-06-27', 'start_time' => '16:35', 'contender1_id' => $firstcontender + 1, 'contender2_id' => $firstcontender + 5, 'court_id' => $firstcourt + 1]))->save();
         (new \App\Game(['date' => '2017-06-27', 'start_time' => '16:52', 'contender1_id' => $firstcontender + 2, 'contender2_id' => $firstcontender + 4, 'court_id' => $firstcourt + 1]))->save();
         (new \App\Game(['date' => '2017-06-27', 'start_time' => '17:09', 'contender1_id' => $firstcontender + 3, 'contender2_id' => $firstcontender + 7, 'court_id' => $firstcourt + 1]))->save();
+        echo "OK\nTerminé.\n\n";
+
+    }
+
+    private function Tennis()
+    {
+        echo "================================================================================================================\n";
+        echo "Tennis\n";
+        echo "================================================================================================================\n";
+        $bv = \App\Tournament::where('name', 'like', '%Tennis%')->where('start_date', '>=', '2019-01-01')->first();
+        if (!$bv)
+        {
+            echo "Le tournoi de tennis n'existe pas\n";
+            return;
+        }
+        $tournamentid = $bv->id;
+        $sportid = $bv->sport_id;
+
+        $teams = \App\Team::where('tournament_id', '=', $tournamentid)->get();
+
+        echo "Tournoi #$tournamentid, " . $teams->count() . " équipes inscrites\n";
+        echo "Elimination directe\n";
+
+        for ($stage = 1; $stage <= 5; $stage++)
+        {
+            echo "Tour $stage, ".pow (2,5-$stage)." matches ";
+            for ($pooln = 1; $pooln <= pow (2, 5-$stage); $pooln++)
+            {
+                echo ".";
+                $pool = new \App\Pool([
+                    'tournament_id' => $tournamentid,
+                    'start_time' => '09:30',
+                    'end_time' => '16:00',
+                    'poolName' => "Game $stage$pooln",
+                    'mode_id' => 1,
+                    'game_type_id' => 1,
+                    'poolSize' => 2,
+                    'stage' => $stage,
+                    'isFinished' => 0
+                ]);
+                $pool->save();
+                if (!isset($firstpoolStage1)) $firstpoolStage1 = $pool->id; // we'll need that to put teams into pools
+            }
+            echo "\n";
+        }
+
+        echo "OK\nInscription des équipes ... ";
+
+        $pooln = 0;
+        foreach ($teams as $team)
+        {
+            $contender = new \App\Contender([
+                'pool_id' => $firstpoolStage1+intdiv($pooln++,2),
+                'team_id' => $team->id
+            ]);
+            $contender->save();
+            if (!isset($firstcontender)) $firstcontender = $contender->id; // we'll need that to put teams into pools
+        }
+
+        echo "OK\nLiens entre poules ... ";
+        $nbpoolstoadd = 8;
+        $pooldelta = 16;
+        $poolfromdelta = 0;
+
+        while ($nbpoolstoadd > 0)
+        {
+            for ($pooln = 0; $pooln < $nbpoolstoadd; $pooln++)
+            {
+                $contender = new \App\Contender([
+                    'pool_id' => $firstpoolStage1+$pooldelta+$pooln,
+                    'pool_from_id' => $firstpoolStage1+$poolfromdelta+$pooln*2,
+                    'rank_in_pool' => 1
+                ]);
+                $contender->save();
+                $contender = new \App\Contender([
+                    'pool_id' => $firstpoolStage1+$pooldelta+$pooln,
+                    'pool_from_id' => $firstpoolStage1+$poolfromdelta+$pooln*2+1,
+                    'rank_in_pool' => 1
+                ]);
+                $contender->save();
+            }
+            $poolfromdelta = $pooldelta;
+            $pooldelta += $nbpoolstoadd;
+            $nbpoolstoadd = intdiv($nbpoolstoadd,2);
+        }
+
+        $firstcourt = \App\Court::where('sport_id', '=', $sportid)->first()->id;
+
+        echo "OK\nMatches ... ";
+
+        for ($matchnumber = 0; $matchnumber < 31; $matchnumber++)
+            (new \App\Game(['date' => '2017-06-27', 'start_time' => '09:30', 'contender1_id' => $firstcontender+$matchnumber*2, 'contender2_id' => $firstcontender+$matchnumber*2 + 1, 'court_id' => $firstcourt]))->save();
+
         echo "OK\nTerminé.\n\n";
 
     }
