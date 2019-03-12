@@ -87,12 +87,6 @@ class Team extends Model
         else return false;
     }
 
-    public function isValid(){
-        if ($this->participants()->count() >= $this->sport->min_participant) return true;
-        else return false;
-
-    }
-
     /**
      *
      * Check if the participant is the owner of the team

@@ -51,7 +51,7 @@
 									@endif
 									<td>{{$team->participants()->count()}}</td>
         							<td><i class="{{ $team->isComplete() ? 'fa fa-check' : 'fa fa-close' }}" aria-hidden="true"></i></td>
-        							<td><i class="{{ $team->isValid() ? 'fa fa-check' : 'fa fa-close' }}" aria-hidden="true"></i></td>
+        							<td><i class="{{ $team->validation ? 'fa fa-check' : 'fa fa-close' }}" aria-hidden="true"></i></td>
 								</tr>
 							@endforeach
 						@else
