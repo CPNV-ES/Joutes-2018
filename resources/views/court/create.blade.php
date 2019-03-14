@@ -42,6 +42,7 @@
 						@endif
 					@endforeach
 				</select>
+				<input type='hidden' value='{{ request()->id_sport }}' name='id_sport'/>
 			</div>
 
 			<div class="send">{{ Form::button('Créer', array('class' => 'btn btn-success formSend')) }}</div>

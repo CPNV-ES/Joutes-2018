@@ -74,7 +74,16 @@ class CourtController extends Controller
             $court->sport_id = $request->input('sport');
             $court->save();
 
-            return redirect()->route('courts.index');
+
+            if(isset(request()->id_sport))
+            {
+                $id_sport = request()->id_sport;
+                return redirect('tournaments/'.$id_sport);
+            }
+            else 
+            {
+                return redirect()->route('courts.index');
+            }
         }
     }
 
