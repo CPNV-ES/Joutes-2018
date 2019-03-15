@@ -88,7 +88,7 @@
 			</div>
 		</div>
 
-		<h2>Visualisation du tournoi</h2>
+		<h2>Visualisation du tournoi <a href="{{ route('pool.create', ['id_sport' => $tournament->sport->id]) }}" class="greenBtn" title="Créer un tournoi">Créer l'arbre</i></a></h2>
 
 		<!-- Stages and pools -->
 		@if (sizeof($tournament->pools) > 0)
