@@ -35,7 +35,7 @@ $( document ).ready(function() {
 
 
 		}
-		
+
 		alertConfirm(form, title, text);
 
 		});
@@ -688,15 +688,15 @@ $( document ).ready(function() {
 		    var oldTime = $(this).text();
 
 			var tempTime = oldTime.split(':');
-			var timeInSecond = tempTime[0] * 60 * 60 + tempTime[1] * 60 ; 
+			var timeInSecond = tempTime[0] * 60 * 60 + tempTime[1] * 60 ;
 
 			//add time
 			timeInSecond += (shiftTime * 60)
-		
+
 			//convert second in string HH:MM:SS
 			var newDate = new Date(null);
 			newDate.setTime( newDate.getTime() + newDate.getTimezoneOffset()*60*1000 ); // make timezone correcte
-			newDate.setSeconds(timeInSecond); 
+			newDate.setSeconds(timeInSecond);
 			var result = newDate.toISOString().substr(11, 8);
 
 			// create var for the dom display and for the DB , the 0 add in start and the slice fix the number for having 14:05:00 instead of 14:5:0
@@ -708,8 +708,8 @@ $( document ).ready(function() {
 	            method      : 'PUT',
 	            context     : this,
 	            cache       : false,
-	            headers     : {            
-	                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')        
+	            headers     : {
+	                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
 	            },
 	            data        : {
 	        		newTime : timeDB
@@ -738,11 +738,11 @@ $( document ).ready(function() {
 
 		});
 
-	
+
 
 	} //shiftMatch
 
-	function displayAlert(type, message){	
+	function displayAlert(type, message){
 		$(".alert").remove();
 
 		switch(type) {
@@ -772,7 +772,7 @@ $( document ).ready(function() {
 	}
 
 	//EDIT TIME
-	
+
 	$("table#matches td.action i.editTime").click(function() {
 		unlockTime($(this));
 	});
@@ -783,13 +783,13 @@ $( document ).ready(function() {
 
 		var tdAction = pencil.parent();
 		var tdTime = tdAction.parent().children("td.separator");
-		var hour = (tdTime.text()).split(":")[0]; 
+		var hour = (tdTime.text()).split(":")[0];
 		var minute = tdTime.text().split(":")[1];
 
 		var form = '<input type="text" id="formHourTime" value="'+hour+'">:<input type="text" id="formMinuteTime" value="'+minute+'">';
 
 		tdTime.text("");
-		tdTime.append(form); 
+		tdTime.append(form);
 
 		// Create and delete icons
 		var checkSquare = document.createElement("i");
@@ -835,20 +835,20 @@ $( document ).ready(function() {
 
 			var newMinute = $("#formMinuteTime").val();
 			var newHour = $("#formHourTime").val();
-			
+
 			// if not between 0 and 59, not numeric or empty
 			if( newMinute >= 60 || newMinute < 0 || newMinute % 1 !== 0 || newMinute == ''){
-				displayAlert("danger", "Format de temps invalide"); 
+				displayAlert("danger", "Format de temps invalide");
 				return;
 			}
 
 			// if not between 0 and 59, not numeric or empty
 			if( newHour >= 24 || newHour < 0 || newHour % 1 !== 0 || newHour == ''){
-				displayAlert("danger", "Format de temps invalide"); 
+				displayAlert("danger", "Format de temps invalide");
 				return;
 			}
 
-				
+
 
 			var tournamentId = $("table#matches").data("tournament");
 			var poolId = $("table#matches").data("pool");
@@ -860,8 +860,8 @@ $( document ).ready(function() {
 	            method      : 'PUT',
 	            context     : this,
 	            cache       : false,
-	            headers     : {            
-	                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')        
+	            headers     : {
+	                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
 	            },
 	            data        : {
 	        		newTime : timeDB
@@ -874,7 +874,7 @@ $( document ).ready(function() {
                     opac.remove();
 	            },
 	            success : function(data) {
-	            	  
+
 	            	//display edit score btn
 					$(this).parent().children('.editScore').show();
 
@@ -904,7 +904,7 @@ $( document ).ready(function() {
 	            }
 	        });
 
-		
+
 		});
 
 	}
@@ -1823,20 +1823,28 @@ $( document ).ready(function() {
     }
 
     // reset content values in the input fields
-    function resetContent(level){
-
+    function resetContent(level) {
+    	console.log('lvl 0');
         $("#formProfileChangeTeam #teamNew").val("");
         $("#formProfileChangeTeam #errorMessage").text("");
         $("#formProfileChangeTeam #errorMessageTeam").text("");
-        if (level == 1) return;
-        $("#formProfileChangeTeam #teamSelected option" ).remove();
-        $('#formProfileChangeTeam #teamSelected').append('<option selected = "selected" disabled = "disabled"  hidden="hidden">Sélectionner</option>'); // append an option tag for the array item
-        if (level == 2) return;
-        $("#formProfileChangeTeam #tournament option" ).remove();
-        $('#formProfileChangeTeam #tournament').append('<option selected = "selected" disabled = "disabled"  hidden="hidden">Sélectionner</option>'); // append an option tag for the array item
-        if (level == 3) return;
-        $("#formProfileChangeTeam #event option" ).remove();
-        $('#formProfileChangeTeam #event').append('<option selected = "selected" disabled = "disabled"  hidden="hidden">Sélectionner</option>'); // append an option tag for the array item
+        if (level == 1)
+		{
+            console.log('lvl 2');
+            $("#formProfileChangeTeam #teamSelected option").remove();
+            $('#formProfileChangeTeam #teamSelected').append('<option selected = "selected" disabled = "disabled"  hidden="hidden">Sélectionner</option>'); // append an option tag for the array item
+        }
+		if (level == 2) {
+            console.log('lvl 2');
+            $("#formProfileChangeTeam #tournament option").remove();
+            $('#formProfileChangeTeam #tournament').append('<option selected = "selected" disabled = "disabled"  hidden="hidden">Sélectionner</option>'); // append an option tag for the array item
+        }
+        if (level == 3)
+		{
+            console.log('lvl 3');
+            $("#formProfileChangeTeam #event option" ).remove();
+            $('#formProfileChangeTeam #event').append('<option selected = "selected" disabled = "disabled"  hidden="hidden">Sélectionner</option>'); // append an option tag for the array item
+        }
     }
 });
 
@@ -1847,7 +1855,7 @@ $( document ).ready(function() {
     $('#formTeam #event').change(function (e) {
         e.preventDefault();
         var val =  $('#event option:selected').val();
-        resetContent();
+        resetContent(2);
         disableTournamensSelections();
         disableTeamNew();
         disableButtonValidate();
@@ -1857,7 +1865,7 @@ $( document ).ready(function() {
     $('#formTeam #tournament').change(function (e) {
         e.preventDefault();
         var val =  $('#tournament option:selected').val();
-        resetContent();
+        resetContent(3);
         enabledTeamNew();
         disableButtonValidate();
     });
@@ -1966,11 +1974,37 @@ $( document ).ready(function() {
         $('#formValidate').attr('disabled','disabled');
     }
 
-    // reset content values in the input fields
+    // case 2 : Reset options of the select
+    function resetContent(level) {
+        console.log('lvl 0');
+        $("#formProfileChangeTeam #teamNew").val("");
+        $("#formProfileChangeTeam #errorMessage").text("");
+        $("#formProfileChangeTeam #errorMessageTeam").text("");
+        if (level == 1)
+        {
+            console.log('lvl 1');
+            $("#formProfileChangeTeam #teamSelected option").remove();
+            $('#formProfileChangeTeam #teamSelected').append('<option selected = "selected" disabled = "disabled"  hidden="hidden">Sélectionner</option>'); // append an option tag for the array item
+        }
+        if (level == 2) {
+            console.log('lvl 2');
+            $("#formTeam #tournament option").remove();
+            $('#formTeam #tournament').append('<option selected = "selected" disabled = "disabled"  hidden="hidden">Sélectionner</option>'); // append an option tag for the array item
+        }
+        if (level == 3)
+        {
+            console.log('lvl 3');
+            $("#formProfileChangeTeam #event option" ).remove();
+            $('#formProfileChangeTeam #event').append('<option selected = "selected" disabled = "disabled"  hidden="hidden">Sélectionner</option>'); // append an option tag for the array item
+        }
+    }
+    /* reset content values in the input fields
     function resetContent(){
         $("#name").val("");
         $("#errorMessage").text("");
+        console.log('lvl vide');
     }
+    */
 });
 
 //# sourceMappingURL=all.js.map
