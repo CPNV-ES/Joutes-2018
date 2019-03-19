@@ -10,6 +10,18 @@ use App\Http\Controllers\Controller;
 class TournamentPoolController extends Controller
 {
     /**
+     * Show the form for creating a pool.
+     *
+     * @return \Illuminate\Http\Response
+     *
+     * @author Jérémy Gfeller
+     */
+    public function create()
+    {
+        return view('pool.create');
+    }
+
+    /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
