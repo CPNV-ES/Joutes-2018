@@ -105,7 +105,7 @@
 					</thead>
 					<tbody>
 						@for ($i = 0; $i < sizeof($pool->rankings()); $i++)
-							<tr data-id="{{ $pool->rankings()[$i]["team_id"] }}" data-rank="{{$i+1}}">
+							<tr data-id="{{ $pool->rankings()[$i]['team_id'] }}" data-rank="{{$i+1}}">
 								<td>{{$i+1}}</td>
 								<td>{{$pool->rankings()[$i]["team"]}}</td>
 								<td>{{$pool->rankings()[$i]["score"]}}</td>
