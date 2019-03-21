@@ -4,7 +4,7 @@
 
 @section('content')
 	<div class="container">
-		<a href=""><i class="fa fa-4x fa-arrow-circle-left return" aria-hidden="true"></i></a>	
+		<a href=""><i class="fa fa-4x fa-arrow-circle-left return" aria-hidden="true"></i></a>
 		<h1>Créer une equipe</h1>
 
 		@if ($errors->any() || isset($customError))
@@ -33,9 +33,9 @@
 			<div class="form-group">
 				{{ Form::label('name', 'Nom') }}
 				<span id="errorMessage" class="text-danger"></span>
-				{{ Form::text('name', null, $teamNewOptions) }}
+				{{ Form::text('name', null, $teamNewOptions, ['id' => 'teamNew']) }}
 			</div>
-			<div class="send">{{ Form::button('Créer', array('class' => 'btn btn-success formSend')) }}</div>
+			<div class="send">{{ Form::button('Créer', array('class' => 'btn btn-success formSend', 'disabled' => 'disabled', 'id' => 'formValidate' )) }}</div>
 
 		{{ Form::close() }}
 
