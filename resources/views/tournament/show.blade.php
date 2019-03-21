@@ -84,12 +84,19 @@
 						@endif
 					</tbody>
 				</table>
-				<a href="{{ route('courts.create', ['id_sport' => $tournament->sport->id]) }}" class="greenBtn" title="Créer un tournoi">Ajouter</i></a>
+				@if (Auth::check() && (Auth::user()->role == 'administrator'))
+					<a href="{{ route('courts.create', ['id_sport' => $tournament->sport->id]) }}" class="greenBtn" title="Créer un tournoi">Ajouter</i></a>
+				@endif
 			</div>
 		</div>
-
-		<h2>Visualisation du tournoi <a href="{{ route('pool.create', ['id_sport' => $tournament->sport->id]) }}" class="greenBtn" title="Créer un tournoi">Créer l'arbre</i></a></h2>
-
+	
+		<h2>
+			Visualisation du tournoi 
+			@if (Auth::check() && (Auth::user()->role == 'administrator'))
+				<a href="{{ route('tournaments.pools.create', ['id_sport' => $tournament->sport->id]) }}" class="greenBtn" title="Créer un arbre">Créer l'arbre</i></a>
+			@endif
+		</h2>
+	
 		<!-- Stages and pools -->
 		@if (sizeof($tournament->pools) > 0)
 
