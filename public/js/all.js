@@ -1828,23 +1828,17 @@ $( document ).ready(function() {
         $("#formProfileChangeTeam #teamNew").val("");
         $("#formProfileChangeTeam #errorMessage").text("");
         $("#formProfileChangeTeam #errorMessageTeam").text("");
-        if (level == 1)
-        {
-            $("#formProfileChangeTeam #teamSelected option").remove();
-            $('#formProfileChangeTeam #teamSelected').append('<option selected = "selected" disabled = "disabled"  hidden="hidden">Sélectionner</option>'); // append an option tag for the array item
-        }
-        if (level == 2) {
-            $("#formProfileChangeTeam #tournament option").remove();
-            $('#formProfileChangeTeam #tournament').append('<option selected = "selected" disabled = "disabled"  hidden="hidden">Sélectionner</option>'); // append an option tag for the array item
-        }
-        if (level == 3)
-        {
-            $("#formProfileChangeTeam #event option" ).remove();
-            $('#formProfileChangeTeam #event').append('<option selected = "selected" disabled = "disabled"  hidden="hidden">Sélectionner</option>'); // append an option tag for the array item
-        }
+        if (level == 1) return;
+        $("#formProfileChangeTeam #teamSelected option" ).remove();
+        $('#formProfileChangeTeam #teamSelected').append('<option selected = "selected" disabled = "disabled"  hidden="hidden">Sélectionner</option>'); // append an option tag for the array item
+        if (level == 2) return;
+        $("#formProfileChangeTeam #tournament option" ).remove();
+        $('#formProfileChangeTeam #tournament').append('<option selected = "selected" disabled = "disabled"  hidden="hidden">Sélectionner</option>'); // append an option tag for the array item
+        if (level == 3) return;
+        $("#formProfileChangeTeam #event option" ).remove();
+        $('#formProfileChangeTeam #event').append('<option selected = "selected" disabled = "disabled"  hidden="hidden">Sélectionner</option>'); // append an option tag for the array item
     }
 });
-
 $( document ).ready(function() {
     // Check if the form team create is have elements to be submit
     // @author Davide Carboni
