@@ -86,6 +86,11 @@ class Team extends Model
         if ($this->participants()->count() >= $this->sport->max_participant) return true;
         else return false;
     }
+    public function isValid(){
+        if ($this->participants()->count() >= $this->sport->min_participant) return true;
+        else return false;
+    }
+
 
     /**
      *
