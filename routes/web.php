@@ -47,7 +47,7 @@ Route::group(['middleware'=>'checkIsAdmin', 'prefix'=>'admin', 'namespace' => 'A
 /* Authorization for Writer or Admin*/
 Route::group(['middleware'=>'checkIsWriterOrAdmin', 'prefix'=>'admin', 'namespace' => 'Admin'],function(){
 	Route::resource('tournaments.pools.games', 'TournamentPoolGameController', ['only' => 'update']);
-	Route::resource('tournaments.pools', 'TournamentPoolController', ['only' => 'update']);
+	Route::resource('tournaments.pools', 'TournamentPoolController');
 });
 
 /* Authorization for Participant*/
