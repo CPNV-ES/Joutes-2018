@@ -33,7 +33,7 @@
 			<div class="form-group">
 				{{ Form::label('name', 'Nom') }}
 				<span id="errorMessage" class="text-danger"></span>
-				{{ Form::text('name', null, $teamNewOptions) }}
+				{{ Form::text('name', null, $teamNewOptions, ['id' => 'teamNew']) }}
 			</div>
 			<div class="send">{{ Form::button('Créer', array('class' => 'btn btn-success formSend', 'disabled' => 'disabled', 'id' => 'formValidate' )) }}</div>
 
