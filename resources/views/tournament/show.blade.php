@@ -93,7 +93,7 @@
 		<h2>
 			Visualisation du tournoi 
 			@if (Auth::check() && (Auth::user()->role == 'administrator'))
-				<a href="{{ route('tournaments.pools.create', ['id_sport' => $tournament->sport->id]) }}" class="greenBtn" title="Créer un arbre">Créer l'arbre</i></a>
+				<a href="{{ route('tournaments.pools.index', ['id_sport' => $tournament->sport->id]) }}" class="greenBtn" title="Créer un arbre">Créer l'arbre</i></a>
 			@endif
 		</h2>
 	
