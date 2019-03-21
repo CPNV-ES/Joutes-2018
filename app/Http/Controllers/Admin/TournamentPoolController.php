@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Pool;
+use App\PoolMode; // This is the linked model
 use App\Contender;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -16,9 +17,22 @@ class TournamentPoolController extends Controller
      *
      * @author Jérémy Gfeller
      */
-    public function create()
+    public function index()
     {
-        return view('pool.create');
+        $poolModes = PoolMode::all();
+        return view('pool.index')->with('pools', $poolModes);
+    }
+
+    /**
+     * Store data in the DB.
+     *
+     * @return \Illuminate\Http\Response
+     *
+     * @author Jérémy Gfeller
+     */
+    public function store(Request $request)
+    {
+        // TO DO : Store in DB
     }
 
     /**
