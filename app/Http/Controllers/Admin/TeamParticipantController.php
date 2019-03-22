@@ -7,6 +7,7 @@ use App\Team;
 use App\Participant;
 use Cookie;
 use URL;
+use Illuminate\Support\Facades\Input;
 
 use Illuminate\Http\Request;
 
@@ -59,8 +60,13 @@ class TeamParticipantController extends Controller
      */
     public function store(Request $request, $id)
     {
+        if (Input::get('isCaptain') === '1')
+        {
+            $isCaptain = true;
 
-        $isCaptain = $request->input('isCaptain') ? true : false;
+        }else {
+            $isCaptain = false;
+        }
 
         //redirect to the correct page with message
         if (URL::previous() === URL::route('teams.show', ['id' => $id])){

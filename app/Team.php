@@ -109,4 +109,7 @@ class Team extends Model
         if ($this->owner_id == $user_id) return true;
         else return false;
     }
+    public function captain(){
+        $this->participants()->where('isCaptain', 1)->get();
+    }
 }
