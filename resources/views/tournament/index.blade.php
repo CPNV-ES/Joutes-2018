@@ -20,7 +20,6 @@
 			<h1>Tournois</h1>
 		@endif
 
-
 		<input type="search" placeholder="Recherche" class="search form-control">
 
 		<div class="row searchIn">

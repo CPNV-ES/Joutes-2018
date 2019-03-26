@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Tournament;
 use App\Pool;
 use App\Team;
+use App\News;
+use App\Participant;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -62,8 +64,41 @@ class TournamentController extends Controller
                 $totalStage = $pool->stage;
             }
         }
+
+        $news = \App\News::where('tournament_id', $id)
+                            ->OrderBy('creation_datetime', 'desc')
+                            ->get();
+        $teams = \App\Team::where('tournament_id', $id)->get();
+
+
+        foreach ($teams as $team)
+        {
+            $listTeams[] = $team['id'];
+
+        }
+
+
+        $participants_teams = \App\Team::find(1)->Participants();
+
+        //foreach ($participants_teams->Participant as $each_participants)
+        //{
+        //    $participants[] = $each_participants;
+        //}
+        //echo $participants_teams[0]['participants'][0]['first_name'];
+
+
+        for ($i=0;$i<'';$i++)
+        {
+            $test[] = $participants_teams[$i]['participants'];
+            //$participantsName[] = $participants[$i]['first_name'];
+        }
+
+        //dd($participants_teams);
+
         return view('tournament.show')->with('tournament', $tournament)
                                       ->with('pools', $pools)
+                                      ->with('news', $news)
+                                      //->with('participants', $participants)
                                       ->with('totalStage', $totalStage);
     }
 }

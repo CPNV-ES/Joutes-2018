@@ -1,0 +1,15 @@
+<?php
+
+namespace App;
+
+use Illuminate\Database\Eloquent\Model;
+
+class News extends Model
+{
+    public $timestamps = false;
+    //
+    public function News()
+    {
+        return $this->belongsTo('App\Tournament', 'tournament_id');
+    }
+}

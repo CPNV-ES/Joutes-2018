@@ -11,7 +11,6 @@ use Carbon\Carbon;
  *
  * @author Dessaules Loïc
  */
-
 class Tournament extends Model
 {
 
@@ -257,4 +256,11 @@ class Tournament extends Model
 
         return false;
     }
+
+    public function GetNews()
+    {
+        //return $news = $this->News;
+        return $this->hasMany('App\News');
+    }
+
 }

@@ -29,7 +29,68 @@
 			<div><strong>Début du tournoi :</strong> {{ $tournament->start_date->format('d.m.Y à H:i') }}</div>
 		</div>
 
-		<div class="row">
+		@if(Auth::check())
+		@if(Auth::user()->role == 'administrator')
+
+		<!-- Vérifie la connexion en tant qu'admin. Affiche une liste et un bouton permettant de désigner une personne comme Manager de tournoi -->
+		<div class="col-lg-12">
+			<div class="form-group col-lg-12">
+				{{ Form::label('name', 'Désigner un responsable de ce tournoi') }}
+			</div>
+			<div class="form-group col-lg-2">
+				{{ Form::select('user', array('test')) }}
+			</div>
+			<div class="form-group col-lg-4">
+				{{ Form::submit('Enregister', array('class' => 'btn btn-success formSend')) }}
+			</div>
+		</div>
+		{{ Form::Close() }}
+		@endif
+		@endif
+
+
+		<div class="row"><br>
+		<!-- Vérifie que la personne connectée est un manager. (admin pr test) -->
+		@if(Auth::check())
+		@if(Auth::user()->role == 'manager')
+		{{ Form::open(array('url' => 'tournaments', 'method' => 'put')) }}
+		<div class="col-lg-10">
+			<div class="form-group">
+				{{ Form::label('name', 'Publier une actualité') }}
+				{{ Form::text('name', "", array('class' => 'form-control', "style" => "height:150px;")) }}
+			</div>
+		</div>
+		<div class="col-lg-1" style="margin-top: 150px;">
+			<div class="form-group" style="">
+				{{ Form::checkbox('name', 'isUrgent') }}
+				{{ Form::label('name', "Urgent", array('style' => 'font-size: 12pt;')) }}
+			</div>
+		</div>
+		<div class="col-lg-1" style="margin-top: 150px;">
+			<div class="send">
+				{{ Form::submit('Publier', array('class' => 'btn btn-success formSend')) }}
+			</div>
+		</div>
+		{{ Form::Close() }}
+		@endif
+		@endif
+
+
+
+			<!-- Affichage des news -->
+			<h4>Informations</h4><br>
+			<div class="col-lg-12" style="overflow:auto; height:150px;">
+				@foreach ($news as $singleNews)
+					<div class="col-lg-12" style="border-style: solid">
+						<div class="col-lg-6" style="height:40px;"><h4>Responsable du tournoi</h4></div>
+						<div class="col-lg-3" style="height:40px;"><h5>Il y a une heure</h5></div>
+						<div class="col-lg-3" style="height:40px;"><h5>{{ $singleNews['creation_datetime'] }}</h5></div>
+
+						<div class="col-lg-12"><h5>{{ $singleNews['content']}}</h5></div>
+					</div>
+				@endforeach
+			</div>
+
 			<div class="col-lg-6">
 				<table id="tournament-teams-table" class="table table-striped table-bordered table-hover" cellspacing="0" width="100%">
 					<thead>
