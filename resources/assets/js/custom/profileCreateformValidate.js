@@ -141,11 +141,14 @@ $( document ).ready(function() {
                         if(captain == null){
                             captain = "Pas de capitaine";
                         }
-                        if(participantInTeam == null){
-                            participantInTeam = "-";
-                        }else{
+                        if(participantInTeam) {
                             participantInTeam = participantInTeam.substring(0, participantInTeam.length - 2);
+                        }else{
+                            participantInTeam = "-";
                         }
+
+                        //participantInTeam = participantInTeam.substring(0, participantInTeam.length - 2);
+
                         $('#formProfile #teamSelected').append('<option value ="' + data[key].id + '">' + 'Equipe : '+ team + ' | Capitaine : ' + captain + ' | Participants : ' + participantInTeam + '</option>'); // append an option tag for the array item
                         enableTeamsSelections();
                     }

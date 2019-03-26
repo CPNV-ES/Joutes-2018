@@ -60,13 +60,7 @@ class TeamParticipantController extends Controller
      */
     public function store(Request $request, $id)
     {
-        if (Input::get('isCaptain') === '1')
-        {
-            $isCaptain = true;
-
-        }else {
-            $isCaptain = false;
-        }
+        $isCaptain = $request->input('isCaptain') ? true : false;
 
         //redirect to the correct page with message
         if (URL::previous() === URL::route('teams.show', ['id' => $id])){
