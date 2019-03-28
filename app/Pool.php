@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\Auth;
 class Pool extends Model
 {
     public $timestamps = false; // Disable timestamp created_at etc.
-    //protected $fillable = array('fk_sports', 'name'); // -> We have to define all data we use on our courts table (For use : ->all())
+    protected $fillable = array('fk_sports', 'name', 'tournament_id', 'poolName', 'stage', 'poolSize', 'isFinished', 'mode_id', 'game_type_id', 'pool_id'); // -> We have to define all data we use on our courts table (For use : ->all())
 
     /**
     * Create a new belongs to relationship instance between pool and Tournament
@@ -35,6 +35,18 @@ class Pool extends Model
     */
     public function games(){
         return $this->hasmanyThrough(Game::class, Contender::class, 'pool_id', 'contender1_id');
+    }
+
+    public function game_types(){
+        return $this->belongsTo(GameType::class);
+    }
+
+    public function pool_modes(){
+        return $this->belongsTo(PoolMode::class);
+    }
+
+    public function tournaments(){
+        return $this->belongsTo(Tournament::class);
     }
 
     /**
