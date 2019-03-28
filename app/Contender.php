@@ -10,7 +10,9 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Contender extends Model
 {
-	public $timestamps = false;
+    public $timestamps = false;
+    protected $fillable = array('pool_id'); // -> We have to define all data we use on our courts table (For use : ->all())
+
 	/**
      * Create a new belongs to relationship instance between games and contenders (to have the first contender)
      *
