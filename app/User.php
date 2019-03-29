@@ -2,21 +2,34 @@
 
 namespace App;
 
+<<<<<<< HEAD
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
 
+=======
+use Illuminate\Foundation\Auth\User as Authenticatable;
+
+>>>>>>> feature/ShowParticipantsInTeam
 class User extends Authenticatable
 {   
     protected $fillable = ['username', 'password', 'role'];
     public $timestamps = false;
     protected $hidden = array('password');
 
+<<<<<<< HEAD
     //This function is used for clear the remember_token when you disconnect
     public function getRememberToken(){}
     public function setRememberToken($value){}
 
+=======
+
+    public function getRememberToken(){
+    }
+    public function setRememberToken($value){
+    }
+>>>>>>> feature/ShowParticipantsInTeam
     public function getRole(){
         return $this->role;
     }

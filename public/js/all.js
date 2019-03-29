@@ -104,16 +104,21 @@ $( document ).ready(function() {
         var formId = form.attr('id');
         var error = '';
 
+<<<<<<< HEAD
         switch(formId) {
+=======
+		switch(formId) {
+			/*
+>>>>>>> feature/ShowParticipantsInTeam
             case "formTeam":
                 var nameValue = $('#formTeam #name').val();
 
-                var patternName = /^[a-zA-ZÀ-ÖØ-öø-ÿ0-9-_ ]{3,30}$/;
+                var patternName = /^[a-zA-Z0-9-_ ]{3,20}$/;
 
                 if(!patternName.test(nameValue)){
-                    error += 'Le champ Nom ne doit pas être vide et doit avoir entre 3 et 30 caractères.<br>';
+                    error += 'Le champ Nom ne doit pas être vide et doit avoir entre 3 et 45 caractères.<br>';
                 }
-                break;
+                break;*/
 
             case "formSport":
                 var nameValue = $('#formSport #name').val();
@@ -139,6 +144,7 @@ $( document ).ready(function() {
                     error += 'Le champ Max participant doit avoir un valeur.<br>';
                 }
 
+<<<<<<< HEAD
                 break;
 
             case "formCourt":
@@ -182,6 +188,51 @@ $( document ).ready(function() {
                 var sportValue = $('#formTournament #sport').val();
                 var startDateValue = $('#formTournament #startDate').val();
                 var startTimeValue = $('#formTournament #startTime').val();
+=======
+		        break;
+
+	        case "formCourt":
+	        	var nameValue = $('#formCourt #name').val();
+	        	var acronymValue = $('#formCourt #acronym').val();
+		    	var sportValue = $('#formCourt #sport').val(); // '' = empty, 1-2-3-... = sport
+
+		    	var patternName = /^[a-zA-Z0-9-_ ]{1,20}$/;
+		    	var patternAcronym = /^[a-zA-Z0-9-_ ]{1,6}$/;
+		    	var patternSport = /^[0-9]+$/;
+
+		    	if(!patternName.test(nameValue)){
+		    		error += 'Le champ Nom ne doit pas être vide et doit avoir entre 1 et 20 caractères.<br>';
+		    	}
+		    	if(!patternAcronym.test(acronymValue)){
+		    		error += 'Le champ Acronyme ne doit pas être vide et doit avoir entre 1 et 3 caractères.<br>';
+		    	}
+		    	if(!patternSport.test(sportValue)){
+		    		error += 'Aucun sport sélectionné.<br>';
+		    	}
+		        break;
+
+		    case "formEvent":
+	        	var nameValue = $('#formEvent #name').val();
+	        	var imgValue = $('#formEvent #img').val();
+
+		    	var patternName = /^[a-zA-Z0-9-_ ]{3,20}$/;
+
+		    	if(!patternName.test(nameValue)){
+		    		error += 'Le champ Nom ne doit pas être vide et doit avoir entre 3 et 20 caractères.<br>';
+		    	}
+		    	//if image is not empty but only if this is on the create event (edit event image can be null and conserve the oldest image)
+		    	if(imgValue == '' && $('#formEvent').is('.add')){
+		    		error += 'Le champ Image ne doit pas être vide.<br>';
+		    	}
+
+		        break;
+
+		    case "formTournament":
+		    	var nameValue = $('#formTournament #name').val();
+		    	var sportValue = $('#formTournament #sport').val();
+		    	var startDateValue = $('#formTournament #startDate').val();
+		    	var startTimeValue = $('#formTournament #startTime').val();
+>>>>>>> feature/ShowParticipantsInTeam
                 var endTimeValue = $('#formTournament #endTime').val();
                 var maxTeams = $('#formTournament #maxTeams').val();
                 var imgValue = $('#formTournament #img').val();
@@ -1019,7 +1070,6 @@ function alertConfirmEndPool(title, text) {
 // Validation for profile change teams form
 
 $( document ).ready(function() {
-
     $('#formProfile #switch').click(function() {
         //event.preventDefault(); // cancel the event click, needed to delte participant in team. Without the form is sumbit on icon click
         disableButtonValidate();
@@ -1145,7 +1195,29 @@ $( document ).ready(function() {
                 {
                     $('#formProfile #teamSelected').append('<option selected = "selected" disabled = "disabled"  hidden="hidden">Sélectionner</option>'); // append an option tag for the array item
                     for (var key in data) {
-                        $('#formProfile #teamSelected').append('<option value ="' + key + '">' + data[key] + '</option>'); // append an option tag for the array item
+                        var team = data[key].name;
+                        var participants = data[key].participants;
+                        var participantInTeam = "";
+
+                        for(var participant in participants){
+                            if(participants[participant].pivot.isCaptain == 1){
+                                var captain = participants[participant].first_name + " " + participants[participant].last_name;
+                            }else {
+                                participantInTeam += participants[participant].first_name + " " + participants[participant].last_name + ", ";
+                            }
+                        }
+                        if(captain == null){
+                            captain = "Pas de capitaine";
+                        }
+                        if(participantInTeam) {
+                            participantInTeam = participantInTeam.substring(0, participantInTeam.length - 2);
+                        }else{
+                            participantInTeam = "-";
+                        }
+
+                        //participantInTeam = participantInTeam.substring(0, participantInTeam.length - 2);
+
+                        $('#formProfile #teamSelected').append('<option value ="' + data[key].id + '">' + 'Equipe : '+ team + ' | Capitaine : ' + captain + ' | Participants : ' + participantInTeam + '</option>'); // append an option tag for the array item
                         enableTeamsSelections();
                     }
                 }
@@ -1579,7 +1651,23 @@ $( document ).ready(function() {
                 {
                     $('#formProfileChangeTeam #teamSelected').append('<option selected = "selected" disabled = "disabled"  hidden="hidden">Sélectionner</option>'); // append an option tag for the array item
                     for (var key in data) {
-                        $('#formProfileChangeTeam #teamSelected').append('<option value ="' + key + '">' + data[key] + '</option>'); // append an option tag for the array item
+                        var team = data[key].name;
+                        var participants = data[key].participants;
+                        var participantInTeam = "";
+
+                        for(var participant in participants){
+                            if(participants[participant].pivot.isCaptain == 1){
+                                var captain = participants[participant].first_name + " " + participants[participant].last_name;
+                            }else {
+                                participantInTeam += participants[participant].first_name + " " + participants[participant].last_name + ", ";
+                            }
+                        }
+                        if(captain == null){
+                            captain = "Pas de capitaine";
+                        }
+                        participantInTeam = participantInTeam.substring(0, participantInTeam.length - 2);
+
+                        $('#formProfileChangeTeam #teamSelected').append('<option value ="' + data[key].id + '">' + 'Equipe : '+ team + ' | Capitaine : ' + captain + ' | Participants : ' + participantInTeam + '</option>'); // append an option tag for the array item
                         enableTeamsSelections();
                     }
                 }
