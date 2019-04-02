@@ -38,7 +38,7 @@
 
 		<!-- Vérifie la connexion en tant qu'admin.
 		Affiche une liste et un bouton permettant de désigner une personne comme Manager de tournoi
-		Affiche également la vue permettant de duplique la formule de ce tournoi sur un autre. (fonctionnalité n2)
+		Affiche également la vue permettant de dupliquer la formule de ce tournoi sur un autre. (fonctionnalité n2)
 		-->
 		{{ Form::open(array('url' => 'tournaments/'.$tournament->id.'/addManager', 'method' => 'post')) }}
 		<div class="col-lg-12">
@@ -55,9 +55,10 @@
 				{{ Form::submit('Enregister', array('class' => 'btn btn-success formSend')) }}
 			</div>
 			{{ Form::Close() }}
-
+			<!-- La vue permettant de dupliquer la formule de ce tournoi sur un autre -->
+			{{ Form::open(array('url' => 'tournaments/'.$tournament->id.'/duplicateTournament', 'method' => 'post')) }}
 			<div class="form-group col-lg-2">
-				{{ Form::select('userID', array('test'), null, ['style' => 'height:38px;' ]) }}
+				{{ Form::select('tournamentID', array($nameTournaments), null, ['style' => 'height:38px;' ]) }}
 			</div>
 			<div class="form-group col-lg-2">
 				{{ Form::submit('Enregister', array('class' => 'btn btn-success formSend')) }}

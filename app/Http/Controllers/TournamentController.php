@@ -71,14 +71,7 @@ class TournamentController extends Controller
         $news = News::where('tournament_id', $id)
                             ->OrderBy('creation_datetime', 'desc')
                             ->get();
-        $teams = Team::where('tournament_id', $id)->get();
 
-
-        foreach ($teams as $team)
-        {
-            $listTeams[] = $team['id'];
-
-        }
 
 
         // Requete QueryBuilder qui permet de récupérer la liste des potentiels manager du tournoi en cours
@@ -98,9 +91,21 @@ class TournamentController extends Controller
             $participantsFullName[$participants[$i]->id] = $participants[$i]->first_name." ".$participants[$i]->last_name;
         }
 
+        $listTournaments = Tournament::all('name');
+
+        // $listTournaments[0]['name']
+
+        for ($i=0;$i<count($listTournaments);$i++)
+        {
+            $listNameTournaments[] = $listTournaments[$i]['name'];
+        }
+
+
+
         return view('tournament.show')->with('tournament', $tournament)
                                       ->with('pools', $pools)
                                       ->with('news', $news)
+                                      ->with('nameTournaments', $listNameTournaments)
                                       ->with('participants', $participantsFullName)
                                       ->with('totalStage', $totalStage);
     }
@@ -115,9 +120,27 @@ class TournamentController extends Controller
         $news = new News;
 
         $news->content = $newsString;
+        // Si la news est jugée urgente par le manager
         if (isset($status))
         {
             $news->isUrgent = '1';
+
+            // Envoie un mail qui permet d'envoyer un sms à l'utilisateur, si il a enregistré un numéro.
+            # To send an SMS to one person, we must send an email to <number>@sms.admin.ch
+            # The number must start with a 0 and have no spaces (obviously)
+            # (to be verified:) The email must be sent from inside the cpnv network to be accepted
+            ini_set('SMTP','mail.cpnv.ch');
+            ini_set('sendmail_from','no-reply@joutes-cpnv-test.com');
+
+            $mailHeader = 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
+            $mailHeader  .= "From: NO-REPLY<no-reply@joutes-cpnv-test.com>" . "\r\n";
+            $mailTo = "0799471470@sms.admin.ch";
+            $mailTo = "niels.germann@cpnv.ch";
+
+            if (@mail($mailTo,$news->content, $mailHeader))
+            {
+                dd('mail envoyé');
+            }
         }
         else
         {
@@ -145,5 +168,33 @@ class TournamentController extends Controller
 
 
         return redirect('/tournaments/'.$id);
+    }
+
+    public function postDuplicateTournament(Request $data, $id)
+    {
+        // Je récupère les informations importantes du tournoi à dupliquer.
+        $thisTournament = DB::table('tournaments')
+            ->join('sports', 'tournaments.sport_id', '=', 'sports.id')
+            ->join('events','event_id','=','events.id')
+            ->join('courts','courts.sport_id','=','sports.id')
+            ->join('pools','pools.tournament_id','=','tournaments.id')
+            ->join('game_types','game_type_id','=','game_types.id')
+            ->join('pool_modes','mode_id','=','pool_modes.id')
+            ->where('tournaments.id','=',$id)
+            ->select('')
+            ->get();
+
+/*
+ *      // Je met à jour le tournoi choisi, avec les paramètres du tournoi à dupliquer.
+         DB::table('tournament')
+          ->where('tournament_id','=',$data['tournamentID']+1)
+          ->join('')
+          ->join()
+          ->join();
+          //->update([]);
+*/
+        dd($thisTournament);
+
+
     }
 }

@@ -26,6 +26,7 @@ Route::resource('tournaments.schedule', 'ScheduleController', ['only' => ['index
 Route::resource('notification', 'NotificationController', ['only' => ['create', 'store']]);
 Route::post('tournaments/{tournament}/addNews', 'TournamentController@postNews');
 Route::post('tournaments/{tournament}/addManager', 'TournamentController@postManager');
+Route::post('tournaments/{tournament}/duplicateTournament', 'TournamentController@postDuplicateTournament');
 # Route to download apk
 Route::get('/download', function() {
     return view('download.index');
