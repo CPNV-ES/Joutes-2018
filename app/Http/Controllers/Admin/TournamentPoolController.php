@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Pool;
 use App\PoolMode; // This is the linked model
 use App\Contender;
+use App\Tournament;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
@@ -17,10 +18,32 @@ class TournamentPoolController extends Controller
      *
      * @author Jérémy Gfeller
      */
-    public function index()
+    public function index(Request $request, $id)
     {
+        $tournament = Tournament::find($id);
+
+        if ($request->ajax())
+        {
+            // Check if the tornament is Full, no more teams are accepted
+            if ($request->input("isFull") == "isFull") {
+                if (($tournament->isComplete()) || ($tournament == null)) return 1;
+                else return 0;
+            }
+        }
+
+        $pools = $tournament->pools;
+        $totalStage = 0;
+        foreach ($pools as $pool) {
+            if($pool->stage > $totalStage){
+                $totalStage = $pool->stage;
+            }
+        }
+
         $poolModes = PoolMode::all();
-        return view('pool.index')->with('pools', $poolModes);
+        return view('pool.index')->with('pools', $poolModes)
+                                    ->with('tournament', $tournament)
+                                    ->with('pools', $pools)
+                                    ->with('totalStage', $totalStage);
     }
 
     /**
