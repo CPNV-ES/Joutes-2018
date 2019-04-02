@@ -29,22 +29,44 @@
 			<div><strong>Début du tournoi :</strong> {{ $tournament->start_date->format('d.m.Y à H:i') }}</div>
 		</div>
 
+
+
+
 		@if(Auth::check())
 		@if(Auth::user()->role == 'administrator')
+			@if ($participants != array())
 
-		<!-- Vérifie la connexion en tant qu'admin. Affiche une liste et un bouton permettant de désigner une personne comme Manager de tournoi -->
+		<!-- Vérifie la connexion en tant qu'admin.
+		Affiche une liste et un bouton permettant de désigner une personne comme Manager de tournoi
+		Affiche également la vue permettant de duplique la formule de ce tournoi sur un autre. (fonctionnalité n2)
+		-->
+		{{ Form::open(array('url' => 'tournaments/'.$tournament->id.'/addManager', 'method' => 'post')) }}
 		<div class="col-lg-12">
-			<div class="form-group col-lg-12">
-				{{ Form::label('name', 'Désigner un responsable de ce tournoi') }}
+			<div class="col-lg-4">
+				{{ Form::label('newManager', 'Désigner un responsable de ce tournoi') }}
+			</div>
+			<div class="col-lg-8">
+				{{ Form::label('duplicateTournament', 'Dupliquer la formule de ce tournoi sur : ') }}
 			</div>
 			<div class="form-group col-lg-2">
-				{{ Form::select('user', array('test')) }}
+				{{ Form::select('userID', array($participants), null, ['style' => 'height:38px;' ]) }}
 			</div>
-			<div class="form-group col-lg-4">
+			<div class="form-group col-lg-2">
+				{{ Form::submit('Enregister', array('class' => 'btn btn-success formSend')) }}
+			</div>
+			{{ Form::Close() }}
+
+			<div class="form-group col-lg-2">
+				{{ Form::select('userID', array('test'), null, ['style' => 'height:38px;' ]) }}
+			</div>
+			<div class="form-group col-lg-2">
 				{{ Form::submit('Enregister', array('class' => 'btn btn-success formSend')) }}
 			</div>
 		</div>
-		{{ Form::Close() }}
+
+			@else
+					<br><div class="form-group col-lg-12"><b>Aucun inscrit au tournoi. Impossible de désigner un responsable</b></div>
+			@endif
 		@endif
 		@endif
 
@@ -52,18 +74,18 @@
 		<div class="row"><br>
 		<!-- Vérifie que la personne connectée est un manager. (admin pr test) -->
 		@if(Auth::check())
-		@if(Auth::user()->role == 'manager')
-		{{ Form::open(array('url' => 'tournaments', 'method' => 'put')) }}
+		@if(Auth::user()->role == 'administrator')
+		{{ Form::open(array('url' => 'tournaments/'.$tournament->id.'/addNews', 'method' => 'post')) }}
 		<div class="col-lg-10">
 			<div class="form-group">
-				{{ Form::label('name', 'Publier une actualité') }}
-				{{ Form::text('name', "", array('class' => 'form-control', "style" => "height:150px;")) }}
+				{{ Form::label('newsLabel', 'Publier une actualité') }}
+				{{ Form::textarea('news', "", array('class' => 'form-control', "style" => "height:150px;")) }}
 			</div>
 		</div>
 		<div class="col-lg-1" style="margin-top: 150px;">
 			<div class="form-group" style="">
-				{{ Form::checkbox('name', 'isUrgent') }}
-				{{ Form::label('name', "Urgent", array('style' => 'font-size: 12pt;')) }}
+				{{ Form::checkbox('status', 'isUrgent') }}
+				{{ Form::label('statusLabel', "Urgent", array('style' => 'font-size: 12pt;')) }}
 			</div>
 		</div>
 		<div class="col-lg-1" style="margin-top: 150px;">
@@ -79,9 +101,9 @@
 
 			<!-- Affichage des news -->
 			<h4>Informations</h4><br>
-			<div class="col-lg-12" style="overflow:auto; height:150px;">
+			<div class="col-lg-12" style="overflow:auto; height:165px;margin-bottom: 50px;border-bottom: solid;border-top:solid;padding:0;">
 				@foreach ($news as $singleNews)
-					<div class="col-lg-12" style="border-style: solid">
+					<div class="col-lg-12" style="border-style: solid;">
 						<div class="col-lg-6" style="height:40px;"><h4>Responsable du tournoi</h4></div>
 						<div class="col-lg-3" style="height:40px;"><h5>Il y a une heure</h5></div>
 						<div class="col-lg-3" style="height:40px;"><h5>{{ $singleNews['creation_datetime'] }}</h5></div>

@@ -24,7 +24,8 @@ Route::resource('tournaments.pools', 'TournamentPoolController');
 Route::resource('admin', 'SessionController', ['only' => ['store', 'destroy']]);
 Route::resource('tournaments.schedule', 'ScheduleController', ['only' => ['index']]);
 Route::resource('notification', 'NotificationController', ['only' => ['create', 'store']]);
-
+Route::post('tournaments/{tournament}/addNews', 'TournamentController@postNews');
+Route::post('tournaments/{tournament}/addManager', 'TournamentController@postManager');
 # Route to download apk
 Route::get('/download', function() {
     return view('download.index');
@@ -34,6 +35,7 @@ Route::get('/download', function() {
 // Prefix admin is here to have an url like that : .../admin/tournaments/create
 // It will add the "admin" prefix before each "critical" URLs
 Route::group(['middleware'=>'checkIsAdmin', 'prefix'=>'admin', 'namespace' => 'Admin'],function(){
+
 	Route::resource('events', 'EventController', ['only' => ['create', 'store', 'edit', 'update', 'destroy']]);
 	Route::resource('tournaments', 'TournamentController', ['only' => ['edit', 'update', 'destroy']]);
 	Route::resource('events.tournaments', 'EventTournamentController', [ 'only' => ['create', 'store']]);
@@ -42,6 +44,7 @@ Route::group(['middleware'=>'checkIsAdmin', 'prefix'=>'admin', 'namespace' => 'A
 	//Route::resource('teams', 'TeamController');
 	//Route::resource('participants', 'ParticipantController');
 	//Route::resource('teams.participants', 'TeamParticipantController', ['only' => ['destroy', 'store']]);
+
 });
 
 /* Authorization for Writer or Admin*/
@@ -64,3 +67,6 @@ Route::group(['middleware'=>'checkIsParticipantOrAdmin', 'namespace' => 'Admin',
     Route::resource('teams.participants', 'TeamParticipantController', ['only' => ['destroy', 'store']]);
     Route::get('tournaments/{tournament}/export', 'TournamentController@export')->name('tournaments.export');
 });
+Auth::routes();
+
+Route::get('/home', 'HomeController@index');

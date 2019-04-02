@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Response\Transformers\ParticipantTeamTransformer;
 use App\Tournament;
 use App\Pool;
 use App\Team;
@@ -10,6 +11,7 @@ use App\Participant;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\DB;
 
 class TournamentController extends Controller
 {
@@ -64,11 +66,12 @@ class TournamentController extends Controller
                 $totalStage = $pool->stage;
             }
         }
+        $tournament =  Tournament::find($id);
 
-        $news = \App\News::where('tournament_id', $id)
+        $news = News::where('tournament_id', $id)
                             ->OrderBy('creation_datetime', 'desc')
                             ->get();
-        $teams = \App\Team::where('tournament_id', $id)->get();
+        $teams = Team::where('tournament_id', $id)->get();
 
 
         foreach ($teams as $team)
@@ -78,27 +81,69 @@ class TournamentController extends Controller
         }
 
 
-        $participants_teams = \App\Team::find(1)->Participants();
+        // Requete QueryBuilder qui permet de récupérer la liste des potentiels manager du tournoi en cours
+        $participants = DB::table('tournaments')
+            ->join('teams', 'tournament_id', '=', 'tournaments.id')
+            ->join('participant_team','team_id','=','teams.id')
+            ->join('participants','participant_id','=','participants.id')
+            ->select('participants.id','first_name','last_name')
+            ->where('tournaments.id','=',$id)
+            ->orderBy('first_name')
+            ->get();
 
-        //foreach ($participants_teams->Participant as $each_participants)
-        //{
-        //    $participants[] = $each_participants;
-        //}
-        //echo $participants_teams[0]['participants'][0]['first_name'];
-
-
-        for ($i=0;$i<'';$i++)
+        // Arrange les données de la requête précédente dans un tableau, avec [participant_id] => "Prénom Nom".
+        $participantsFullName = array();
+        for ($i=0;$i<count($participants);$i++)
         {
-            $test[] = $participants_teams[$i]['participants'];
-            //$participantsName[] = $participants[$i]['first_name'];
+            $participantsFullName[$participants[$i]->id] = $participants[$i]->first_name." ".$participants[$i]->last_name;
         }
-
-        //dd($participants_teams);
 
         return view('tournament.show')->with('tournament', $tournament)
                                       ->with('pools', $pools)
                                       ->with('news', $news)
-                                      //->with('participants', $participants)
+                                      ->with('participants', $participantsFullName)
                                       ->with('totalStage', $totalStage);
+    }
+
+    public function postNews(Request $data, $id)
+    {
+
+        $newsString = $data->get('news');
+
+        $status = $data->get('status');
+
+        $news = new News;
+
+        $news->content = $newsString;
+        if (isset($status))
+        {
+            $news->isUrgent = '1';
+        }
+        else
+        {
+            $news->isUrgent = '0';
+        }
+
+        $news->tournament_id = $id;
+
+        $news->save();
+
+        return redirect('/tournaments/'.$id);
+    }
+
+    // Fonction permettant de désigner une personne inscrite au tournoi sélectionné comme manager de celui-ci.
+    // La valeur isTournamentManager de la table participant_team passe à "1", pour l'utilisateur dont l'id est celui selectionné à la vue admin show.tournament
+    public function postManager(Request $data, $id)
+    {
+
+        DB::table('participant_team')
+            ->where('participant_id','=',$data->get('userID'))
+            ->join('teams', 'team_id', '=', 'teams.id')
+            ->join('tournaments','tournament_id','=','tournaments.id')
+            ->where('tournament_id','=',$id)
+            ->update(['isTournamentManager' => 1]);
+
+
+        return redirect('/tournaments/'.$id);
     }
 }
