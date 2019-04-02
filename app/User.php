@@ -2,21 +2,19 @@
 
 namespace App;
 
-use Illuminate\Notifications\Notifiable;
-use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
-
 class User extends Authenticatable
-{   
+{
     protected $fillable = ['username', 'password', 'role'];
     public $timestamps = false;
     protected $hidden = array('password');
 
-    //This function is used for clear the remember_token when you disconnect
-    public function getRememberToken(){}
-    public function setRememberToken($value){}
 
+    public function getRememberToken(){
+    }
+    public function setRememberToken($value){
+    }
     public function getRole(){
         return $this->role;
     }
@@ -33,7 +31,7 @@ class User extends Authenticatable
         return $teams;
         //return $this->hasManyThrough('App\Team', 'App\Participant', 'team_id','user_id' );
     }
-    
+
     // Returns whether the user is locally authenticated or remotely (SAML)
     public function isLocal()
     {

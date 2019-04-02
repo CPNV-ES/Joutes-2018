@@ -7,6 +7,7 @@ use App\Team;
 use App\Participant;
 use Cookie;
 use URL;
+use Illuminate\Support\Facades\Input;
 
 use Illuminate\Http\Request;
 
@@ -59,7 +60,6 @@ class TeamParticipantController extends Controller
      */
     public function store(Request $request, $id)
     {
-
         $isCaptain = $request->input('isCaptain') ? true : false;
 
         //redirect to the correct page with message

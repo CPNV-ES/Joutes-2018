@@ -86,12 +86,11 @@ class Team extends Model
         if ($this->participants()->count() >= $this->sport->max_participant) return true;
         else return false;
     }
-
     public function isValid(){
         if ($this->participants()->count() >= $this->sport->min_participant) return true;
         else return false;
-
     }
+
 
     /**
      *
@@ -109,5 +108,9 @@ class Team extends Model
         $user_id = $participant->user->id;
         if ($this->owner_id == $user_id) return true;
         else return false;
+    }
+    public function captain()
+    {
+        $this->participants()->where('isCaptain', 1)->get();
     }
 }

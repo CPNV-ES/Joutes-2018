@@ -1020,7 +1020,6 @@ function alertConfirmEndPool(title, text) {
 // Validation for profile change teams form
 
 $( document ).ready(function() {
-
     $('#formProfile #switch').click(function() {
         //event.preventDefault(); // cancel the event click, needed to delte participant in team. Without the form is sumbit on icon click
         disableButtonValidate();
@@ -1146,7 +1145,29 @@ $( document ).ready(function() {
                 {
                     $('#formProfile #teamSelected').append('<option selected = "selected" disabled = "disabled"  hidden="hidden">Sélectionner</option>'); // append an option tag for the array item
                     for (var key in data) {
-                        $('#formProfile #teamSelected').append('<option value ="' + key + '">' + data[key] + '</option>'); // append an option tag for the array item
+                        var team = data[key].name;
+                        var participants = data[key].participants;
+                        var participantInTeam = "";
+
+                        for(var participant in participants){
+                            if(participants[participant].pivot.isCaptain == 1){
+                                var captain = participants[participant].first_name + " " + participants[participant].last_name;
+                            }else {
+                                participantInTeam += participants[participant].first_name + " " + participants[participant].last_name + ", ";
+                            }
+                        }
+                        if(captain == null){
+                            captain = "Pas de capitaine";
+                        }
+                        if(participantInTeam) {
+                            participantInTeam = participantInTeam.substring(0, participantInTeam.length - 2);
+                        }else{
+                            participantInTeam = "-";
+                        }
+
+                        //participantInTeam = participantInTeam.substring(0, participantInTeam.length - 2);
+
+                        $('#formProfile #teamSelected').append('<option value ="' + data[key].id + '">' + 'Equipe : '+ team + ' | Capitaine : ' + captain + ' | Participants : ' + participantInTeam + '</option>'); // append an option tag for the array item
                         enableTeamsSelections();
                     }
                 }
@@ -1580,7 +1601,27 @@ $( document ).ready(function() {
                 {
                     $('#formProfileChangeTeam #teamSelected').append('<option selected = "selected" disabled = "disabled"  hidden="hidden">Sélectionner</option>'); // append an option tag for the array item
                     for (var key in data) {
-                        $('#formProfileChangeTeam #teamSelected').append('<option value ="' + key + '">' + data[key] + '</option>'); // append an option tag for the array item
+                        var team = data[key].name;
+                        var participants = data[key].participants;
+                        var participantInTeam = "";
+
+                        for(var participant in participants){
+                            if(participants[participant].pivot.isCaptain == 1){
+                                var captain = participants[participant].first_name + " " + participants[participant].last_name;
+                            }else {
+                                participantInTeam += participants[participant].first_name + " " + participants[participant].last_name + ", ";
+                            }
+                        }
+                        if(captain == null){
+                            captain = "Pas de capitaine";
+                        }
+                        if(participantInTeam) {
+                            participantInTeam = participantInTeam.substring(0, participantInTeam.length - 2);
+                        }else{
+                            participantInTeam = "-";
+                        }
+
+                        $('#formProfileChangeTeam #teamSelected').append('<option value ="' + data[key].id + '">' + 'Equipe : '+ team + ' | Capitaine : ' + captain + ' | Participants : ' + participantInTeam + '</option>'); // append an option tag for the array item
                         enableTeamsSelections();
                     }
                 }
