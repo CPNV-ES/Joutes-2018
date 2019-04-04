@@ -21,6 +21,7 @@ class TournamentPoolController extends Controller
     public function index(Request $request, $id)
     {
         $tournament = Tournament::find($id);
+        $pool_modes = PoolMode::all();
 
         if ($request->ajax())
         {
@@ -43,7 +44,8 @@ class TournamentPoolController extends Controller
         return view('pool.index')->with('pools', $poolModes)
                                     ->with('tournament', $tournament)
                                     ->with('pools', $pools)
-                                    ->with('totalStage', $totalStage);
+                                    ->with('totalStage', $totalStage)
+                                    ->with('poolModes', $pool_modes);
     }
 
     /**
@@ -55,7 +57,16 @@ class TournamentPoolController extends Controller
      */
     public function store(Request $request)
     {
-        // 
+        $pool = new Pool;
+        $pool->poolName = "$request->poolName";
+        $pool->stage = $request->stage;
+        $pool->poolSize = $request->pool;
+        $pool->isFinished = $request->isFinished;
+        $pool->tournament_id = request()->route()->parameters;
+        $pool->mode_id = 3;
+        $pool->game_type_id = $request->game_type_id;
+        $pool->save();
+        dd($request, request()->route()->parameters);
     }
 
     /**
