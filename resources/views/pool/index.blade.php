@@ -20,35 +20,31 @@
 				@endif
 			</div>
 		@endif
-
-		{{ Form::open(array('url' => route('tournaments.pools.store', request()->route()->parameters), 'method' => 'post', 'id' => 'formPool')) }}
-		<div class="col-lg-6">
-			<table id="tournament-teams-table" class="table table-striped table-bordered table-hover" cellspacing="0" width="100%">
-				<thead>
-					<tr>
-						<th>Liste des équipes participantes</th>
-					</tr>
-				</thead>
-				<tbody>
-					@foreach ($tournament->teams as $team)
-						@if(count($tournament->teams) > 0 && $team->isValid())
-							<tr>
-								@if(Auth::check() && Auth::user()->role == 'administrator')
-									<td class="clickable" data-id="{{$team->id}}">{{$team->name}}</td>
-								@endif
-								<td>{{$team->participants()->count()}}</td>
-								<td><i class="{{ $team->isComplete() ? 'fa fa-check' : 'fa fa-close' }}" aria-hidden="true"></i></td>
-								<td><i class="{{ $team->isValid() ? 'fa fa-check' : 'fa fa-close' }}" aria-hidden="true"></i></td>
-							</tr>
-						@endif
-					@endforeach
-					@if(count($tournament->teams) > 0 && $team->isValid())
+		<div class="row">
+			<div class="col-lg-4">
+				<table id="tournament-teams-table" class="table table-striped table-bordered table-hover" cellspacing="0" width="100%">
+					<thead>
 						<tr>
-							<td>Aucune équipe pour l'instant ...</td>
+							<th>Liste des équipes participantes</th>
 						</tr>
-					@endif
-				</tbody>
-			</table>
+					</thead>
+					<tbody>
+						@foreach ($tournament->teams as $team)
+							@if(count($tournament->teams) > 0 && $team->isValid())
+								<tr>
+									@if(Auth::check() && Auth::user()->role == 'administrator')
+										<td class="clickable" data-id="{{$team->id}}">{{$team->name}}</td>
+									@endif
+								</tr>
+							@endif
+						@endforeach
+					</tbody>
+				</table>
+			</div>
+		</div>
+		{{ Form::open(array('url' => route('tournaments.pools.store', request()->route()->parameters), 'method' => 'post', 'id' => 'formPool')) }}
+		<div class="col-lg-4">
+				
 		</div>
 		{{ Form::close() }}
 
