@@ -44,7 +44,31 @@
 		</div>
 		{{ Form::open(array('url' => route('tournaments.pools.store', request()->route()->parameters), 'method' => 'post', 'id' => 'formPool')) }}
 		<div class="col-lg-4">
-				
+			<div class="form-group">
+				<label>Nom de la phase</label>
+				<input name="poolName" type="text" class="form-control">
+			</div>
+			<div class="form-group">
+				<label>Phase</label>
+				<input name="stage" type="number" class="form-control">
+			</div>
+			<div class="form-group">
+				<label>Taille de la pool</label>
+				<input name="pool" type="number" class="form-control">
+			</div>
+			<div class="form-group">
+				<label>Mode du tournoi</label>
+				<select name="mode_tounament" class="form-control">
+					@foreach($poolModes as $poolMode)
+						<option value='{{ $poolMode->id }}'>{{ $poolMode->mode_description }}
+					@endforeach
+				</select>
+			</div>
+			<input type="hidden" name="isFinished" value="0">
+			<input type="hidden" name="game_type_id" value="1">
+			<div class="send">
+				<button type="submit" class="btn btn-success formSend">Créer</button>
+			</div>
 		</div>
 		{{ Form::close() }}
 
