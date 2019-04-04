@@ -12,3 +12,5 @@ CREATE TABLE news (
 );
 
 INSERT INTO joutes.news (content, creation_datetime, isUrgent, tournament_id) VALUES ("Ceci est une news de test", "2019-03-21 12:20:10","0","1");
+
+ALTER TABLE joutes.participants ADD phone_number INT(10) UNSIGNED;

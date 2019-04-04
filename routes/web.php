@@ -24,6 +24,7 @@ Route::resource('tournaments.pools', 'TournamentPoolController');
 Route::resource('admin', 'SessionController', ['only' => ['store', 'destroy']]);
 Route::resource('tournaments.schedule', 'ScheduleController', ['only' => ['index']]);
 Route::resource('notification', 'NotificationController', ['only' => ['create', 'store']]);
+/* Les routes que j'ai rajoutées, non sécurisées */
 Route::post('tournaments/{tournament}/addNews', 'TournamentController@postNews');
 Route::post('tournaments/{tournament}/addManager', 'TournamentController@postManager');
 Route::post('tournaments/{tournament}/duplicateTournament', 'TournamentController@postDuplicateTournament');

@@ -866,16 +866,16 @@
         },
         {
             "name": "league/flysystem",
-            "version": "1.0.50",
+            "version": "1.0.51",
             "source": {
                 "type": "git",
                 "url": "https://github.com/thephpleague/flysystem.git",
-                "reference": "dab4e7624efa543a943be978008f439c333f2249"
+                "reference": "755ba7bf3fb9031e6581d091db84d78275874396"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/thephpleague/flysystem/zipball/dab4e7624efa543a943be978008f439c333f2249",
-                "reference": "dab4e7624efa543a943be978008f439c333f2249",
+                "url": "https://api.github.com/repos/thephpleague/flysystem/zipball/755ba7bf3fb9031e6581d091db84d78275874396",
+                "reference": "755ba7bf3fb9031e6581d091db84d78275874396",
                 "shasum": ""
             },
             "require": {
@@ -946,7 +946,7 @@
                 "sftp",
                 "storage"
             ],
-            "time": "2019-02-01T08:50:36+00:00"
+            "time": "2019-03-30T13:22:34+00:00"
         },
         {
             "name": "league/fractal",
@@ -1901,16 +1901,16 @@
         },
         {
             "name": "symfony/event-dispatcher",
-            "version": "v3.4.23",
+            "version": "v3.4.24",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/event-dispatcher.git",
-                "reference": "ec625e2fff7f584eeb91754821807317b2e79236"
+                "reference": "a088aafcefb4eef2520a290ed82e4374092a6dff"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/event-dispatcher/zipball/ec625e2fff7f584eeb91754821807317b2e79236",
-                "reference": "ec625e2fff7f584eeb91754821807317b2e79236",
+                "url": "https://api.github.com/repos/symfony/event-dispatcher/zipball/a088aafcefb4eef2520a290ed82e4374092a6dff",
+                "reference": "a088aafcefb4eef2520a290ed82e4374092a6dff",
                 "shasum": ""
             },
             "require": {
@@ -1960,7 +1960,7 @@
             ],
             "description": "Symfony EventDispatcher Component",
             "homepage": "https://symfony.com",
-            "time": "2019-02-23T15:06:07+00:00"
+            "time": "2019-04-02T08:51:52+00:00"
         },
         {
             "name": "symfony/finder",
@@ -2628,22 +2628,22 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/usmanhalalit/laracsv.git",
-                "reference": "4e3379463d63c84d89f832ec683d80b874290f9e"
+                "reference": "444aaa0af65cd70c303ebe8517ff00787b589378"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/usmanhalalit/laracsv/zipball/4e3379463d63c84d89f832ec683d80b874290f9e",
-                "reference": "4e3379463d63c84d89f832ec683d80b874290f9e",
+                "url": "https://api.github.com/repos/usmanhalalit/laracsv/zipball/444aaa0af65cd70c303ebe8517ff00787b589378",
+                "reference": "444aaa0af65cd70c303ebe8517ff00787b589378",
                 "shasum": ""
             },
             "require": {
                 "illuminate/database": ">=5.2",
-                "league/csv": ">=8.2",
-                "php": ">=5.6.4"
+                "league/csv": "^9.0",
+                "php": ">=7.1"
             },
             "require-dev": {
-                "fzaninotto/faker": "^1.6",
-                "phpunit/phpunit": "5.7.*"
+                "fzaninotto/faker": "^1.8",
+                "phpunit/phpunit": "^7.0"
             },
             "type": "library",
             "autoload": {
@@ -2670,7 +2670,7 @@
                 "export",
                 "laravel"
             ],
-            "time": "2018-05-07T08:51:53+00:00"
+            "time": "2019-03-31T13:06:56+00:00"
         },
         {
             "name": "vlucas/phpdotenv",

@@ -25,55 +25,49 @@
 					<strong>Sport :</strong> Aucun, veuillez en choisir un.
 				@endif
 			</div>
-
 			<div><strong>Début du tournoi :</strong> {{ $tournament->start_date->format('d.m.Y à H:i') }}</div>
 		</div>
 
-
-
-
-		@if(Auth::check())
-		@if(Auth::user()->role == 'administrator')
-			@if ($participants != array())
-
 		<!-- Vérifie la connexion en tant qu'admin.
-		Affiche une liste et un bouton permettant de désigner une personne comme Manager de tournoi
-		Affiche également la vue permettant de dupliquer la formule de ce tournoi sur un autre. (fonctionnalité n2)
+			 Affiche une liste et un bouton permettant de désigner une personne comme Manager de tournoi
+			 Affiche également la vue permettant de dupliquer la formule de ce tournoi sur un autre. (fonctionnalité n2)
 		-->
-		{{ Form::open(array('url' => 'tournaments/'.$tournament->id.'/addManager', 'method' => 'post')) }}
-		<div class="col-lg-12">
-			<div class="col-lg-4">
-				{{ Form::label('newManager', 'Désigner un responsable de ce tournoi') }}
-			</div>
-			<div class="col-lg-8">
-				{{ Form::label('duplicateTournament', 'Dupliquer la formule de ce tournoi sur : ') }}
-			</div>
-			<div class="form-group col-lg-2">
-				{{ Form::select('userID', array($participants), null, ['style' => 'height:38px;' ]) }}
-			</div>
-			<div class="form-group col-lg-2">
-				{{ Form::submit('Enregister', array('class' => 'btn btn-success formSend')) }}
-			</div>
-			{{ Form::Close() }}
-			<!-- La vue permettant de dupliquer la formule de ce tournoi sur un autre -->
-			{{ Form::open(array('url' => 'tournaments/'.$tournament->id.'/duplicateTournament', 'method' => 'post')) }}
-			<div class="form-group col-lg-2">
-				{{ Form::select('tournamentID', array($nameTournaments), null, ['style' => 'height:38px;' ]) }}
-			</div>
-			<div class="form-group col-lg-2">
-				{{ Form::submit('Enregister', array('class' => 'btn btn-success formSend')) }}
-			</div>
-		</div>
+		@if(Auth::check())
+			@if(Auth::user()->role == 'administrator')
 
+				{{ Form::open(array('url' => 'tournaments/'.$tournament->id.'/addManager', 'method' => 'post')) }}
+				<div class="col-lg-12">
+					<div class="col-lg-4">
+						{{ Form::label('newManager', 'Désigner un responsable de ce tournoi') }}
+					</div>
+					<div class="col-lg-8">
+						{{ Form::label('duplicateTournament', 'Dupliquer la formule de ce tournoi sur : ') }}
+					</div>
+					<div class="form-group col-lg-2">
+						{{ Form::select('userID', array(@$participants), null, ['style' => 'height:38px;' ]) }}
+					</div>
+					<div class="form-group col-lg-2">
+						{{ Form::submit('Enregister', array('class' => 'btn btn-success formSend')) }}
+					</div>
+					{{ Form::Close() }}
+					<!-- La vue permettant de dupliquer la formule de ce tournoi sur un autre -->
+					{{ Form::open(array('url' => 'tournaments/'.$tournament->id.'/duplicateTournament', 'method' => 'post')) }}
+					<div class="form-group col-lg-2">
+						{{ Form::select('tournamentID', array($nameTournaments), null, ['style' => 'height:38px;' ]) }}
+					</div>
+					<div class="form-group col-lg-2">
+						{{ Form::submit('Enregister', array('class' => 'btn btn-success formSend')) }}
+					</div>
+					{{ Form::Close() }}
+				</div>
 			@else
-					<br><div class="form-group col-lg-12"><b>Aucun inscrit au tournoi. Impossible de désigner un responsable</b></div>
+				<br><div class="form-group col-lg-12"><b>Aucun inscrit au tournoi. Impossible de désigner un responsable</b></div>
 			@endif
 		@endif
-		@endif
 
 
-		<div class="row"><br>
 		<!-- Vérifie que la personne connectée est un manager. (admin pr test) -->
+		<!-- Permet au manager de créer une news relative au tournoi. Il peut la jugée importante, et l'envoyer par SMS. -->
 		@if(Auth::check())
 		@if(Auth::user()->role == 'administrator')
 		{{ Form::open(array('url' => 'tournaments/'.$tournament->id.'/addNews', 'method' => 'post')) }}
@@ -98,21 +92,31 @@
 		@endif
 		@endif
 
-
-
-			<!-- Affichage des news -->
+		<!-- Affichage des news, pour les utilisateurs ou visiteurs -->
+		<div class="row"><br>
 			<h4>Informations</h4><br>
 			<div class="col-lg-12" style="overflow:auto; height:165px;margin-bottom: 50px;border-bottom: solid;border-top:solid;padding:0;">
-				@foreach ($news as $singleNews)
-					<div class="col-lg-12" style="border-style: solid;">
-						<div class="col-lg-6" style="height:40px;"><h4>Responsable du tournoi</h4></div>
-						<div class="col-lg-3" style="height:40px;"><h5>Il y a une heure</h5></div>
-						<div class="col-lg-3" style="height:40px;"><h5>{{ $singleNews['creation_datetime'] }}</h5></div>
-
-						<div class="col-lg-12"><h5>{{ $singleNews['content']}}</h5></div>
-					</div>
-				@endforeach
+					@foreach ($news as $singleNews)
+						<div class="col-lg-12" style="border-style: solid;">
+							<div class="col-lg-9" style="height:40px;"><h4>Responsable du tournoi</h4></div>
+							<div class="col-lg-3" style="height:40px;"><h5>{{ $singleNews['creation_datetime'] }}</h5></div>
+							<div class="col-lg-12"><h5>{{ $singleNews['content']}}</h5></div>
+						</div>
+					@endforeach
 			</div>
+
+			<!-- Affichage de la liste des responsables de ce tournoi -->
+			<h4>Responsables</h4><br>
+			<div class="col-lg-12">
+				@if (isset($managers))
+					@foreach ($managers as $manager)
+						<?=$manager->first_name;?> <?=$manager->last_name?>,
+					@endforeach
+				@else
+				<h5>Aucun participant n'a été désigné comme responsable de ce tournoi pour le moment ...</h5>
+				@endif
+			</div><br><br>
+
 
 			<div class="col-lg-6">
 				<table id="tournament-teams-table" class="table table-striped table-bordered table-hover" cellspacing="0" width="100%">
