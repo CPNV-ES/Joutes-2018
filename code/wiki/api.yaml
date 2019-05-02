@@ -1,0 +1,562 @@
+# as a demonstration of an API spec in YAML
+swagger: '2.0'
+info:
+  title: Joutes API
+  description: API of the Joutes from the CPNV
+  version: "1.2"
+
+paths:
+  /events:
+    get:
+      summary: All events
+      description: |
+        The events endpoint returns all the events. The response includes the display name
+        and id.
+      tags:
+        - Events
+      responses:
+        200:
+          description: JSON response with all events
+          schema:
+            $ref: '#/definitions/Events'
+        default:
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+  /events/{event_id}/tournaments:
+    get:
+      summary: Get the tournaments of an event
+      description: |
+        Get the tournaments of an event
+      parameters:
+        - name: event_id
+          in: path
+          description: Id of the event.
+          required: true
+          type: number
+          format: integer
+      tags:
+        - Tournaments
+      responses:
+        200:
+          description: JSON response with tournaments of an event
+          schema:
+            $ref: '#/definitions/Tournaments'
+        default:
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+  /events/{event_id}/tournament/{tournament_id}:
+    get:
+      summary: Get a tournament
+      description: Get the infos of an tournament
+      parameters:
+        - name: event_id
+          in: path
+          description: Id of the event.
+          required: true
+          type: number
+          format: integer
+        - name: tournament_id
+          in: path
+          description: Id of the tournament.
+          required: true
+          type: number
+          format: integer
+      tags:
+        - Tournament
+      responses:
+        200:
+          description: JSON response with tournament infos
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Tournament'
+        default:
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+  /events/{event_id}/tournament/{tournament_id}/{group_match_id}:
+    get:
+      summary: Get a pool
+      description: Get the infos of a pool
+      parameters:
+        - name: event_id
+          in: path
+          description: Id of the event.
+          required: true
+          type: number
+          format: integer
+        - name: tournament_id
+          in: path
+          description: Id of the tournament.
+          required: true
+          type: number
+          format: integer
+        - name: group_match_id
+          in: path
+          description: Id of the pool.
+          required: true
+          type: number
+          format: integer
+      tags:
+        - Tournament
+      responses:
+        200:
+          description: JSON response with pool infos
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Pool'
+        default:
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+  /events/{event_id}/teams:
+    get:
+      summary: Get the teams participating to an event
+      parameters:
+        - name: event_id
+          in: path
+          description: Id of the event.
+          required: true
+          type: number
+          format: integer
+      tags:
+        - Teams
+      responses:
+        200:
+          description: JSON response with teams
+          schema:
+            $ref: '#/definitions/Teams'
+        default:
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+  /events/{event_id}/team/{team_id}:
+    get:
+      summary: Team of an event
+      parameters:
+        - name: event_id
+          in: path
+          description: Id of the even
+          required: true
+          type: number
+          format: integert
+        - name: team_id
+          in: path
+          description: Id of te team
+          required: true
+          type: number
+          format: integer
+      tags:
+        - Team
+      responses:
+        200:
+          description: JSON response infos of a team
+          schema:
+            $ref: '#/definitions/Team'
+        default:
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+  /events/{event_id}/participants:
+    get:
+      summary: Get all the participants of an event
+      description: |
+        Get all the participants of an event
+      parameters:
+        - name: event_id
+          in: path
+          description: Id of the event.
+          required: true
+          type: number
+          format: integer
+      tags:
+        - Participants
+      responses:
+        200:
+          description: JSON response with participants of an event
+          schema:
+            $ref: '#/definitions/Participants'
+        default:
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+  /events/{event_id}/participants/{participant_id}:
+    get:
+      summary: Get a participant of an event
+      description: |
+        Get a specific participant of an event
+      parameters:
+        - name: event_id
+          in: path
+          description: Id of the event.
+          required: true
+          type: number
+          format: integer
+        - name: participant_id
+          in: path
+          description: Id of the participant.
+          required: true
+          type: number
+          format: integer
+      tags:
+        - Participant
+      responses:
+        200:
+          description: JSON response with participant of an event
+          schema:
+            $ref: '#/definitions/Participant'
+        default:
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+            
+            
+            
+            
+            
+definitions:
+  Events:
+    type: array
+    items:
+      $ref: '#/definitions/Event'
+  Event:
+    type: object
+    properties:
+      id:
+        type: integer
+        description: Unique identifier representing a specific event.
+      name:
+        type: string
+        description: Name of the event
+  Tournaments:
+    type: array
+    items:
+      $ref: '#/definitions/Event_tournament'
+  Event_tournament:
+    type: object
+    properties:
+      id:
+        type: integer
+        description: Unique identifier representing a specific event.
+      name:
+        type: string
+        description: Name of the tournament
+      sport:
+        type: string
+        description: Sport of the tournament
+  Event_tournament_team:
+    type: object
+    properties:
+      id:
+        type: integer
+        description: Unique identifier representing a specific team.
+      name:
+        type: string
+        description: Name of the team
+  Tournament:
+    type: object
+    properties:
+      id:
+        type: integer
+        description: Unique identifier representing a specific tournament.
+      name:
+        type: string
+        description: Name of the tournament
+      sport:
+        type: string
+        description: Sport of the tournament
+      place:
+        type: string
+        description: Location of the tournament
+      winner:
+        type: array
+        description: Winner if determined or empty
+        items:
+          $ref: '#/definitions/Event_tournament_team'
+      second:
+        type: array
+        description: Second if determined or empty
+        items:
+          $ref: '#/definitions/Event_tournament_team'
+      third:
+        type: array
+        description: Third if determined or empty
+        items:
+          $ref: '#/definitions/Event_tournament_team'
+      stages:
+        type: array
+        items:
+          $ref: '#/definitions/Tournament_stage'
+      teams:
+        type: array
+        items:
+          $ref: '#/definitions/Tournament_team'
+  Teams:
+    type: array
+    items:
+      $ref: '#/definitions/Event_team'
+  Event_team:
+    type: object
+    properties:
+      id:
+        type: integer
+        description: Unique identifier representing a specific team.
+      name:
+        type: string
+        description: Name of the team
+      sport:
+        type: string
+        description: Sport the team play.
+  Team:
+    type: object
+    properties:
+      id:
+        type: integer
+        description: Unique identifier representing a specific team.
+      name:
+        type: string
+        description: Name of the team.
+      members:
+        type: array
+        items:
+          $ref: '#/definitions/Team_member'
+      tournament:
+        type: array
+        items:
+          $ref: '#/definitions/Team_tournament'
+      matches:
+        type: array
+        items:
+          $ref: '#/definitions/Team_match'
+  Tournament_team:
+    type: object
+    properties:
+      id:
+        type: integer
+        description: Unique identifier representing a specific team.
+      name:
+        type: string
+        description:  Name of the team
+  Tournament_stage:
+    type: object
+    properties:
+      name:
+        type: string
+        description:  Name of the pool
+      pools:
+        type: array
+        description: Type of pool, if is a simple pool or a elimination
+        items:
+          $ref: '#/definitions/Stage_pool'
+  Stage_pool:
+    type: object
+    properties:
+      id:
+        type: integer
+        description: Unique identifier representing a specific pool.
+      name:
+        type: string
+        description:  Name of the pool
+      totalMatchs:
+        type: integer
+        description: Number of match of the pool
+      playesMatchs:
+        type: integer
+        description: Number of match that have been played in the pool
+  Team_member:
+    type: object
+    properties:
+      firstname:
+        type: string
+        description: First name of the member
+      lastname:
+        type: string
+        description: Last name of the member
+  Team_match:
+    type: object
+    properties:
+      id:
+        type: integer
+        description: Unique identifier representing a specific match.
+      group_match_id:
+        type: integer
+        description: Unique identifier representing the pool of the match.
+      status:
+        type: string
+        description: Status of the match, incoming or finish.
+      team2:
+        type: string
+        description: Name of the opponent team.
+      start:
+        type: string
+        description: Begin hour of the match.
+      ownScore:
+        type: integer
+        description: Null if match is coming or score of the team.
+      team2Score:
+        type: integer
+        description: Null if match is coming or score of opponent team.
+  Team_tournament:
+    type: object
+    properties:
+      id:
+        type: integer
+        description: Unique identifier representing a specific match.
+      name:
+        type: string
+        description: Name of the tournament.
+      place:
+        type: string
+        description: Place of the tournament.
+      sport:
+        type: string
+        description: Sport the team play
+  Pool:
+    type: object
+    properties:
+      id:
+        type: integer
+        description: Unique identifier representing a specific pool.
+      name:
+        type: string
+        description: Name of the pool.
+      place:
+        type: string
+        description: Place of the match.
+      type:
+        type : string
+        description : The type from poolModes
+      teams:
+        type: array
+        description: The teams of the pool, sorted by points (classement)
+        items:
+          $ref: '#/definitions/Pool_team'
+      matches:
+        type: array
+        items:
+          $ref: '#/definitions/Pool_matche'
+  Pool_team:
+    type: object
+    properties:
+      id:
+        type: integer
+        description: Unique identifier representing a specific team.
+      name:
+        type: string
+        description:  Name of the team
+      matchesPlayed:
+        type: string
+        description: Number of matchs played by the team
+      matchesWin:
+        type: string
+        description: Number of matchs win by the team
+      matchesDraw:
+        type: string
+        description: Number of draw matchs by the team
+      matchesLost:
+        type: string
+        description: Number of matchs lost by the team
+      goalsFor:
+        type: integer
+        description: Number of goals scored by the team
+      goalsAgainst:
+        type: integer
+        description: Number of goals against the team
+      points:
+        type: string
+        description: Number of points
+  Pool_matche:
+    type: object
+    properties:
+      id:
+        type: integer
+        description: Unique identifier representing a specific team.
+      name:
+        type: string
+        description:  Name of the match (id or name like Demi-finale, Petite finale, ...)
+      status:
+        type: string
+        description: Terminé or A venir
+      team1:
+        type: string
+        description: Name of the first team
+      team2:
+        type: string
+        description: Name of the second team
+      start:
+        type: string
+        description: Hour of the match
+      team1Score:
+        type: integer
+        description: Number of goals scored by the team 1, null if match is coming
+      team2Score:
+        type: integer
+        description: Number of goals scored by the team 2, null if match is coming
+  Participants:
+    type: array
+    items:
+      $ref: '#/definitions/Event_participant'
+  Event_participant:
+    type: object
+    properties:
+      id:
+        type: integer
+        description: Unique identifier representing a specific participant.
+      firstname:
+        type: string
+        description: The firstname of the participant
+      lastname:
+        type: string
+        description: The lastname of the participant
+  Participant:
+    type: object
+    properties:
+      id:
+        type: integer
+        description: Unique identifier representing a specific participant.
+      firstname:
+        type: string
+        description: The firstname of the participant
+      lastname:
+        type: string
+        description: The lastname of the participant
+      tournament:
+          type: array
+          items:
+            $ref: '#/definitions/Participant_tournament'
+      team:
+        type: array
+        description: The team of the participant if he has one, or empty
+        items:
+          $ref: '#/definitions/Participant_team'
+  Participant_tournament:
+    type: object
+    properties:
+      id:
+        type: integer
+        description: Unique identifier representing a specific participant.
+      name:
+        type: string
+        description: The name of the tournament
+      sport:
+        type: string
+        description: The sport of the tournament
+      place:
+        type: string
+        description: The place of the tournament
+  Participant_team:
+    type: object
+    properties:
+      id:
+        type: integer
+        description: Unique identifier representing a specific team.
+      name:
+        type: string
+        description: The name of the team
+
+  Error:
+    type: object
+

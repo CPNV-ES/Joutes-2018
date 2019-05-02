@@ -1,0 +1,58 @@
+.schedule {
+    font-family: lato;
+    padding-top: 25px;
+}
+
+.schedule .row {
+    margin-left: 0;
+    margin-right: 0;
+}
+
+.schedule .header {
+    background-color: #353535;
+}
+
+.schedule .match,
+.schedule .header {
+
+    color: #fafafa;
+    border-radius: 3px;
+    box-shadow: 1px 1px 1px rgba(0,0,0,.2);
+    padding: 15px;
+    margin-bottom: 15px;
+    font-weight: 800;
+}
+
+.schedule .match .info,
+.schedule .header .info {
+    /*font-size: 8rem;*/
+    font-size: 1.4vh;
+}
+
+.schedule .match .team-name {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/*.team-name {
+    font-size: 4rem;
+}*/
+
+/*First version*/
+
+/*.match {
+    background-color: #2A3F54;
+}
+.schedule .row:nth-child(even) .match {
+    background-color: #9EE493;
+}*/
+
+/*Second version*/
+
+.match {
+    background-color: #2A3F54;
+}
+.schedule .row:nth-child(even) .match {
+    background-color: rgba(42, 63, 84, 0.75);
+}
