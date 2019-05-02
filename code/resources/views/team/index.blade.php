@@ -29,8 +29,8 @@
 						<tr>
 					      	<td data-id="{{$team->id}}" class="clickable">{{ $team->name }}</td>
 					      	<td>{{ $team->sport->name }}</td>
-							<td><i aria-hidden="true" class="hidden">{{ $team->isComplete() ? '1' : '0' }}</i><i  class="{{ $team->isComplete() ? 'fa fa-check' : 'fa fa-close' }}"></i></td>
-							<td><i aria-hidden="true" class="hidden">{{ $team->isValid() ? '1' : '0' }}</i><i class="{{ $team->isValid() ? 'fa fa-check' : 'fa fa-close' }}"></i></td>
+							<td><i class="{{ $team->isComplete() ? 'fa fa-check' : 'fa fa-close' }}" aria-hidden="true"></i></td>
+							<td><i class="{{ $team->isValid() ? 'fa fa-check' : 'fa fa-close' }}" aria-hidden="true"></i></td>
 					      	<td class="action">
 							  @if (($team->owner_id == Auth::user()->id) || Auth::user()->role == "administrator")
 						      	<a href="{{ route('teams.edit', $team->id) }}" alt="Modifier la team"> <i class="fa fa-pencil fa-lg action" aria-hidden="true"></i> </a>
