@@ -63,6 +63,48 @@
 		</div>
 		{{ Form::close() }}
 
+		<div class="col-lg-4">
+
+			<!-- Stages and pools -->
+			@if (sizeof($tournament->pools) > 0)
+
+				<table class="table pools">
+					<thead>
+						<tr>
+							<th class="sizedTh"></th>
+							@for ($i = 1; $i <= $totalStage; $i++)
+
+								<th class="nav-item">
+									Phase {{$i}}
+								</th>
+
+							@endfor
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<th class="verticalText"><span>Poules</span></th>
+							@for ($i = 0; $i <= $totalStage; $i++)
+								<td class="noPadding">
+									<table id="pools-table" class="table-hover table-striped table-bordered" width="100%" data-tournament="{{$tournament->id}}">
+										<tbody>
+											@for ($j = 0; $j <= $pools[$i]->poolSize; $j++)
+												@if ($pools[$j]->stage == $j)
+													<tr>
+														<td data-id="{{$pool->id}}" class="clickable"></td>
+													</tr>
+												@endif
+											@endfor
+										</tbody>
+									</table>
+								</td>
+							@endfor
+						</tr>
+					</tbody>
+				</table>
+			@endif
+
+		</div>
+
 	</div>
-	
 @endsection

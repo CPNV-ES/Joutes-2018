@@ -21,6 +21,7 @@ class TournamentPoolController extends Controller
     public function index(Request $request, $id)
     {
         $tournament = Tournament::find($id);
+        $poolTable = Pool::where('tournament_id', $id)->get();
 
         if ($request->ajax())
         {
@@ -43,7 +44,8 @@ class TournamentPoolController extends Controller
         return view('pool.index')->with('pools', $poolModes)
                                     ->with('tournament', $tournament)
                                     ->with('pools', $pools)
-                                    ->with('totalStage', $totalStage);
+                                    ->with('totalStage', $totalStage)
+                                    ->with('poolTable', $poolTable);
     }
 
     /**
