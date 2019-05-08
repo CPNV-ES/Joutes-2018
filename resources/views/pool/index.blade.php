@@ -84,16 +84,15 @@
 					<tbody>
 						<tr>
 							<th class="verticalText"><span>Poules</span></th>
-							@for ($i = 0; $i <= $totalStage; $i++)
+							@for ($i = 0; $i < $totalStage; $i++)
 								<td class="noPadding">
 									<table id="pools-table" class="table-hover table-striped table-bordered" width="100%" data-tournament="{{$tournament->id}}">
 										<tbody>
-											@for ($j = 0; $j <= $pools[$i]->poolSize; $j++)
-												@if ($pools[$j]->stage == $j)
-													<tr>
-														<td data-id="{{$pool->id}}" class="clickable"></td>
-													</tr>
-												@endif
+											@for ($j = 1; $j <= $pools[$i]->poolSize; $j++)
+												
+												<tr>
+													<td data-id="" class="clickable">1</td>
+												</tr>
 											@endfor
 										</tbody>
 									</table>
