@@ -21,7 +21,7 @@
 			</div>
 		@endif
 		<div class="row">
-			<div class="col-lg-4">
+			<div class="col-lg-6">
 				<table id="tournament-teams-table" class="table table-striped table-bordered table-hover" cellspacing="0" width="100%">
 					<thead>
 						<tr>
@@ -41,29 +41,30 @@
 					</tbody>
 				</table>
 			</div>
+		
+			{{ Form::open(array('url' => route('tournaments.pools.store', request()->route()->parameters), 'method' => 'post', 'id' => 'formPool')) }}
+			<div class="col-lg-6">
+				<div class="form-group">
+					<label>Nom de la phase</label>
+					<input name="poolName" type="text" class="form-control">
+				</div>
+				<div class="form-group">
+					<label>Phase</label>
+					<input name="stage" type="number" class="form-control">
+				</div>
+				<div class="form-group">
+					<label>Taille de la pool</label>
+					<input name="pool" type="number" class="form-control">
+				</div>
+				<input type="hidden" name="isFinished" value="0">
+				<div class="send">
+					<button type="submit" class="btn btn-success formSend">Créer</button>
+				</div>
+			</div>
+			{{ Form::close() }}
 		</div>
-		{{ Form::open(array('url' => route('tournaments.pools.store', request()->route()->parameters), 'method' => 'post', 'id' => 'formPool')) }}
-		<div class="col-lg-4">
-			<div class="form-group">
-				<label>Nom de la phase</label>
-				<input name="poolName" type="text" class="form-control">
-			</div>
-			<div class="form-group">
-				<label>Phase</label>
-				<input name="stage" type="number" class="form-control">
-			</div>
-			<div class="form-group">
-				<label>Taille de la pool</label>
-				<input name="pool" type="number" class="form-control">
-			</div>
-			<input type="hidden" name="isFinished" value="0">
-			<div class="send">
-				<button type="submit" class="btn btn-success formSend">Créer</button>
-			</div>
-		</div>
-		{{ Form::close() }}
 
-		<div class="col-lg-4">
+		<div class="col-lg-12" style="padding-top: 10px;">
 
 			<!-- Stages and pools -->
 			@if (sizeof($tournament->pools) > 0)
