@@ -950,16 +950,16 @@
         },
         {
             "name": "league/fractal",
-            "version": "0.17.0",
+            "version": "0.18.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/thephpleague/fractal.git",
-                "reference": "a0b350824f22fc2fdde2500ce9d6851a3f275b0e"
+                "reference": "4e553dae1a9402adbe11c81430a64675dc97b4fc"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/thephpleague/fractal/zipball/a0b350824f22fc2fdde2500ce9d6851a3f275b0e",
-                "reference": "a0b350824f22fc2fdde2500ce9d6851a3f275b0e",
+                "url": "https://api.github.com/repos/thephpleague/fractal/zipball/4e553dae1a9402adbe11c81430a64675dc97b4fc",
+                "reference": "4e553dae1a9402adbe11c81430a64675dc97b4fc",
                 "shasum": ""
             },
             "require": {
@@ -970,7 +970,7 @@
                 "illuminate/contracts": "~5.0",
                 "mockery/mockery": "~0.9",
                 "pagerfanta/pagerfanta": "~1.0.0",
-                "phpunit/phpunit": "~4.0",
+                "phpunit/phpunit": "^4.8.35 || ^7.5",
                 "squizlabs/php_codesniffer": "~1.5",
                 "zendframework/zend-paginator": "~2.3"
             },
@@ -1010,7 +1010,7 @@
                 "league",
                 "rest"
             ],
-            "time": "2017-06-12T11:04:56+00:00"
+            "time": "2019-05-10T02:16:43+00:00"
         },
         {
             "name": "monolog/monolog",
@@ -1136,16 +1136,16 @@
         },
         {
             "name": "nesbot/carbon",
-            "version": "1.36.2",
+            "version": "1.37.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/briannesbitt/Carbon.git",
-                "reference": "cd324b98bc30290f233dd0e75e6ce49f7ab2a6c9"
+                "reference": "5be4fdf97076a685b23efdedfc2b73ad0c5eab70"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/briannesbitt/Carbon/zipball/cd324b98bc30290f233dd0e75e6ce49f7ab2a6c9",
-                "reference": "cd324b98bc30290f233dd0e75e6ce49f7ab2a6c9",
+                "url": "https://api.github.com/repos/briannesbitt/Carbon/zipball/5be4fdf97076a685b23efdedfc2b73ad0c5eab70",
+                "reference": "5be4fdf97076a685b23efdedfc2b73ad0c5eab70",
                 "shasum": ""
             },
             "require": {
@@ -1190,7 +1190,7 @@
                 "datetime",
                 "time"
             ],
-            "time": "2018-12-28T10:07:33+00:00"
+            "time": "2019-04-19T10:27:42+00:00"
         },
         {
             "name": "nikic/php-parser",
@@ -1901,7 +1901,7 @@
         },
         {
             "name": "symfony/event-dispatcher",
-            "version": "v3.4.26",
+            "version": "v3.4.27",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/event-dispatcher.git",
