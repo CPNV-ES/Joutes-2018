@@ -2,14 +2,34 @@
 
 namespace App\Http\Controllers;
 
+use App\Sport;
+use App\Tournament;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\View;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent;
+use Illuminate\Support\Facades\DB;
 
 class TournamentBySportController extends Controller
 {
+
+    // Function used to retrieve the list of all the sports, and return the name with the id
+    public function retrieveSports()
+    {
+        $listSports = Sport::all();
+        $listSportsName = array();
+        foreach ($listSports as $sports)
+        {
+            $listSportsName[$sports->id] = $sports->name;
+        }
+        return $listSportsName;
+    }
+
+
+
     /**
      * Display a listing of the resource.
      *
@@ -18,12 +38,9 @@ class TournamentBySportController extends Controller
     public function index(Request $request)
     {
         //
-        if (isset($request))
-        {
-            dd($request);
-        }
+     $listSports = $this->retrieveSports();
 
-        return View::make('tournamentBySport.index');
+        return view('tournamentBySport.index')->with('sports', $listSports);
     }
 
     /**
@@ -44,7 +61,23 @@ class TournamentBySportController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $listTournaments = array();
+
+        $listSports = $this->retrieveSports();
+        $idSport = $request->request->get('listSports');
+
+        // Impossible de sortir la valeur de l'objet. Pourtant la requete est bonne
+        // $listTournaments = Sport::with('tournaments')->where('sports.id',$idSport)->get();
+        // dd($listTournaments['0']->tournaments());
+
+        $listTournaments = DB::table('sports')
+                                ->where('sports.id','=',$idSport)
+                                ->join('tournaments','tournaments.sport_id','=','sports.id')
+                                ->select('tournaments.id','tournaments.name as name','sports.name as sport', 'tournaments.start_date', 'tournaments.end_date' , 'tournaments.img')
+                                ->get();
+
+
+        return view('tournamentBySport.index')->with('tournaments',$listTournaments)->with('sports',$listSports);
     }
 
     /**
