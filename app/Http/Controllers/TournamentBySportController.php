@@ -3,14 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Sport;
-use App\Tournament;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Facades;
-use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\View;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent;
+
 use Illuminate\Support\Facades\DB;
 
 class TournamentBySportController extends Controller
@@ -74,6 +68,7 @@ class TournamentBySportController extends Controller
                                 ->where('sports.id','=',$idSport)
                                 ->join('tournaments','tournaments.sport_id','=','sports.id')
                                 ->select('tournaments.id','tournaments.name as name','sports.name as sport', 'tournaments.start_date', 'tournaments.end_date' , 'tournaments.img')
+                                ->orderByRaw('tournaments.start_date DESC')
                                 ->get();
 
 
