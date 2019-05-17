@@ -37,7 +37,7 @@
                         ?>
 
 
-                    <a href="{{route('tournaments.show', $tournament->id)}}" title="Voir le tournoi">
+                    <a href="{{route('tournamentsBySport.show', $tournament->id)}}" title="Voir le tournoi">
                         <div class="box">
 
                             <div class="imgBox">

@@ -84,6 +84,37 @@ class TournamentBySportController extends Controller
     public function show($id)
     {
         //
+
+        $classification = DB::table('pools')
+                                    ->join('tournaments','tournaments.id','=','pools.tournament_id')
+                                    ->join('teams','tournaments.id','=','teams.tournament_id')
+                                    ->join('participant_team','teams.id','=','participant_team.team_id')
+                                    ->join('participants','participants.id','=','participant_team.participant_id')
+                                    ->join('contenders','pools.id','=','contenders.pool_id')
+                                    ->join('games','contenders.id','=','games.contender1_id')
+                                    ->join('games as games2','contenders.id','=','games2.contender2_id')
+                                    ->select
+                                    (
+                                        'participants.first_name','participants.last_name',
+                                        'teams.name'
+
+
+
+                                    )
+                                    ->get();
+
+        
+        $total_1 = db::table('games')->sum('games.score_contender1');
+
+
+
+    echo '<div style="margin-left:300px;">';
+        var_dump ($classification);
+    echo '</div>';
+
+        return view('tournamentBySport.show');
+
+
     }
 
     /**
