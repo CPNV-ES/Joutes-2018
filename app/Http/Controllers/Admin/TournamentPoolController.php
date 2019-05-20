@@ -65,6 +65,7 @@ class TournamentPoolController extends Controller
         $pool->tournament_id = request()->route()->parameters['tournament'];
         $pool->mode_id = 1;
         $pool->game_type_id = 1;
+        $pool->nb_team = $request->nb_team;
         $pool->save();
         return redirect()->route('tournaments.pools.index', request()->route()->parameters['tournament']);
     }

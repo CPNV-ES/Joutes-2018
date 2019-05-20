@@ -53,8 +53,12 @@
 					<input name="stage" type="number" class="form-control">
 				</div>
 				<div class="form-group">
-					<label>Taille de la pool</label>
+					<label>Nombre de pool par phase</label>
 					<input name="pool" type="number" class="form-control">
+				</div>
+				<div class="form-group">
+					<label>Nombre d'équipe par pool</label>
+					<input name="nb_team" type="number" class="form-control">
 				</div>
 				<input type="hidden" name="isFinished" value="0">
 				<div class="send">
