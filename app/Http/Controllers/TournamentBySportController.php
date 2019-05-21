@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Sport;
+use App\Tournament;
 use Illuminate\Http\Request;
 
 use Illuminate\Support\Facades\DB;
@@ -84,7 +85,7 @@ class TournamentBySportController extends Controller
     public function show($id)
     {
         //
-
+        /*
         $classification = DB::table('pools')
                                     ->join('tournaments','tournaments.id','=','pools.tournament_id')
                                     ->join('teams','tournaments.id','=','teams.tournament_id')
@@ -95,7 +96,7 @@ class TournamentBySportController extends Controller
                                     ->join('games as games2','contenders.id','=','games2.contender2_id')
                                     ->select
                                     (
-                                        'participants.first_name','participants.last_name',
+                                        'participants.id as participant_id', 'participants.first_name','participants.last_name',
                                         'teams.name'
 
 
@@ -103,14 +104,17 @@ class TournamentBySportController extends Controller
                                     )
                                     ->get();
 
-        
-        $total_1 = db::table('games')->sum('games.score_contender1');
+
+        $total_1 = DB::table('games')->sum('games.score_contender1');
+        */
+
+        ;
 
 
 
-    echo '<div style="margin-left:300px;">';
-        var_dump ($classification);
-    echo '</div>';
+        echo '<div style="margin-left:300px;">';
+            var_dump ($id);
+        echo '</div>';
 
         return view('tournamentBySport.show');
 

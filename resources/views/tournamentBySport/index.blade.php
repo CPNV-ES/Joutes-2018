@@ -71,7 +71,7 @@
     {
         document.getElementById('formDuplicateTournament').submit();
     }
-    let btn = document.getElementById('listSports');
-    btn.addEventListener("change", test);
+    let listSport = document.getElementById('listSports');
+    listSport.addEventListener("change", test);
 </script>
 @stop

@@ -20,14 +20,16 @@
                 <tbody>
                 <!--if(count($tournament->teams) > 0)
                     foreach ($tournament->teams as $team)-->
-                        <tr>
-                            <td data-id=""></td>
-                            <td></td>
-                        </tr>
+                <tr>
+                    <td data-id=""></td>
+                    <td></td>
+                </tr>
                 </tbody>
             </table>
         </div>
     </div>
+
+
 
 
 

@@ -78,7 +78,8 @@
             <ul class="nav navbar-nav">
                 <li class="@if(Route::is('events.index')) active @endif"><a href="{{ route('events.index') }}"> <i class="fa fa-calendar" aria-hidden="true"></i> Evénements</a></li>
                 <li class="@if(Route::is('tournaments.index')) active @endif"><a href="{{ route('tournaments.index') }}"> <i class="fa fa-trophy" aria-hidden="true"></i> Tournois</a></li>
-                <li class="@if(Route::is('tournamentsBySportcompocom.index')) active @endif"><a href="{{ route('tournamentsBySport.index') }}"> <i class="fa fa-trophy" aria-hidden="true"></i> Tournois par sport</a></li>
+                <li class="@if(Route::is('tournamentsBySport.index')) active @endif"><a href="{{ route('tournamentsBySport.index') }}"> <i class="fa fa-trophy" aria-hidden="true"></i>Classement général</a></li>
+                <li class="@if(Route::is('individualRanking.index')) active @endif"><a href="{{ route('individualRanking.index') }}"> <i class="fa fa-trophy" aria-hidden="true"></i>Palmarès individuel</a></li>
                 @if(Auth::check())
                     @if(Auth::user()->role == 'administrator')
                         <li class="@if(Route::is('sports.index')) active @endif"><a href="{{ route('sports.index') }}"> <i class="fa fa-futbol-o" aria-hidden="true"></i> Sports</a></li>
