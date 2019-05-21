@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Pool;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 class individualRankingController extends Controller
@@ -13,8 +14,8 @@ class individualRankingController extends Controller
      */
     public function index()
     {
-        $idParticipant = 2;
-
+        $idParticipant = 3;
+        $idTeams = 2;
 
         // Retrieve all datas needed when the participant team is the contender 1
         $individualRankingContender1 = DB::table('pools')
@@ -22,11 +23,12 @@ class individualRankingController extends Controller
             ->join('teams','tournaments.id','=','teams.tournament_id')
             ->join('participant_team','teams.id','=','participant_team.team_id')
             ->join('participants','participants.id','=','participant_team.participant_id')
+            ->where('participants.id','=',$idParticipant)
+            ->where('contenders.team_id','=',$idTeams)
             ->join('contenders','pools.id','=','contenders.pool_id')
             ->join('games','contenders.id','=','games.contender1_id')
-            ->where('games.contender1_id',$idParticipant)
-            ->where('participants.id', $idParticipant)
-            ->select('tournaments.name as tournament_name','teams.name as team_name','games.contender1_id','games.contender2_id','games.score_contender1','games.score_contender2');
+
+            ->select('participants.id as participant_id', 'tournaments.id as tournament_id', 'tournaments.name as tournament_name','teams.name as team_name','games.contender1_id as contender_id','games.score_contender1 as score');
 
         // Retrieve all datas needed when the participant team is the contender 2
         $individualRankingContender2 = DB::table('pools')
@@ -34,23 +36,57 @@ class individualRankingController extends Controller
             ->join('teams','tournaments.id','=','teams.tournament_id')
             ->join('participant_team','teams.id','=','participant_team.team_id')
             ->join('participants','participants.id','=','participant_team.participant_id')
+            ->where('participants.id','=',$idParticipant)
+            ->where('contenders.team_id','=',$idTeams)
             ->join('contenders','pools.id','=','contenders.pool_id')
             ->join('games as games2','contenders.id','=','games2.contender2_id')
-            ->where('games2.contender2_id',$idParticipant)
-            ->where('participants.id', $idParticipant)
-            ->select('tournaments.name as tournament_name','teams.name as team_name','games2.contender1_id','games2.contender2_id','games2.score_contender1','games2.score_contender2');
+
+            ->select('participants.id as participant_id', 'tournaments.id as tournament_id', 'tournaments.name as tournament_name','teams.name as team_name','games2.contender2_id as contender_id','games2.score_contender2 as score');
 
         // I merge the two collections. So that i have every match played by the team of the participant.
         $individualRanking = $individualRankingContender1->get()->merge($individualRankingContender2->get());
 
+
+        $oldTournament_name = 'a';
+        $a = 0;
+        $test = array();
+        $totalScore = 0;
+        for ($i=0;$i<sizeof($individualRanking);$i++)
+        {
+            if ($individualRanking[$i]->tournament_id != $oldTournament_name)
+            {
+                $a++;
+                $test[$a]['tournament_name'] = $individualRanking[$i]->tournament_name;
+                $test[$a]['team_name'] = $individualRanking[$i]->team_name;
+                $test[$a]['contender_id'] = $individualRanking[$i]->contender_id;
+                $totalScore += $individualRanking[$i]->score;
+                $test[$a]['score'] = $totalScore;
+            }
+            else
+            {
+                $test[$a]['tournament_name'] = $individualRanking[$i]->tournament_name;
+                $test[$a]['team_name'] = $individualRanking[$i]->team_name;
+                $test[$a]['contender_id'] = $individualRanking[$i]->contender_id;
+                $totalScore += $individualRanking[$i]->score;
+                $test[$a]['score'] = $totalScore;
+                ;
+            }
+            $oldTournament_name = $individualRanking[$i]->tournament_id;
+
+        }
+        dd ($test);
+
+
+
+
         $totalPoints = 0;
         $totalGamesWon = 0;
-
+/*
         foreach ($individualRanking as $ranking)
         {
 
-            // If the participant team' is the "Contender 1" of the games
-            if ($ranking->contender1_id == $idParticipant)
+            // If the participant team is the "Contender 1" of the games
+            if ($ranking->contender1_id == $idTeams)
             {
                 $totalPoints = $individualRanking->sum('games.score_contender1');
 
@@ -59,7 +95,7 @@ class individualRankingController extends Controller
                 {
                     $totalGamesWon++;
                 }
-                echo 'YES<br>';
+                echo '</br>YES<br>';
             }
 
             // If the participant team is the "Contender 2" of the games
@@ -73,7 +109,7 @@ class individualRankingController extends Controller
                 echo 'YES 2<br>';
             }
         }
-
+*/
 
 
         echo '<div style="margin-left:300px;">';
