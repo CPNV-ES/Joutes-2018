@@ -28,7 +28,7 @@ class individualRankingController extends Controller
             ->join('contenders','pools.id','=','contenders.pool_id')
             ->join('games','contenders.id','=','games.contender1_id')
 
-            ->select('participants.id as participant_id', 'tournaments.id as tournament_id', 'tournaments.name as tournament_name','teams.name as team_name','games.contender1_id as contender_id','games.score_contender1 as score');
+            ->select('participants.id as participant_id', 'participants.first_name as participant_first_name', 'participants.last_name as participant_last_name', 'tournaments.id as tournament_id', 'tournaments.name as tournament_name','teams.name as team_name','games.contender1_id as contender_id','games.score_contender1 as score');
 
         // Retrieve all datas needed when the participant team is the contender 2
         $individualRankingContender2 = DB::table('pools')
@@ -41,7 +41,7 @@ class individualRankingController extends Controller
             ->join('contenders','pools.id','=','contenders.pool_id')
             ->join('games as games2','contenders.id','=','games2.contender2_id')
 
-            ->select('participants.id as participant_id', 'tournaments.id as tournament_id', 'tournaments.name as tournament_name','teams.name as team_name','games2.contender2_id as contender_id','games2.score_contender2 as score');
+            ->select('participants.id as participant_id', 'participants.first_name as participant_first_name', 'participants.last_name as participant_last_name', 'tournaments.id as tournament_id', 'tournaments.name as tournament_name','teams.name as team_name','games2.contender2_id as contender_id','games2.score_contender2 as score');
 
         // I merge the two collections. So that i have every match played by the team of the participant.
         $individualRanking = $individualRankingContender1->get()->merge($individualRankingContender2->get());
@@ -56,67 +56,22 @@ class individualRankingController extends Controller
             if ($individualRanking[$i]->tournament_id != $oldTournament_name)
             {
                 $a++;
-                $test[$a]['tournament_name'] = $individualRanking[$i]->tournament_name;
-                $test[$a]['team_name'] = $individualRanking[$i]->team_name;
-                $test[$a]['contender_id'] = $individualRanking[$i]->contender_id;
-                $totalScore += $individualRanking[$i]->score;
-                $test[$a]['score'] = $totalScore;
             }
-            else
-            {
-                $test[$a]['tournament_name'] = $individualRanking[$i]->tournament_name;
-                $test[$a]['team_name'] = $individualRanking[$i]->team_name;
-                $test[$a]['contender_id'] = $individualRanking[$i]->contender_id;
-                $totalScore += $individualRanking[$i]->score;
-                $test[$a]['score'] = $totalScore;
-                ;
-            }
+
+            $test[$a]['tournament_name'] = $individualRanking[$i]->tournament_name;
+            $test[$a]['participant_name'] = $individualRanking[$i]->participant_first_name.' '.$individualRanking[$i]->participant_last_name;
+            $test[$a]['team_name'] = $individualRanking[$i]->team_name;
+            $test[$a]['contender_id'] = $individualRanking[$i]->contender_id;
+            $totalScore += $individualRanking[$i]->score;
+            $test[$a]['score'] = $totalScore;
+
             $oldTournament_name = $individualRanking[$i]->tournament_id;
 
         }
-        dd ($test);
-
-
-
-
-        $totalPoints = 0;
-        $totalGamesWon = 0;
-/*
-        foreach ($individualRanking as $ranking)
-        {
-
-            // If the participant team is the "Contender 1" of the games
-            if ($ranking->contender1_id == $idTeams)
-            {
-                $totalPoints = $individualRanking->sum('games.score_contender1');
-
-                // If his team won against the other team, will count
-                if ($ranking->score_contender1 > $ranking->score_contender2)
-                {
-                    $totalGamesWon++;
-                }
-                echo '</br>YES<br>';
-            }
-
-            // If the participant team is the "Contender 2" of the games
-            else if ($ranking->contender2_id == $idParticipant)
-            {
-                $totalPoints += $individualRanking->sum('games.score_contender2');
-                if ($ranking->score_contender2 > $ranking->score_contender1)
-                {
-                    $totalGamesWon++;
-                }
-                echo 'YES 2<br>';
-            }
-        }
-*/
-
-
-        echo '<div style="margin-left:300px;">';
-        var_dump ($individualRanking);
+        var_dump ($test);
         echo '</div>';
 
-        return view('individualRanking.index')->with('ranking',$individualRanking);
+        return view('individualRanking.index')->with('ranking',$test);
     }
 
 

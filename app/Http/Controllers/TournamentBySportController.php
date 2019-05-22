@@ -2,14 +2,17 @@
 
 namespace App\Http\Controllers;
 
+use App\Pool;
 use App\Sport;
-use App\Tournament;
 use Illuminate\Http\Request;
 
 use Illuminate\Support\Facades\DB;
+use Illuminate\Database\Eloquent\Model;
 
 class TournamentBySportController extends Controller
 {
+
+
 
     // Function used to retrieve the list of all the sports, and return the name with the id
     public function retrieveSports()
@@ -82,38 +85,25 @@ class TournamentBySportController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
+
     public function show($id)
     {
-        //
-        /*
-        $classification = DB::table('pools')
-                                    ->join('tournaments','tournaments.id','=','pools.tournament_id')
-                                    ->join('teams','tournaments.id','=','teams.tournament_id')
-                                    ->join('participant_team','teams.id','=','participant_team.team_id')
-                                    ->join('participants','participants.id','=','participant_team.participant_id')
-                                    ->join('contenders','pools.id','=','contenders.pool_id')
-                                    ->join('games','contenders.id','=','games.contender1_id')
-                                    ->join('games as games2','contenders.id','=','games2.contender2_id')
-                                    ->select
-                                    (
-                                        'participants.id as participant_id', 'participants.first_name','participants.last_name',
-                                        'teams.name'
+
+    // I retrieve the list of the pool where the final rank is not null. So it will return every ending pool.
+    //$finalPools = Pool::whereNotNull('pools.bestFinalRank')->where('pools.tournament_id','=',$id)->select('pools.id','pools.poolName','pools.bestFinalRank');
+    $finalPools = Pool::find(1);
+    // Doesn't work for now ...
+    //$finalPools = Pool::whereNotNull('pools.bestFinalRank')->where('pools.tournament_id','=',$id)->select('pools.id','pools.poolName','pools.bestFinalRank');
 
 
+    // I need to retrieve the rank of everyone in every pools from before. There is a function in the pool model (rankings())
+    $ranking = $finalPools->rankings();
 
-                                    )
-                                    ->get();
-
-
-        $total_1 = DB::table('games')->sum('games.score_contender1');
-        */
-
-        ;
 
 
 
         echo '<div style="margin-left:300px;">';
-            var_dump ($id);
+            dd ($ranking);
         echo '</div>';
 
         return view('tournamentBySport.show');
@@ -154,4 +144,7 @@ class TournamentBySportController extends Controller
     {
         //
     }
+
+
+
 }

@@ -18,8 +18,10 @@
                 </tr>
                 </thead>
                 <tbody>
-                <!--if(count($tournament->teams) > 0)
-                    foreach ($tournament->teams as $team)-->
+                @foreach($ranking as $rank)
+
+                <td>{{$rank->}}</td>
+                @endforeach
                 <tr>
 
                     <td data-id=""></td>
