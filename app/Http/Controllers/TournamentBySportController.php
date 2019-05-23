@@ -88,25 +88,50 @@ class TournamentBySportController extends Controller
 
     public function show($id)
     {
+        $ranking = array();
+        // I retrieve the list of the pool of this tournament, where the final rank is not null. So it will return every ending pool (fun,good and final pools for example).
+        $finalPools = Pool::where('pools.tournament_id','=',$id)->whereNotNull('pools.bestFinalRank')->get();
 
-    // I retrieve the list of the pool where the final rank is not null. So it will return every ending pool.
-    //$finalPools = Pool::whereNotNull('pools.bestFinalRank')->where('pools.tournament_id','=',$id)->select('pools.id','pools.poolName','pools.bestFinalRank');
-    $finalPools = Pool::find(1);
-    // Doesn't work for now ...
-    //$finalPools = Pool::whereNotNull('pools.bestFinalRank')->where('pools.tournament_id','=',$id)->select('pools.id','pools.poolName','pools.bestFinalRank');
+        // I need to retrieve the rank of every teams(score,matchs won/loose, ...) in every pools from this tournament.
+        // There is a function in the pool model (rankings() that i will use. I use a foreach because this function only accept 1 array
+        foreach ($finalPools as $finalPool)
+        {
+            $ranking[] = $finalPool->rankings();
+        }
+
+        // This will add a field bestFinalRank for every recording. The index for the ranking and for the pools are the same, so i can use the counting var of my for for it (I use another var to count every teams in every pools (because there is sometimes 4 or 2 teams by pools, depending on the pool mode)
+        for ($i=0;$i<count($finalPools);$i++)
+        {
+            $teamCount = 0;
+            foreach ($finalPools as $pool)
+            {
+                // Best way I found to only add the rank on existing teams recording inside every pools (I tried to instead use foreach ($finalPools[$i] as $pool) but i can't. Will try to improve this later.
+                if (isset($ranking[$i][$teamCount]['team']))
+                {
+                    // Putting the rank for every team in every pools
+                    $ranking[$i][$teamCount]['rank'] = $finalPools[$i]->bestFinalRank + $teamCount;
+                    $teamCount++;
+                }
+            }
+        }
+        // Retrieving all datas from the object to
+        foreach ($ranking as $rankByPool)
+        {
+            foreach($rankByPool as $rankByTeam)
+            {
+                $rank[] = $rankByTeam;
+            }
+        }
+
+        // Used to sort the array by the rank index value.
+        foreach ($rank as $key => $row)
+        {
+            $vc_array_name[$key] = $row['rank'];
+        }
+        array_multisort($vc_array_name, SORT_ASC, $rank);
 
 
-    // I need to retrieve the rank of everyone in every pools from before. There is a function in the pool model (rankings())
-    $ranking = $finalPools->rankings();
-
-
-
-
-        echo '<div style="margin-left:300px;">';
-            dd ($ranking);
-        echo '</div>';
-
-        return view('tournamentBySport.show');
+        return view('tournamentBySport.show')->with('ranking', $rank);
 
 
     }
