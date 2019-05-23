@@ -1,7 +1,7 @@
--- Script that creates fake results for the 'joutes' database
+-- Script that creates fake results for the 'homestead' database
 -- ==========================================================
 
-use joutes;
+use homestead;
 
 -- Used to fake rankings for propagation to the next stages
 CREATE TEMPORARY TABLE IF NOT EXISTS ranking(

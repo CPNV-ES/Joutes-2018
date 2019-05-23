@@ -19,7 +19,7 @@ class Joutes2018Seeder extends Seeder
 
         $event = \App\Event::where('name', 'like', '%2018%')->first();
         if (!$event) die ("L'événement n'existe pas\n");
-        $this->eventid = $event->id;
+        $this->eventid = $event['id'];
 
         // make room
         \Illuminate\Support\Facades\DB::statement('delete from games;');
@@ -60,7 +60,7 @@ class Joutes2018Seeder extends Seeder
             echo "Le tournoi de badminton n'existe pas\n";
             return;
         }
-        $tournamentid = $bv->id;
+        $tournamentid = $bv['id'];
         $sportid = $bv->sport_id;
 
         $teams = \App\Team::where('tournament_id', '=', $tournamentid)->get();
@@ -81,19 +81,19 @@ class Joutes2018Seeder extends Seeder
             'isFinished' => 0
         ]);
         $pool->save();
-        $firstpoolStage1 = $pool->id; // we'll need that to put teams into pools
+        $firstpoolStage1 = $pool['id']; // we'll need that to put teams into pools
 
 
         foreach ($teams as $team)
         {
             (new \App\Contender([
                 'pool_id' => $firstpoolStage1,
-                'team_id' => $team->id
+                'team_id' => $team['id']
             ]))->save();
         }
-        $firstcontender = \App\Contender::where('pool_id', '=', $firstpoolStage1)->first()->id;
+        $firstcontender = \App\Contender::where('pool_id', '=', $firstpoolStage1)->first()['id'];
 
-        $firstcourt = \App\Court::where('sport_id', '=', $sportid)->first()->id;
+        $firstcourt = \App\Court::where('sport_id', '=', $sportid)->first()['id'];
 
         $teams = array(0,1,2,3,4,5,6,7,8,9,10,11,12); // Offsets from database id of first contender
 
@@ -152,7 +152,7 @@ class Joutes2018Seeder extends Seeder
             echo "Le tournoi de unihockey n'existe pas\n";
             return;
         }
-        $tournamentid = $bv->id;
+        $tournamentid = $bv['id'];
         $sportid = $bv->sport_id;
 
         $teams = \App\Team::where('tournament_id', '=', $tournamentid)->get();
@@ -173,19 +173,19 @@ class Joutes2018Seeder extends Seeder
             'isFinished' => 0
         ]);
         $pool->save();
-        $firstpoolStage1 = $pool->id; // we'll need that to put teams into pools
+        $firstpoolStage1 = $pool['id']; // we'll need that to put teams into pools
 
 
         foreach ($teams as $team)
         {
             (new \App\Contender([
                 'pool_id' => $firstpoolStage1,
-                'team_id' => $team->id
+                'team_id' => $team['id']
             ]))->save();
         }
-        $firstcontender = \App\Contender::where('pool_id', '=', $firstpoolStage1)->first()->id;
+        $firstcontender = \App\Contender::where('pool_id', '=', $firstpoolStage1)->first()['id'];
 
-        $firstcourt = \App\Court::where('sport_id', '=', $sportid)->first()->id;
+        $firstcourt = \App\Court::where('sport_id', '=', $sportid)->first()['id'];
 
         // Thank you https://nrich.maths.org/1443
         // Games of pool A
@@ -221,7 +221,7 @@ class Joutes2018Seeder extends Seeder
             echo "Le tournoi de basket n'existe pas\n";
             return;
         }
-        $tournamentid = $bv->id;
+        $tournamentid = $bv['id'];
         $sportid = $bv->sport_id;
 
         $teams = \App\Team::where('tournament_id', '=', $tournamentid)->get();
@@ -242,19 +242,19 @@ class Joutes2018Seeder extends Seeder
             'isFinished' => 0
         ]);
         $pool->save();
-        $firstpoolStage1 = $pool->id; // we'll need that to put teams into pools
+        $firstpoolStage1 = $pool['id']; // we'll need that to put teams into pools
 
 
         foreach ($teams as $team)
         {
             (new \App\Contender([
                 'pool_id' => $firstpoolStage1,
-                'team_id' => $team->id
+                'team_id' => $team['id']
             ]))->save();
         }
-        $firstcontender = \App\Contender::where('pool_id', '=', $firstpoolStage1)->first()->id;
+        $firstcontender = \App\Contender::where('pool_id', '=', $firstpoolStage1)->first()['id'];
 
-        $firstcourt = \App\Court::where('sport_id', '=', $sportid)->first()->id;
+        $firstcourt = \App\Court::where('sport_id', '=', $sportid)->first()['id'];
 
         // Thank you https://nrich.maths.org/1443
         // Games of pool A
@@ -303,7 +303,7 @@ class Joutes2018Seeder extends Seeder
             echo "Le tournoi de beach n'existe pas\n";
             return;
         }
-        $tournamentid = $bv->id;
+        $tournamentid = $bv['id'];
         $sportid = $bv->sport_id;
 
         $teams = \App\Team::where('tournament_id', '=', $tournamentid)->get();
@@ -324,7 +324,7 @@ class Joutes2018Seeder extends Seeder
             'isFinished' => 0
         ]);
         $pool->save();
-        $firstpoolStage1 = $pool->id; // we'll need that to put teams into pools
+        $firstpoolStage1 = $pool['id']; // we'll need that to put teams into pools
 
         (new \App\Pool([
             'tournament_id' => $tournamentid,
@@ -343,12 +343,12 @@ class Joutes2018Seeder extends Seeder
         {
             (new \App\Contender([
                 'pool_id' => $firstpoolStage1 + intdiv($nbTeams,6),
-                'team_id' => $team->id
+                'team_id' => $team['id']
             ]))->save();
             $nbTeams++;
         }
-        $firstcontender = \App\Contender::where('pool_id', '=', $firstpoolStage1)->first()->id;
-        $firstcourt = \App\Court::where('sport_id', '=', $sportid)->first()->id;
+        $firstcontender = \App\Contender::where('pool_id', '=', $firstpoolStage1)->first()['id'];
+        $firstcourt = \App\Court::where('sport_id', '=', $sportid)->first()['id'];
 
         // Games of pool A
         (new \App\Game(['date' => '2017-06-27', 'start_time' => '09:30', 'contender1_id' => $firstcontender + 0, 'contender2_id' => $firstcontender + 1, 'court_id' => $firstcourt]))->save();
@@ -399,7 +399,7 @@ class Joutes2018Seeder extends Seeder
             'isFinished' => 0
         ]);
         $pool->save();
-        $firstpoolStage2 = $pool->id; // we'll need that to put teams into pools
+        $firstpoolStage2 = $pool['id']; // we'll need that to put teams into pools
 
         (new \App\Pool([
             'tournament_id' => $tournamentid,
@@ -427,8 +427,8 @@ class Joutes2018Seeder extends Seeder
         (new \App\Contender(['pool_id' => $firstpoolStage2+1,'pool_from_id' => $firstpoolStage1+1, 'rank_in_pool' => 5]))->save();
         (new \App\Contender(['pool_id' => $firstpoolStage2+1,'pool_from_id' => $firstpoolStage1+1, 'rank_in_pool' => 6]))->save();
 
-        $firstcontender = \App\Contender::where('pool_id', '=', $firstpoolStage2)->first()->id;
-        $firstcourt = \App\Court::where('sport_id', '=', $sportid)->first()->id;
+        $firstcontender = \App\Contender::where('pool_id', '=', $firstpoolStage2)->first()['id'];
+        $firstcourt = \App\Court::where('sport_id', '=', $sportid)->first()['id'];
 
         // Games of pool Winner
         (new \App\Game(['date' => '2017-06-27', 'start_time' => '13:00', 'contender1_id' => $firstcontender + 0, 'contender2_id' => $firstcontender + 1, 'court_id' => $firstcourt]))->save();

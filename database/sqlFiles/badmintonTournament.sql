@@ -1,4 +1,4 @@
-USE joutes;
+USE homestead;
 
 -- ========================================== Data ==============================================
 
@@ -6,7 +6,7 @@ USE joutes;
 --  Insert Data in events
 --
 
-INSERT INTO joutes.events(NAME) VALUES ('joutes 2017');
+INSERT INTO homestead.events(NAME) VALUES ('homestead 2017');
 
 --
 --  Insert Data in sports

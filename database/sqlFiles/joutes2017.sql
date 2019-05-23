@@ -43,7 +43,7 @@
 --  Insert Data in events
 --
 
-INSERT INTO joutes.events (NAME) VALUES ('joutes 2017');
+INSERT INTO homestead.events (NAME) VALUES ('homestead 2017');
 
 --
 --  Insert Data in sports
@@ -722,7 +722,7 @@ DROP PROCEDURE AddBadmintonTournament;
 
 -- Temporarily for ease of testing: create admin and writer
 
-INSERT INTO joutes.users (username, password, role)
+INSERT INTO homestead.users (username, password, role)
 VALUES ('writer', '$2y$10$1nlzftBwvtxq6yueKHvROukJ9acntgG1pmu.qb1UY80pJWFchadP6', 'writer');
-INSERT INTO joutes.users (username, password, role)
+INSERT INTO homestead.users (username, password, role)
 VALUES ('admin', '$2y$10$RsiBblUoNfis0/TAmWR3NuLQRUITxQbQmsaSAdCPyto1z4eUs4ZlW', 'administrator');

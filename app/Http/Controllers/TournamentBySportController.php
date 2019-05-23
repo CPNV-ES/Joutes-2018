@@ -86,6 +86,7 @@ class TournamentBySportController extends Controller
      * @return \Illuminate\Http\Response
      */
 
+    // General Classification
     public function show($id)
     {
         $ranking = array();
