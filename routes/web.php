@@ -24,7 +24,8 @@ Route::resource('tournaments.pools', 'TournamentPoolController');
 Route::resource('admin', 'SessionController', ['only' => ['store', 'destroy']]);
 Route::resource('tournaments.schedule', 'ScheduleController', ['only' => ['index']]);
 Route::resource('notification', 'NotificationController', ['only' => ['create', 'store']]);
-Route::resource('tournamentsBySport', 'TournamentBySportController');
+Route::resource('tournamentClassification', 'TournamentClassificationController');
+// Should be visible only for the users actually connected (participants, not local users like admin)
 Route::resource('individualRanking', 'individualRankingController');
 # Route to download apk
 Route::get('/download', function() {

@@ -6,7 +6,7 @@
     <input type="search" placeholder="Recherche" class="search form-control">
     <div class="row searchIn">
         <div class="col-lg-12" style="padding-bottom:100px;">
-            {{ Form::open(array('url' => 'tournamentsBySport', 'method' => 'post',  'id' => 'formListSports')) }}
+            {{ Form::open(array('url' => 'tournamentClassification', 'method' => 'post',  'id' => 'formListSports')) }}
                 <div class="form-group" style="width:250px;float:left">
                     {{ Form::label('labelListSports', 'Sport : ') }}
                     {{ Form::select('listSports', $sports,'1', array('class' => 'form-control', 'style' => 'width:200px;')) }}
@@ -37,7 +37,7 @@
                         ?>
 
 
-                    <a href="{{route('tournamentsBySport.show', $tournament->id)}}" title="Voir le tournoi">
+                    <a href="{{route('tournamentClassification.show', $tournament->id)}}" title="Voir le tournoi">
                         <div class="box">
 
                             <div class="imgBox">
@@ -47,13 +47,21 @@
 
                             <div class="infos"  style="padding-top:0px;">
                                 <div class="col-lg-7 sport"> {{ $tournament->sport }} </div>
-                                <div class="col-lg-5">Dupliquer vers</div>
+                                @if(Auth::check())
+                                    @if(Auth::user()->role == 'administrator')
+                                        <div class="col-lg-5">Dupliquer vers</div>
+                                    @endif
+                                @endif
                                 <div class="col-lg-7 date"> {{substr($tournament->start_date,0,10)}} | {{substr($tournament->start_date,11,5)}}-{{substr($tournament->end_date,11,5)}}</div>
-                    </a>
-                                {{ Form::open(array('url' => 'tournamentsBySport', 'method' => 'post',  'id' => 'formDuplicateTournament')) }}
-                                        <div class="sport col-lg-5" id="listSports">{{ Form::select('listTournaments', array('1' => 'Tournoi 1', '2' => 'Tournoi 2'),'1', array('class' => 'form-control', 'style' => 'width:130px;height:28px;')) }}</div>
-                                    {{ Form::button('Afficher', array('class' => 'btn btn-success formSend', 'style' => 'padding:0;background: none;border:none;')) }}
-                                {{ Form::close() }}
+                    </a>        <!--Check if the user is conncted-->
+                                @if(Auth::check())
+                                    @if(Auth::user()->role == 'administrator')
+                                        {{ Form::open(array('url' => 'tournamentClassification', 'method' => 'post',  'id' => 'formDuplicateTournament')) }}
+                                            <div class="sport col-lg-5" id="listSports">{{ Form::select('listTournaments', $listTournaments,'1', array('class' => 'form-control', 'style' => 'width:130px;height:28px;')) }}</div>
+                                            {{ Form::button('Afficher', array('class' => 'btn btn-success formSend', 'style' => 'padding:0;background: none;border:none;')) }}
+                                        {{ Form::close() }}
+                                    @endif
+                                @endif
                             </div>
                         </div>
 

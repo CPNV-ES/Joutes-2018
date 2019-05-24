@@ -4,12 +4,14 @@ namespace App\Http\Controllers;
 
 use App\Pool;
 use App\Sport;
+use App\Tournament;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Model;
 
-class TournamentBySportController extends Controller
+class TournamentClassificationController extends Controller
 {
 
 
@@ -33,32 +35,24 @@ class TournamentBySportController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    // When accessing the page Tournament Classification index, where we can filter tournaments by sport, and go to their respective classification
     public function index(Request $request)
     {
         //
      $listSports = $this->retrieveSports();
 
-        return view('tournamentBySport.index')->with('sports', $listSports);
+        return view('tournamentClassification.index')->with('sports', $listSports);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
+    // After choosing a sport in the dropdown list, we return the list of tournaments to display.
+    // This also return the list of tournaments where we can duplicate this one, when we are connected as admin of course.
     public function store(Request $request)
     {
+        //dd($request->request);
+        if (isset($request->request->listTournaments))
+        {
+
+        }
         $listTournaments = array();
 
         $listSports = $this->retrieveSports();
@@ -76,7 +70,28 @@ class TournamentBySportController extends Controller
                                 ->get();
 
 
-        return view('tournamentBySport.index')->with('tournaments',$listTournaments)->with('sports',$listSports);
+        // This is for the duplicate function, for the admin
+        if(Auth::check())
+        {
+            if(Auth::user()->role == 'administrator')
+            {
+                // Retrieve list of tournament name and id
+                $listEveryTournaments = Tournament::all('name');
+
+                // Saving the name of every tournaments in an array, to be able to show it in the view
+                foreach ($listEveryTournaments as $listEveryTournament)
+                {
+                    $everyTournaments[] = $listEveryTournament->name;
+                }
+                //dd($listmyass);
+                return view('tournamentClassification.index')->with('tournaments',$listTournaments)->with('sports',$listSports)->with('listTournaments',$everyTournaments);
+            }
+        }
+
+
+
+
+        return view('tournamentClassification.index')->with('tournaments',$listTournaments)->with('sports',$listSports);
     }
 
     /**
@@ -93,12 +108,22 @@ class TournamentBySportController extends Controller
         // I retrieve the list of the pool of this tournament, where the final rank is not null. So it will return every ending pool (fun,good and final pools for example).
         $finalPools = Pool::where('pools.tournament_id','=',$id)->whereNotNull('pools.bestFinalRank')->get();
 
+        // Check if any pool is not finished. If it's the case, just return the view and stop here
+        if ($finalPools[0]->isFinished != '1')
+        {
+            // Should be actived. Only disabled for development purpose.
+            //return view('tournamentClassification.show');
+        }
+
+
+        // Ranking function only return the total score/total win/total lose of a team in a SINGLE pool. I will try to do a function to have the total of every pools played in a tournament, if I have the time.
         // I need to retrieve the rank of every teams(score,matchs won/loose, ...) in every pools from this tournament.
         // There is a function in the pool model (rankings() that i will use. I use a foreach because this function only accept 1 array
         foreach ($finalPools as $finalPool)
         {
             $ranking[] = $finalPool->rankings();
         }
+
 
         // This will add a field bestFinalRank for every recording. The index for the ranking and for the pools are the same, so i can use the counting var of my for for it (I use another var to count every teams in every pools (because there is sometimes 4 or 2 teams by pools, depending on the pool mode)
         for ($i=0;$i<count($finalPools);$i++)
@@ -115,7 +140,10 @@ class TournamentBySportController extends Controller
                 }
             }
         }
-        // Retrieving all datas from the object to
+
+
+        // Retrieving all datas from the object to an array. I used this because i cannot order the object, and i cannot count it. If I don't do that here, i would still need to do this in my view, because i cannot just show a multidimensionnal array like this one.
+        $rank = array();$vc_array_name = array();
         foreach ($ranking as $rankByPool)
         {
             foreach($rankByPool as $rankByTeam)
@@ -132,8 +160,7 @@ class TournamentBySportController extends Controller
         array_multisort($vc_array_name, SORT_ASC, $rank);
 
 
-        return view('tournamentBySport.show')->with('ranking', $rank);
-
+        return view('tournamentClassification.show')->with('ranking', $rank);
 
     }
 
