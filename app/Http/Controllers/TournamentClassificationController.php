@@ -116,8 +116,9 @@ class TournamentClassificationController extends Controller
         }
 
 
-        // Ranking function only return the total score/total win/total lose of a team in a SINGLE pool. I will try to do a function to have the total of every pools played in a tournament, if I have the time.
-        // I need to retrieve the rank of every teams(score,matchs won/loose, ...) in every pools from this tournament.
+        // Ranking function only return the total score/total win/total lose of a team in a SINGLE pool.
+        // I will try to do a function to have the total of every pools played in a tournament, if I have the time.
+        // I could join the tournaments and teams tables to have access to the team name, but with this method, i will be able to add new column (matchs won/lose for a team, in this tournament) without changing a lot of code
         // There is a function in the pool model (rankings() that i will use. I use a foreach because this function only accept 1 array
         foreach ($finalPools as $finalPool)
         {
@@ -129,13 +130,18 @@ class TournamentClassificationController extends Controller
         for ($i=0;$i<count($finalPools);$i++)
         {
             $teamCount = 0;
+            $poolGap = 0;
             foreach ($finalPools as $pool)
             {
                 // Best way I found to only add the rank on existing teams recording inside every pools (I tried to instead use foreach ($finalPools[$i] as $pool) but i can't. Will try to improve this later.
                 if (isset($ranking[$i][$teamCount]['team']))
                 {
                     // Putting the rank for every team in every pools
-                    $ranking[$i][$teamCount]['rank'] = $finalPools[$i]->bestFinalRank + $teamCount;
+                    if ($finalPools[$i]->stage == '2') { $poolGap = 4; } //This is the gap between participants in a pool, depending on the stage of the pool
+                    if ($finalPools[$i]->stage == '3') { $poolGap = 2; }
+                    if ($finalPools[$i]->stage == '4') { $poolGap = 1; }
+                    // The final best is is the one in the DBB, and I add the poolGap*position of the team
+                    $ranking[$i][$teamCount]['rank'] = $finalPools[$i]->bestFinalRank + ($poolGap * $teamCount);
                     $teamCount++;
                 }
             }
@@ -143,7 +149,7 @@ class TournamentClassificationController extends Controller
 
 
         // Retrieving all datas from the object to an array. I used this because i cannot order the object, and i cannot count it. If I don't do that here, i would still need to do this in my view, because i cannot just show a multidimensionnal array like this one.
-        $rank = array();$vc_array_name = array();
+        $rank = array(); $vc_array_name = array();
         foreach ($ranking as $rankByPool)
         {
             foreach($rankByPool as $rankByTeam)

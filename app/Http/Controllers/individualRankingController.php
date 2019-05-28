@@ -14,64 +14,57 @@ class individualRankingController extends Controller
      */
     public function index()
     {
-        $idParticipant = 3;
-        $idTeams = 2;
+        $idParticipant = 1;
 
-        // Retrieve all datas needed when the participant team is the contender 1
-        $individualRankingContender1 = DB::table('pools')
-            ->join('tournaments','tournaments.id','=','pools.tournament_id')
-            ->join('teams','tournaments.id','=','teams.tournament_id')
-            ->join('participant_team','teams.id','=','participant_team.team_id')
-            ->join('participants','participants.id','=','participant_team.participant_id')
-            ->where('participants.id','=',$idParticipant)
-            ->where('contenders.team_id','=',$idTeams)
+
+        // Retrieving all the "final" pools (where bestFinalRank is set), and for this participant only.
+        $finalPools = DB::table('pools')
+            //->whereNotNull('pools.bestFinalRank')
             ->join('contenders','pools.id','=','contenders.pool_id')
-            ->join('games','contenders.id','=','games.contender1_id')
-
-            ->select('participants.id as participant_id', 'participants.first_name as participant_first_name', 'participants.last_name as participant_last_name', 'tournaments.id as tournament_id', 'tournaments.name as tournament_name','teams.name as team_name','games.contender1_id as contender_id','games.score_contender1 as score');
-
-        // Retrieve all datas needed when the participant team is the contender 2
-        $individualRankingContender2 = DB::table('pools')
-            ->join('tournaments','tournaments.id','=','pools.tournament_id')
-            ->join('teams','tournaments.id','=','teams.tournament_id')
+            ->join('teams','teams.id','=','contenders.team_id')
             ->join('participant_team','teams.id','=','participant_team.team_id')
-            ->join('participants','participants.id','=','participant_team.participant_id')
-            ->where('participants.id','=',$idParticipant)
-            ->where('contenders.team_id','=',$idTeams)
-            ->join('contenders','pools.id','=','contenders.pool_id')
-            ->join('games as games2','contenders.id','=','games2.contender2_id')
-
-            ->select('participants.id as participant_id', 'participants.first_name as participant_first_name', 'participants.last_name as participant_last_name', 'tournaments.id as tournament_id', 'tournaments.name as tournament_name','teams.name as team_name','games2.contender2_id as contender_id','games2.score_contender2 as score');
-
-        // I merge the two collections. So that i have every match played by the team of the participant.
-        $individualRanking = $individualRankingContender1->get()->merge($individualRankingContender2->get());
+            ->where('participant_team.participant_id',$idParticipant)
+            ->get();
 
 
-        $oldTournament_name = 'a';
-        $a = 0;
-        $test = array();
-        $totalScore = 0;
-        for ($i=0;$i<sizeof($individualRanking);$i++)
+    $ranking = array();
+$teamCount = 0;
+$poolGap = 0;
+
+        foreach ($finalPools as $pool)
         {
-            if ($individualRanking[$i]->tournament_id != $oldTournament_name)
+            // Best way I found to only add the rank on existing teams recording inside every pools (I tried to instead use foreach ($finalPools[$i] as $pool) but i can't. Will try to improve this later.
+            if (isset($pool->name))
             {
-                $a++;
+
+                // Putting the rank for every team in every pools
+                if ($pool->stage == '2') { $poolGap = 4;dd(); } //This is the gap between participants in a pool, depending on the stage of the pool
+                if ($pool->stage == '3') { $poolGap = 2; }
+                if ($pool->stage == '4') { $poolGap = 1; }
+                // The final best is is the one in the DBB, and I add the poolGap*position of the team
+                $ranking[$teamCount]['team'] = $pool->name;
+                $ranking[$teamCount]['stage'] = $pool->stage;
+                $ranking[$teamCount]['rank'] = $pool->bestFinalRank + ($poolGap * $teamCount);
+                $teamCount++;
             }
-
-            $test[$a]['tournament_name'] = $individualRanking[$i]->tournament_name;
-            $test[$a]['participant_name'] = $individualRanking[$i]->participant_first_name.' '.$individualRanking[$i]->participant_last_name;
-            $test[$a]['team_name'] = $individualRanking[$i]->team_name;
-            $test[$a]['contender_id'] = $individualRanking[$i]->contender_id;
-            $totalScore += $individualRanking[$i]->score;
-            $test[$a]['score'] = $totalScore;
-
-            $oldTournament_name = $individualRanking[$i]->tournament_id;
-
         }
-        var_dump ($test);
-        echo '</div>';
 
-        return view('individualRanking.index')->with('ranking',$test);
+
+
+        // Used to sort the array by the rank index value.
+        foreach ($ranking as $key => $row)
+        {
+            $vc_array_name[$key] = $row['rank'];
+        }
+        array_multisort($vc_array_name, SORT_ASC, $ranking);
+
+
+
+
+
+
+
+        return view('individualRanking.index')->with('ranking',$ranking);
     }
 
 
