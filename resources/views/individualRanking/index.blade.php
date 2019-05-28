@@ -9,15 +9,20 @@
                 <thead>
                 <tr>
                     <th>#</th>
+                    <th>Tournoi</th>
                     <th>Equipe</th>
                     <th>Classement</th>
                 </tr>
                 </thead>
                 <tbody>
+
                     @foreach ($ranking as $rank)
-                        <td>1</td>
-                        <td>{{$rank['team']}}</td>
-                        <td>{{$rank['rank']}}</td>
+                        <tr>
+                            <td>1</td>
+                            <td>{{$rank['tournament']}}</td>
+                            <td>{{$rank['team']}}</td>
+                            <td>{{$rank['rank']}}</td>
+                        </tr>
                     @endforeach
 
                 </tbody>
