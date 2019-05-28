@@ -83,7 +83,7 @@ class TournamentClassificationController extends Controller
                 {
                     $everyTournaments[] = $listEveryTournament->name;
                 }
-                //dd($listmyass);
+
                 return view('tournamentClassification.index')->with('tournaments',$listTournaments)->with('sports',$listSports)->with('listTournaments',$everyTournaments);
             }
         }
@@ -104,18 +104,73 @@ class TournamentClassificationController extends Controller
     // General Classification
     public function show($id)
     {
+
+
+
+        /* This should work but it's not the case ...
+        $finalPools = DB::table('pools')
+            ->whereNotNull('pools.bestFinalRank')
+            ->where('pools.tournament_id','=',$id)
+            ->join('tournaments','pools.tournament_id','=','tournaments.id')
+            // Error when joining this table .............
+            ->join('teams','tournaments.id','=','teams.tournament_id')
+            //->select('pools.id as pool_id','tournaments.name as tournament', 'teams.name as team', 'pools.stage', 'pools.bestFinalRank')
+            ->get();
+
+        // This should also work
+        $finalPools = Tournament::with('pools')->join('teams','tournaments.id','=','teams.tournament_id')->where('pools.tournament_id','=',$id)->whereNotNull('pools.bestFinalRank')->get();
+
+
+        $ranking = array();
+        $poolRank = 0;
+        $nbPoolsInStage = 0;
+        $previousPool = 0;
+        dd($finalPools->toArray());
+        foreach ($finalPools as $pool)
+        {
+            // The rank of the team of the participants is reset every time the function "execute" a new pool.
+            // This is done with the $previousPool var, which store the id of the pool, but a the end of the loop, so the previous one here.
+            if ($pool->pool_id != $previousPool)
+            {
+                $poolRank = 0;
+            }
+
+            //This is the gap between participants in a pool, depending on the stage of the pool
+            if ($pool->stage == '2') { $nbPoolsInStage = 4; }
+            if ($pool->stage == '3') { $nbPoolsInStage = 2; }
+            if ($pool->stage == '4') { $nbPoolsInStage = 1; }
+
+            $ranking[$poolRank]['tournament'] = $pool->tournament;
+            $ranking[$poolRank]['team'] = $pool->name;
+            $ranking[$poolRank]['stage'] = $pool->stage;
+            $ranking[$poolRank]['score'] = $pool->bestFinalRank;
+            // only used in dev, because in reality this value should be always set to 1, according to the request
+            if ($pool->bestFinalRank != 0)
+            {
+                // The rank is calculated with the bestFinalRank value, which is equal to the rank of the first of the current pool. We add to this the rank of the team in pool multiply  by the number of pools in this stage
+                $ranking[$poolRank]['rank'] = $pool->bestFinalRank + ($nbPoolsInStage * $poolRank);
+            }
+            else
+            {
+                $ranking[$poolRank]['rank'] = 'Pas terminé';
+            }
+            $previousPool = $pool->pool_id;
+            $poolRank++;
+
+        }
+
+        */
+
+
         $ranking = array();
         // I retrieve the list of the pool of this tournament, where the final rank is not null. So it will return every ending pool (fun,good and final pools for example).
         $finalPools = Pool::where('pools.tournament_id','=',$id)->whereNotNull('pools.bestFinalRank')->get();
-
         // Check if any pool is not finished. If it's the case, just return the view and stop here
         if ($finalPools[0]->isFinished != '1')
         {
             // Should be actived. Only disabled for development purpose.
             //return view('tournamentClassification.show');
         }
-
-
         // Ranking function only return the total score/total win/total lose of a team in a SINGLE pool.
         // I will try to do a function to have the total of every pools played in a tournament, if I have the time.
         // I could join the tournaments and teams tables to have access to the team name, but with this method, i will be able to add new column (matchs won/lose for a team, in this tournament) without changing a lot of code
@@ -124,8 +179,6 @@ class TournamentClassificationController extends Controller
         {
             $ranking[] = $finalPool->rankings();
         }
-
-
         // This will add a field bestFinalRank for every recording. The index for the ranking and for the pools are the same, so i can use the counting var of my for for it (I use another var to count every teams in every pools (because there is sometimes 4 or 2 teams by pools, depending on the pool mode)
         for ($i=0;$i<count($finalPools);$i++)
         {
@@ -146,8 +199,6 @@ class TournamentClassificationController extends Controller
                 }
             }
         }
-
-
         // Retrieving all datas from the object to an array. I used this because i cannot order the object, and i cannot count it. If I don't do that here, i would still need to do this in my view, because i cannot just show a multidimensionnal array like this one.
         $rank = array(); $vc_array_name = array();
         foreach ($ranking as $rankByPool)
@@ -157,7 +208,6 @@ class TournamentClassificationController extends Controller
                 $rank[] = $rankByTeam;
             }
         }
-
         // Used to sort the array by the rank index value.
         foreach ($rank as $key => $row)
         {

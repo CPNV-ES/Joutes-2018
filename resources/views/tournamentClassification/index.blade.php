@@ -75,11 +75,11 @@
 </div>
 <!-- Script used to detect when the user change the value of the drop down list containing the list of the tournaments -->
 <script type="text/javascript">
-    function test()
+    function postFormShowClassification()
     {
         document.getElementById('formDuplicateTournament').submit();
     }
     let listSport = document.getElementById('listSports');
-    listSport.addEventListener("change", test);
+    listSport.addEventListener("change", postFormShowClassification);
 </script>
 @stop

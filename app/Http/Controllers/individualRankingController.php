@@ -27,6 +27,7 @@ class individualRankingController extends Controller
             ->select('tournaments.name as tournament', 'teams.name as team', 'pools.stage', 'pools.bestFinalRank')
             ->get();
         */
+
         $finalPools = DB::table('pools')
             // Should not be in comment, only for dev purpose
             //->whereNotNull('pools.bestFinalRank')

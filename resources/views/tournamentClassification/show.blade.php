@@ -17,18 +17,17 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <tr>
 
                             @foreach ($ranking as $rankByTeam)
-                                <td>{{$rankByTeam['rank']}}</td>
-                                <td>{{$rankByTeam['team']}}</td>
-                                <!--<td>{{$rankByTeam['score']}}</td>
-                                <td>{{$rankByTeam['W']}}</td>
-                                <td>{{$rankByTeam['L']}}</td>
-                                <td>{{$rankByTeam['D']}}</td>-->
-                                </tr><tr>
+                                {{ Form::open(array('url' => 'individualRanking', 'method' => 'post',  'id' => 'formAccessTeamRanking')) }}
+                                <tr>
+                                    <td>{{$rankByTeam['rank']}}</td>
+                                    <td>{{$rankByTeam['team']}}</td>
+                                    {{ Form::hidden('team',$rankByTeam['team']) }}
+                                </tr>
+                                {{ Form::close }}
                             @endforeach
-                    </tr>
+
                     </tbody>
                 </table>
             @else
@@ -36,7 +35,6 @@
             @endif
         </div>
     </div>
-
 
 
 @stop
