@@ -16,14 +16,16 @@
                 </thead>
                 <tbody>
 
-                    @foreach ($ranking as $rank)
+                @foreach ($ranking as $rank)
+                    {{ Form::open(array('url' => 'individualRanking', 'method' => 'post',  'id' => 'formAccessTeamRanking')) }}
                         <tr>
                             <td>1</td>
                             <td>{{$rank['tournament']}}</td>
-                            <td>{{$rank['team']}}</td>
-                            <td>{{$rank['rank']}}</td>
+                            <td>{{$rank['team']}} {{ Form::submit("Voir résultats de l'équipe") }}</td>
+                            <td>{{$rank['rank']}} {{ Form::hidden('team',$rank['team']) }}</td>
                         </tr>
-                    @endforeach
+                    {{ Form::close() }}
+                @endforeach
 
                 </tbody>
             </table>
