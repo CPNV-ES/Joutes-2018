@@ -12,16 +12,16 @@ class ProfilController extends Controller
     public function index(Request $request)
     {
         $user = \Auth::user();
+
         $teams = null;
 
         if ($user != null) {
             try {
-                $teams = \Auth::user()->participant()->first()->teams;
+                $teams = \Auth::user()->teams;
             } catch (\Exception $e) {
                 $teams = null;
             }
         }
-
 
         return [
             'user' => $user,

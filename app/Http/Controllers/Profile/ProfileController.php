@@ -6,8 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Tournament;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use App\User;
 use App\Team;
-use App\Participant;
 use App\Event;
 use Auth;
 use Illuminate\Support\Facades\Validator;
@@ -23,7 +23,8 @@ class ProfileController extends Controller
      */
     public function index(Request $request)
     {
-        $participant = Auth::user()->participant()->first();
+        $participant = Auth::user();
+
 
         // Verify if the users is Unsigned, so they are not registered for any tournament
         if ($participant->isUnsigned($participant->id))
@@ -66,7 +67,7 @@ class ProfileController extends Controller
 
         // Verify if the user want to SignIn in the Tournament with a new personal team or with a exsist team
         if ($isNewEquipe == null) {
-            $participant = Participant::find($id);
+            $participant = User::find($id);
             $participant->teams()->detach($oldTeamID);
             if ($oldTeam->isOwner($participant->id)) {
                 $participants = $oldTeam->participants;
@@ -81,11 +82,12 @@ class ProfileController extends Controller
                 }
             }
             $team = Team::where('id',$request->input('teamSelected'))->first();
-            $team->participants()->attach([$participant->id => array('isCaptain' => '0' )]); //add the link row in intemrediate table
+            $team->users()->attach([$participant->id => array('isCaptain' => '0' )]); //add the link row in intemrediate table
+
         }
         else {
             // The team do not exsist so call the TeamController to store the new team
-            $participant = Participant::find($id);
+            $participant = User::find($id);
             $participant->teams()->detach($oldTeamID);
             if ($oldTeam->isOwner($participant->id)) {
                 $participants = $oldTeam->participants;
@@ -105,7 +107,7 @@ class ProfileController extends Controller
             $team->validation = 0;
             $team->owner_id = Auth::user()->id;
             $team->save();
-            $participant = Auth::user()->participant()->first();
+            $participant = Auth::user();
             $team->participants()->attach([$participant->id => array('isCaptain' => '1' )]); //add the link row in intemrediate table
         }
 
@@ -123,7 +125,6 @@ class ProfileController extends Controller
         //Prepare all values for the SignIn login form
         $dropdownListEvent = $this->getDropDownList_Event();
         $toFinish = $request->input("toFinish");
-
         return view('profile.create')
             ->with('dropdownListEvent', $dropdownListEvent)
             ->with('from', $request->input("from"))
@@ -141,7 +142,7 @@ class ProfileController extends Controller
     public function store(Request $request)
     {
         $isNewEquipe = $request->input('switch');
-        $participant = Auth::user()->participant()->first();
+        $participant = Auth::user();
         $tournament = $request->input('tournament');
 
         // store participant in a exisist teams
@@ -159,7 +160,7 @@ class ProfileController extends Controller
             $team->validation = 0;
             $team->owner_id = Auth::user()->id;
             $team->save();
-            $participant = Auth::user()->participant()->first();
+            $participant = Auth::user();
             $team->participants()->attach([$participant->id => array('isCaptain' => '1' )]); //add the link row in intemrediate table
             }
 
@@ -178,7 +179,7 @@ class ProfileController extends Controller
      */
     public function show($id)
     {
-        $participant = Auth::user()->participant()->first();
+        $participant = Auth::user();
         $teams = $participant->teams;
         return view('profile.index')->with('teams', $teams)->with('participant', $participant) ;
     }
@@ -213,7 +214,7 @@ class ProfileController extends Controller
      */
     public function destroy($id)
     {
-        $participant = Participant::find($id);
+        $participant = user::find($id);
         $teams = $participant->teams;
         $participant->teams()->detach();
         foreach ($teams as $team){
@@ -283,7 +284,7 @@ class ProfileController extends Controller
      * @author Carboni Davide
      */
     private function getDropList_ParticipantTeams($id){
-        $participant = Participant::find($id);
+        $participant = user::find($id);
         $teams = $participant->teams;
         // Creation of the array will contain the datas of the dropdown teams list
         // Example: array("sport_id 1" => "sport_name 1", "sport_id 2" => "sport_name 2"), ...

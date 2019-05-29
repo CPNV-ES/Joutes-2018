@@ -10,7 +10,7 @@ namespace App\Http\Controllers\Profile;
 
 use App\Http\Controllers\Controller;
 use App\Team;
-use App\Participant;
+use App\User;
 use Illuminate\Http\Request;
 use Cookie;
 use Illuminate\Support\Facades\Validator;
@@ -28,9 +28,8 @@ class ProfileTeamsController
      */
     public function index()
     {
-        $participant = Auth::user()->participant()->first();
+        $participant = Auth::user();
         $teams = $participant->teams;
-        //$teams = $participant->teams->where('owner_id', Auth::user()->id);
         return view('team.index', array(
             "teams" => $teams,
             "participant" => $participant
@@ -96,13 +95,13 @@ class ProfileTeamsController
      */
     public function show(Request $request, $id, $id2)
     {
-        $participant = Auth::user()->participant()->first();
+        $participant = Auth::user();
         // return the id for a username using ajax
 
         $team = Team::find($id2);
         $error = $infos = null;
 
-        $pepoleNoTeam = Participant::doesntHave('teams')->get();
+        $pepoleNoTeam = User::doesntHave('teams')->get();
 
         // Creation of the array will contain the datas of the dropdown list
         // This form: array("sport1" => "sport1", "sport2" => "sport2"), ...
@@ -197,5 +196,4 @@ class ProfileTeamsController
         $team->delete();
         return redirect()->route('teams.index');
     }
-
 }
