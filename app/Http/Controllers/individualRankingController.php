@@ -94,7 +94,7 @@ class individualRankingController extends Controller
 
 
 
-    public function destroy($id)
+    public function show()
     {
         //
     }

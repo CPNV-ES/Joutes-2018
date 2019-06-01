@@ -27,9 +27,9 @@ class Joutes2018Seeder extends Seeder
         \Illuminate\Support\Facades\DB::statement('delete from pools;');
 
         $this->basics();
-        $this->BeachVolley();
-        $this->Basket();
-        $this->UniHockey();
+        //$this->BeachVolley();
+        //$this->Basket();
+        //$this->UniHockey();
         $this->Badminton();
     }
 
