@@ -15,16 +15,18 @@
                 </tr>
                 </thead>
                 <tbody>
-
+                <?php $id=1;?>
+                <!-- Strangely, I cannot access the team classification. The form doesn't want to post.
                 @foreach ($ranking as $rank)
                     {{ Form::open(array('url' => 'individualRanking', 'method' => 'post',  'id' => 'formAccessTeamRanking')) }}
                         <tr>
-                            <td>1</td>
+                            <td>{{ $id }}</td>
                             <td>{{$rank['tournament']}}</td>
                             <td>{{$rank['team']}} {{ Form::submit("Voir résultats de l'équipe") }}</td>
                             <td>{{$rank['rank']}} {{ Form::hidden('team',$rank['team']) }}</td>
                         </tr>
                     {{ Form::close() }}
+                    <?php $id++;?>
                 @endforeach
 
                 </tbody>

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Event;
 use App\Pool;
 use App\Sport;
 use App\Tournament;
@@ -41,7 +42,8 @@ class TournamentClassificationController extends Controller
         //
      $listSports = $this->retrieveSports();
 
-        return view('tournamentClassification.index')->with('sports', $listSports);
+
+     return view('tournamentClassification.index')->with('sports', $listSports);
     }
 
     // After choosing a sport in the dropdown list, we return the list of tournaments to display.
@@ -84,10 +86,14 @@ class TournamentClassificationController extends Controller
                     $everyTournaments[] = $listEveryTournament->name;
                 }
 
-                return view('tournamentClassification.index')->with('tournaments',$listTournaments)->with('sports',$listSports)->with('listTournaments',$everyTournaments);
+                // Retrieve list of events, used for the duplicate fonctionnality. I should recover the datas in another array, because the display in the view isn't perfect (0 -> event 1, 1 -> event 2)
+                $listEvents = Event::all('name');
+
+
+                // Return the view with the datas for the admin
+                return view('tournamentClassification.index')->with('tournaments',$listTournaments)->with('sports',$listSports)->with('listTournaments',$everyTournaments)->with('events', $listEvents);
             }
         }
-
 
 
 
@@ -161,16 +167,23 @@ class TournamentClassificationController extends Controller
 
         */
 
-
         $ranking = array();
         // I retrieve the list of the pool of this tournament, where the final rank is not null. So it will return every ending pool (fun,good and final pools for example).
         $finalPools = Pool::where('pools.tournament_id','=',$id)->whereNotNull('pools.bestFinalRank')->get();
+
         // Check if any pool is not finished. If it's the case, just return the view and stop here
-        if ($finalPools[0]->isFinished != '1')
+        if (isset($finalPools[0]))
         {
-            // Should be actived. Only disabled for development purpose.
-            //return view('tournamentClassification.show');
+            if ($finalPools[0]->isFinished != '1')
+            {
+                return view('tournamentClassification.show');
+            }
         }
+        else
+        {
+            return view('tournamentClassification.show');
+        }
+
         // Ranking function only return the total score/total win/total lose of a team in a SINGLE pool.
         // I will try to do a function to have the total of every pools played in a tournament, if I have the time.
         // I could join the tournaments and teams tables to have access to the team name, but with this method, i will be able to add new column (matchs won/lose for a team, in this tournament) without changing a lot of code
@@ -208,7 +221,7 @@ class TournamentClassificationController extends Controller
                 $rank[] = $rankByTeam;
             }
         }
-        // Used to sort the array by the rank index value.
+        // Used to sort the array by the rank index value. Inspired by code on PHP.net and StackOverflow
         foreach ($rank as $key => $row)
         {
             $vc_array_name[$key] = $row['rank'];
@@ -219,41 +232,4 @@ class TournamentClassificationController extends Controller
         return view('tournamentClassification.show')->with('ranking', $rank);
 
     }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
-    }
-
-
-
 }

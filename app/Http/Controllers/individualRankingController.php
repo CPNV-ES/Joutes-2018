@@ -14,9 +14,11 @@ class individualRankingController extends Controller
      */
     public function index()
     {
+        // The participant id should be retrieved using SAML and middlewares, however, I will hardcode the value now, and will maybe create a "fake" login to test this fonctionnality, if I have enough time.
         $idParticipant = 1;
 
-        /* The where clause is not respected. I don't know why. I will use other tables to acces the datas I need
+        //Different version that doesn't work
+        /* The where clause is not respected. I don't know why. I will use other tables to access the datas I need
         // Retrieving all the "final" pools (where bestFinalRank is set), and for this participant only.
         $finalPools = DB::table('pools')
             ->whereNotNull('pools.bestFinalRank')
@@ -28,15 +30,15 @@ class individualRankingController extends Controller
             ->get();
         */
 
+        // Retrieving all the "final" pools (where bestFinalRank is set), and for this participant only.
         $finalPools = DB::table('pools')
-            // Should not be in comment, only for dev purpose
-            //->whereNotNull('pools.bestFinalRank')
+            ->whereNotNull('pools.bestFinalRank')
             ->join('contenders','pools.id','=','contenders.pool_id')
             ->join('teams','teams.id','=','contenders.team_id')
             ->join('participant_team','teams.id','=','participant_team.team_id')
             ->where('participant_team.participant_id',$idParticipant)
             ->join('tournaments','tournaments.id','=','pools.tournament_id')
-            ->select('pools.id as pool_id','tournaments.name as tournament', 'teams.name as team', 'pools.stage', 'pools.bestFinalRank')
+            ->select('pools.id as pool_id','tournaments.name as tournament', 'teams.name as team', 'pools.stage', 'pools.bestFinalRank', 'pools.isFinished')
             ->get();
 
 
@@ -49,6 +51,9 @@ class individualRankingController extends Controller
 
         foreach ($finalPools as $pool)
         {
+
+            // They may be some bugs due to tournament not being finished. I will add a condition to test if all pools of a tournament are finished before showing it. If I have the time.
+
             // The rank of the team of the participants is reset every time the function "execute" a new pool.
             // This is done with the $previousPool var, which store the id of the pool, but a the end of the loop, so the previous one here.
             if ($pool->pool_id != $previousPool)
