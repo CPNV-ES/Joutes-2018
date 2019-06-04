@@ -44,7 +44,7 @@
                                 <div class="col-lg-7 date"> {{substr($tournament->start_date,0,10)}} | {{substr($tournament->start_date,11,5)}}-{{substr($tournament->end_date,11,5)}}</div>
                                 @if(Auth::check())
                                     @if(Auth::user()->role == 'administrator')
-                                        {{ Form::open(array('action' => 'TournamentClassificationController@index', 'method' => 'post',  'id' => 'formDuplicateTournament')) }}
+                                        {{ Form::open(array('url' => 'TournamentClassification', 'method' => 'post',  'id' => 'formDuplicateTournament')) }}
                                             <div class="col-lg-12">Utiliser comme base pour nouveau tournoi de :</div>
                                             <div class="col-lg-6">{{ Form::select('listSports', $sports,'1', array('class' => 'form-control', 'style' => 'width:130px;height:28px;')) }}</div>
                                             <div class="col-lg-6">dans l'évenement :</div>

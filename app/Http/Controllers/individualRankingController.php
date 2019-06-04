@@ -12,6 +12,7 @@ class individualRankingController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    // Individual classification (fonctionality 3) participant view
     public function index()
     {
         // The participant id should be retrieved using SAML and middlewares, however, I will hardcode the value now, and will maybe create a "fake" login to test this fonctionnality, if I have enough time.
@@ -98,9 +99,14 @@ class individualRankingController extends Controller
 
 
 
-
-    public function show()
+// Individual classification - team view
+    public function show($teamID)
     {
-        //
+
+    $teamID = 1;
+
+
+
+        return view('individualRanking.show');
     }
 }
