@@ -16,7 +16,7 @@
                 </thead>
                 <tbody>
                 <?php $id=1;?>
-                <!-- Strangely, I cannot access the team classification. The form doesn't want to post.
+                <!-- Strangely, I cannot access the team classification. The form doesn't want to post. -->
                 @foreach ($ranking as $rank)
                     {{ Form::open(array('url' => 'individualRanking', 'method' => 'post',  'id' => 'formAccessTeamRanking')) }}
                         <tr>

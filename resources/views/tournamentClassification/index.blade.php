@@ -48,8 +48,8 @@
                                             <div class="col-lg-12">Utiliser comme base pour nouveau tournoi de :</div>
                                             <div class="col-lg-6">{{ Form::select('listSports', $sports,'1', array('class' => 'form-control', 'style' => 'width:130px;height:28px;')) }}</div>
                                             <div class="col-lg-6">dans l'évenement :</div>
-                                            <div class="col-lg-8">{{ Form::select('listEvents', $events->toArray(),'1', array('class' => 'form-control', 'style' => 'width:130px;height:28px;')) }}</div>
-                                            <div class="col-lg-4">{{ Form::submit('Dupliquer') }}</div>
+                                            <div class="col-lg-8">{{ Form::select('listEvents', $events->toArray(),'1', array('class' => 'form-control', 'style' => 'width:180px;height:28px;')) }}</div>
+                                            <div class="col-lg-3">{{ Form::submit('Dupliquer') }}</div>
                                         {{ Form::close() }}
                                     @endif
                                 @endif
