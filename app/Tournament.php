@@ -112,7 +112,7 @@ class Tournament extends Model
 
     public function completeTeams()
     {
-        return $this->teams()->with('participants');
+        return $this->teams()->with('users');
     }
 
     /**

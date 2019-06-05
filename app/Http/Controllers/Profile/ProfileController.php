@@ -218,7 +218,6 @@ class ProfileController extends Controller
         $teams = $participant->teams;
         $participant->teams()->detach();
         foreach ($teams as $team){
-
             if ($team->isOwner($participant->id)) {
                 $participants = $team->participants;
                 if ($participants->count() == 0) {
@@ -226,7 +225,7 @@ class ProfileController extends Controller
                 }
                 else{
                     $first = $participants->first();
-                    $team->owner_id = $first->user->id;
+                    $team->owner_id = $first->id;
                     $team->save();
                     $team->participants()->updateExistingPivot($first->id,['isCaptain'=>'1']);
                 }
