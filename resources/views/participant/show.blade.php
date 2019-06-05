@@ -40,7 +40,7 @@
 					      <td data-id="{{$team->id}}" class="clickable"> {{ $team->name }} </td>
 							@if (Auth::user()->role == "administrator")
 							  <td class="action">
-									  {{ Form::open(array('url' => route('teams.participants.destroy', [$team->pivot['participant_id'], $team->pivot['team_id']]), 'method' => 'delete')) }}
+									  {{ Form::open(array('url' => route('teams.participants.destroy', [$team->pivot['user_id'], $team->pivot['team_id']]), 'method' => 'delete')) }}
 										<button type="submit" class="button-delete" data-type="memberTeam" data-name='"{{ $participant->last_name }} {{ $participant->first_name }}" de "{{ $team->name }}"'>
 											<i class="fa fa-trash-o fa-lg action" aria-hidden="true"></i>
 										</button>
