@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Team;
-use App\Participant;
+use App\User;
 use Illuminate\Http\Request;
 use Cookie;
 use Illuminate\Support\Facades\Validator;
@@ -89,8 +89,8 @@ class TeamController extends Controller
         $team->save();
 
         if (Auth::user()->role == "participant") {
-            $participant = Auth::user()->participant()->first();
-            $team->participants()->attach([$participant->id => array('isCaptain' => '0' )]); //add the link row in intemrediate table
+            $participant = Auth::user()->first();
+            $team->users()->attach([$participant->id => array('isCaptain' => '0')]);
         }
         /*
         if (Auth::user()->role == "administrator") {
@@ -136,10 +136,9 @@ class TeamController extends Controller
             }
         }
 
-        $team = Team::find($id); 
+        $team = Team::find($id);
         $error = $infos = null;
-
-        $pepoleNoTeam = Participant::doesntHave('teams')->get();
+        $pepoleNoTeam = User::doesntHave('teams')->get();
 
         // Creation of the array will contain the datas of the dropdown list
         // This form: array("sport1" => "sport1", "sport2" => "sport2"), ...
@@ -186,7 +185,7 @@ class TeamController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @param  int $id
      * @return \Illuminate\Http\Response
-     * 
+     *
      * @author Dessauges Antoine
      */
     public function update(Request $request, $id)

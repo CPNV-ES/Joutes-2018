@@ -60,7 +60,7 @@
 
         <br>
 
-        {{ Form::open(array('url' => route('profile.destroy', Auth::user()->participant->id), 'method' => 'delete')) }}
+        {{ Form::open(array('url' => route('profile.destroy', Auth::user()->id), 'method' => 'delete')) }}
             <button class="btn btn-success  button-delete"  data-type="participantSigin">Reset</button>
         {{ Form::close() }}
 

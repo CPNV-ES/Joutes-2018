@@ -6,7 +6,6 @@
 
 	<div class="container">
 		<a href=""><i class="fa fa-4x fa-arrow-circle-left return" aria-hidden="true"></i></a>
-
 		<h1> {{ $team->name }}</h1>
 
 		@if (isset($infos))
@@ -40,10 +39,12 @@
 							@else
 								<td data-id="{{$participant->id}}" class="clickable"> {{ $participant->last_name }} {{ $participant->first_name }}</td>
 							@endif
-								<td><a href="mailto:{{$participant->user->email}}">{{$participant->user->email}}</a></td>
+								<td><a href="mailto:{{$participant->email}}">{{$participant->email}}</a></td>
 								<td class="action">
-									@if ((($team->owner_id == Auth::user()->id) && ($participant->user->id != Auth::user()->id)) || Auth::user()->role == "administrator")
-									{{ Form::open(array('url' => route('teams.participants.destroy', [$participant->pivot['participant_id'], $participant->pivot['team_id']]), 'method' => 'delete')) }}
+
+									@if ((($team->owner_id == Auth::user()->id) && ($participant->id != Auth::user()->id)) || Auth::user()->role == "administrator")
+
+									{{ Form::open(array('url' => route('teams.participants.destroy', [$participant->pivot['user_id'], $participant->pivot['team_id']]), 'method' => 'delete')) }}
 											<button type="submit" class="button-delete" data-type="teamMember" data-name="{{ $participant->last_name }} {{ $participant->first_name }}">
 										<i class="fa fa-lg fa-trash-o action" aria-hidden="true"></i>
 										</button>

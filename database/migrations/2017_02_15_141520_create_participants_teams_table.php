@@ -13,16 +13,16 @@ class CreateParticipantsTeamsTable extends Migration
      */
     public function up()
     {
-        Schema::create('participant_team', function (Blueprint $table) { 
- 
-            $table->integer('participant_id')->unsigned(); 
-            $table->integer('team_id')->unsigned(); 
+        Schema::create('team_user', function (Blueprint $table) {
+
+            $table->integer('user_id')->unsigned();
+            $table->integer('team_id')->unsigned();
             $table->boolean('isCaptain');
 
-            $table->foreign('participant_id')->references('id')->on('participants'); 
-            $table->foreign('team_id')->references('id')->on('teams'); 
+            $table->foreign('user_id')->references('id')->on('users');
+            $table->foreign('team_id')->references('id')->on('teams');
 
-        }); 
+        });
     }
 
     /**
@@ -32,6 +32,6 @@ class CreateParticipantsTeamsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('participant_team');
+        Schema::dropIfExists('team_user');
     }
 }
