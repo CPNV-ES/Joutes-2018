@@ -37,11 +37,43 @@ class TournamentClassificationController extends Controller
      * @return \Illuminate\Http\Response
      */
     // When accessing the page Tournament Classification index, where we can filter tournaments by sport, and go to their respective classification
-    public function index(Request $request)
+    public function index(Request $request, $idTournament)
     {
-        //
-     $listSports = $this->retrieveSports();
 
+    /* Code that should be executed only when an admin is duplacting a tournament. Not finished.
+    if (isset($request->request['formDuplicateTournament']))
+    {
+
+        // Datas coming from the form.
+        $eventName = $request->request['formDuplicateTournament']->listEvents
+        $sportName = $request->request['formDuplicateTournament']->listSports
+
+        // Retrieving the event ID
+        $event = Event::find(1)->where('events.name','=', $eventName)->get();
+
+        // Retrieving the sportID
+        $sport = Sport::find(1)->where('sports.name','=', $sportName)->get();
+
+        // Retrieving the datas of this tournament
+        $thisTournament = Tournament::find(1)->where('tournaments.id','=',$idTournament)->get();
+
+        // Retrieving the datas of the pools from this tournament
+        $thisTournamentPools = Pool::all()->where('pools.tournament_id','=', $idTournament)->get();
+
+        // Creating the new tournament
+        $newTournament = Tournament::create(['tournaments.name' => $thisTournament->name, 'tournaments.start_date' => $thisTournament->start_date, 'tournaments.end_date' => $thisTournament->end_date, 'tournaments.event_id' => $eventID]);
+
+        // Creating new pool based on the pools of the current tournament.
+        foreach ($thisTournamentPools as $thisTournamentPool)
+        {
+            $newPool = Pool::create(['' => '']);
+        }
+    }
+    */
+
+
+
+        $listSports = $this->retrieveSports();
 
      return view('tournamentClassification.index')->with('sports', $listSports);
     }
