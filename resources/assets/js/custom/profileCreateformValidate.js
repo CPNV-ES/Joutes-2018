@@ -128,7 +128,7 @@ $( document ).ready(function() {
                     $('#formProfile #teamSelected').append('<option selected = "selected" disabled = "disabled"  hidden="hidden">Sélectionner</option>'); // append an option tag for the array item
                     for (var key in data) {
                         var team = data[key].name;
-                        var participants = data[key].participants;
+                        var participants = data[key].users;
                         var participantInTeam = "";
 
                         for(var participant in participants){
