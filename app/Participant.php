@@ -22,6 +22,10 @@ class Participant extends Model
         return $this->belongsTo('App\User');
     }
 
+    public function event(){
+        return $this->belongsToMany('App\Event');
+    }
+
     public function tournaments() {
         // get event teams
         $teams = $this->teams;
