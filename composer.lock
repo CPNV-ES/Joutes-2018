@@ -4,26 +4,26 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "afb88a46d7a6c06ced2beb56072bec14",
+    "content-hash": "d763359ca2a4e315858fe13fef367dca",
     "packages": [
         {
             "name": "aacotroneo/laravel-saml2",
-            "version": "dev-remove_mcrypt",
+            "version": "1.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/aacotroneo/laravel-saml2.git",
-                "reference": "d992f7b8078d573f1e8c2ee50fd200c442a24d12"
+                "reference": "5045701a07bcd7600a17c92971368669870f546a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/aacotroneo/laravel-saml2/zipball/d992f7b8078d573f1e8c2ee50fd200c442a24d12",
-                "reference": "d992f7b8078d573f1e8c2ee50fd200c442a24d12",
+                "url": "https://api.github.com/repos/aacotroneo/laravel-saml2/zipball/5045701a07bcd7600a17c92971368669870f546a",
+                "reference": "5045701a07bcd7600a17c92971368669870f546a",
                 "shasum": ""
             },
             "require": {
                 "ext-openssl": "*",
                 "illuminate/support": ">=5.0.0",
-                "onelogin/php-saml": "3.0.0.x-dev",
+                "onelogin/php-saml": "^3.0.0",
                 "php": ">=5.4.0"
             },
             "require-dev": {
@@ -63,7 +63,7 @@
                 "onelogin",
                 "saml"
             ],
-            "time": "2018-11-07T13:33:25+00:00"
+            "time": "2018-11-08T14:03:58+00:00"
         },
         {
             "name": "defuse/php-encryption",
@@ -6236,7 +6236,6 @@
     "aliases": [],
     "minimum-stability": "dev",
     "stability-flags": {
-        "aacotroneo/laravel-saml2": 20,
         "dingo/api": 20,
         "usmanhalalit/laracsv": 20
     },
