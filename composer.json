@@ -6,14 +6,14 @@
     "type": "project",
     "require": {
         "php": ">=5.6.4",
-        "aacotroneo/laravel-saml2": "dev-remove_mcrypt",
+        "aacotroneo/laravel-saml2": "^1.0",
         "dingo/api": "1.0.*@dev",
+        "fideloper/proxy": "^4.0",
         "laravel/framework": "5.7.*",
+        "laravel/passport": "^7.0",
         "laravel/tinker": "^1.0",
         "laravelcollective/html": "^5.3.0",
-        "usmanhalalit/laracsv": "dev-master",
-        "fideloper/proxy": "^4.0",
-        "laravel/passport": "^7.0"
+        "usmanhalalit/laracsv": "dev-master"
     },
     "require-dev": {
         "barryvdh/laravel-debugbar": "^3.2",
