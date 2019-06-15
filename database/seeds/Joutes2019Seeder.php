@@ -17,7 +17,7 @@ class Joutes2019Seeder extends Seeder
         $user = \Config::get('database.connections.mysql.username');
         $pass = \Config::get('database.connections.mysql.password');
 
-        $event = \App\Event::where('name', 'like', '%2018%')->first();
+        $event = \App\Event::where('name', 'like', '%2019%')->first();
         if (!$event) die ("L'événement n'existe pas\n");
         $this->eventid = $event->id;
 
