@@ -17,9 +17,11 @@ class Joutes2019Seeder extends Seeder
         $user = \Config::get('database.connections.mysql.username');
         $pass = \Config::get('database.connections.mysql.password');
 
-        $event = \App\Event::where('name', 'like', '%2019%')->first();
-        if (!$event) die ("L'événement n'existe pas\n");
-        $this->eventid = $event->id;
+        $this->event = \App\Event::where('name', 'like', '%2019%')->first();
+        if ($this->event) die ("L'événement existe déjà\n");
+
+        $this->event = new \App\Event(['name' => 'Joutes 2019', 'img' => 'sports.jpg']);
+        $this->event->save();
 
         // make room
         \Illuminate\Support\Facades\DB::statement('delete from games;');
@@ -27,6 +29,7 @@ class Joutes2019Seeder extends Seeder
         \Illuminate\Support\Facades\DB::statement('delete from pools;');
 
         $this->basics();
+        $this->tournaments();
         //$this->BeachVolley();
         //$this->Basket();
         //$this->UniHockey();
@@ -50,6 +53,122 @@ class Joutes2019Seeder extends Seeder
             'mode_description' => 'Elimination directe',
             'planningAlgorithm' => '3',
         ]))->save();
+    }
+
+    // Create tournaments
+    private function tournaments()
+    {
+        echo "Création du tournoi de beach...";
+        // Beach Volley
+        $sport = new \App\Sport(['name' => 'Beach Volley','description' => 'Le 4-4 de la mort', 'min_participant' => 12, 'max_participant' => 12]);
+        $sport->save();
+        $court = new \App\Court(['name' => 'Lac', 'acronym' => 'LAC']);
+        $court->sport()->associate($sport);
+        $court->save();
+        $court = new \App\Court(['name' => 'Montagne', 'acronym' => 'MTN']);
+        $court->sport()->associate($sport);
+        $court->save();
+        $tournament = new \App\Tournament(['name' => 'Beach Volley','start_date' => Carbon\Carbon::Parse('2019-07-02 08:00'),'end_date' => Carbon\Carbon::Parse('2019-07-02 16:00'), 'max_teams' => 12, 'img' => 'beachvolley.jpg']);
+        echo("-");
+        $tournament->sport()->associate($sport);
+        echo("-");
+        $tournament->event()->associate($this->event);
+        echo("-");
+        $tournament->save();
+        echo "OK\n";
+
+        echo "Création du tournoi de badminton...";
+        // Bad
+        $sport = new \App\Sport(['name' => 'Badminton','description' => 'En double mixte (ou pas)', 'min_participant' => 12, 'max_participant' => 16]);
+        $sport->save();
+        for ($i=1; $i <=6 ; $i++)
+        {
+            $court = new \App\Court(['name' => 'Court '.$i, 'acronym' => 'CT'.$i]);
+            $court->sport()->associate($sport);
+            $court->save();
+        }
+        $tournament = new \App\Tournament(['name' => 'Badminton','start_date' => Carbon\Carbon::Parse('2019-07-02 13:30'),'end_date' => Carbon\Carbon::Parse('2019-07-02 16:00'), 'max_teams' => 16, 'img' => 'badminton.jpg']);
+        $tournament->sport()->associate($sport);
+        $tournament->event()->associate($this->event);
+        $tournament->save();
+        echo "OK\n";
+
+        echo "Création du tournoi de basket...";
+        // Basket
+        $sport = new \App\Sport(['name' => 'Basket','description' => 'Equipes de 5 (+1 remplaçant)', 'min_participant' => 10, 'max_participant' => 10]);
+        $sport->save();
+        for ($i=1; $i <=2 ; $i++)
+        {
+            $court = new \App\Court(['name' => 'Court '.$i, 'acronym' => 'CT'.$i]);
+            $court->sport()->associate($sport);
+            $court->save();
+        }
+        $tournament = new \App\Tournament(['name' => 'Basket','start_date' => Carbon\Carbon::Parse('2019-07-02 08:00'),'end_date' => Carbon\Carbon::Parse('2019-07-02 12:00'), 'max_teams' => 10, 'img' => 'basket.jpg']);
+        $tournament->sport()->associate($sport);
+        $tournament->event()->associate($this->event);
+        $tournament->save();
+        echo "OK\n";
+
+        echo "Création du tournoi de unihockey...";
+        // Unihockey
+        $sport = new \App\Sport(['name' => 'Unihockey','description' => 'Equipes de 4 (+1 remplaçant)', 'min_participant' => 10, 'max_participant' => 10]);
+        $sport->save();
+        for ($i=1; $i <=2 ; $i++)
+        {
+            $court = new \App\Court(['name' => 'Court '.$i, 'acronym' => 'CT'.$i]);
+            $court->sport()->associate($sport);
+            $court->save();
+        }
+        $tournament = new \App\Tournament(['name' => 'Unihockey','start_date' => Carbon\Carbon::Parse('2019-07-02 08:00'),'end_date' => Carbon\Carbon::Parse('2019-07-02 16:00'), 'max_teams' => 10, 'img' => 'unihockey.jpg']);
+        $tournament->sport()->associate($sport);
+        $tournament->event()->associate($this->event);
+        $tournament->save();
+        echo "OK\n";
+
+        echo "Création du tournoi de pétanque...";
+        // Pétanque
+        $sport = new \App\Sport(['name' => 'Pétanque','description' => 'Doublettes', 'min_participant' => 16, 'max_participant' => 16]);
+        $sport->save();
+        for ($i=1; $i <=4 ; $i++)
+        {
+            $court = new \App\Court(['name' => 'Piste '.$i, 'acronym' => 'PT'.$i]);
+            $court->sport()->associate($sport);
+            $court->save();
+        }
+        $tournament = new \App\Tournament(['name' => 'Pétanque','start_date' => Carbon\Carbon::Parse('2019-07-02 08:00'),'end_date' => Carbon\Carbon::Parse('2019-07-02 16:00'), 'max_teams' => 16, 'img' => 'petanque.jpg']);
+        $tournament->sport()->associate($sport);
+        $tournament->event()->associate($this->event);
+        $tournament->save();
+        echo "OK\n";
+
+        echo "Création du tournoi de foot...";
+        // Foot
+        $sport = new \App\Sport(['name' => 'Foot','description' => 'A huit', 'min_participant' => 8, 'max_participant' => 8]);
+        $sport->save();
+        for ($i='A'; $i <='B' ; $i++)
+        {
+            $court = new \App\Court(['name' => 'Terrain '.$i, 'acronym' => 'T'.$i]);
+            $court->sport()->associate($sport);
+            $court->save();
+        }
+        $tournament = new \App\Tournament(['name' => 'Foot','start_date' => Carbon\Carbon::Parse('2019-07-02 13:30'),'end_date' => Carbon\Carbon::Parse('2019-07-02 16:00'), 'max_teams' => 8, 'img' => 'football.jpg']);
+        $tournament->sport()->associate($sport);
+        $tournament->event()->associate($this->event);
+        $tournament->save();
+        echo "OK\n";
+
+        echo "Création de la marche...";
+        // Marche
+        $sport = new \App\Sport(['name' => 'Marche','description' => 'Par là autour', 'min_participant' => 1, 'max_participant' => 100]);
+        $sport->save();
+        $court = new \App\Court(['name' => 'Sainte-Croix et alentours', 'acronym' => 'Stex']);
+        $court->sport()->associate($sport);
+        $court->save();
+        $tournament = new \App\Tournament(['name' => 'Marche','start_date' => Carbon\Carbon::Parse('2019-07-02 08:00'),'end_date' => Carbon\Carbon::Parse('2019-07-02 16:00'), 'max_teams' => 100, 'img' => 'rando.jpg']);
+        $tournament->sport()->associate($sport);
+        $tournament->event()->associate($this->event);
+        $tournament->save();
+        echo "OK\n";
     }
 
     private function Badminton()
