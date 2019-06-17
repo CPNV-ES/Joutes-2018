@@ -94,7 +94,7 @@
 
                 <footer class="footer">
                     <div class="versiontag">Version @include('partials.versiontag')</div>
-                    <div class="copyright">© CPNV - 2017</div>
+                    <div class="copyright">© CPNV - 2019</div>
                     <div class="devs">
                         <a href="#" class="show-devs">Développeurs</a>
 
