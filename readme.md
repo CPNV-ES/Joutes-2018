@@ -122,3 +122,5 @@ $ composer dump-autoload
 ## Wiki
 
 Any further information can be found in our [wiki](https://github.com/CPNV-ES/Joutes/wiki).
+
+Version of the application is shown on all pages. If you need to modify the version, it's in the "versiontag.blade" in "partials" folder.

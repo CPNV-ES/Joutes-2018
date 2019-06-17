@@ -199,7 +199,7 @@ return [
          */
 
         Aacotroneo\Saml2\Saml2ServiceProvider::class,
-
+        Laravel\Tinker\TinkerServiceProvider::class,
     ],
 
     /*

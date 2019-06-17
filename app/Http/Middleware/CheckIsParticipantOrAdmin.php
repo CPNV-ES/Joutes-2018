@@ -16,15 +16,19 @@ class CheckIsParticipantOrAdmin
      */
     public function handle($request, Closure $next)
     {
-        $role = Auth::user()->role;
-        if(Auth::check()){
-            if($role == "participant" || $role == "administrator"){
-                return $next($request);
-            }else{
-                return redirect(route('events.index')); 
-            }
-        }else{
+        if (Auth::user() == null) {
             return redirect(route('events.index'));
+        } else {
+            $role = Auth::user()->role;
+            if (Auth::check()) {
+                if ($role == "participant" || $role == "administrator") {
+                    return $next($request);
+                } else {
+                    return redirect(route('events.index'));
+                }
+            } else {
+
+            }
         }
     }
 }

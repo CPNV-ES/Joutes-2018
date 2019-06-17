@@ -58,7 +58,7 @@ class CourtController extends Controller
         // create the validation rules
         $rules = array(
             'name' => 'required|min:1|max:20',
-            'acronym' => 'required|min:1|max:3',
+            'acronym' => 'required|min:1|max:5',
             'sport' => 'required',
         );
 
@@ -74,7 +74,16 @@ class CourtController extends Controller
             $court->sport_id = $request->input('sport');
             $court->save();
 
-            return redirect()->route('courts.index');
+
+            if(isset(request()->id_sport))
+            {
+                $id_sport = request()->id_sport;
+                return redirect('tournaments/'.$id_sport);
+            }
+            else 
+            {
+                return redirect()->route('courts.index');
+            }
         }
     }
 
@@ -144,7 +153,7 @@ class CourtController extends Controller
         // create the validation rules
         $rules = array(
             'name' => 'required|min:1|max:20',
-            'acronym' => 'required|min:1|max:3',
+            'acronym' => 'required|min:1|max:5',
             'sport' => 'required',
         );
 

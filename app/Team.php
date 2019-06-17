@@ -3,7 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
-use App\Participant;
+use App\User;
 
 class Team extends Model
 {
@@ -18,7 +18,13 @@ class Team extends Model
      */
     public function participants()
     {
-        return $this->belongsToMany('App\Participant')->withPivot('isCaptain');
+        return $this->belongsToMany('App\User')->withPivot('isCaptain');
+        //return $this->belongsToMany('App\Participant')->withPivot('isCaptain');
+    }
+
+    public function users()
+    {
+        return $this->belongsToMany('App\User')->withPivot('isCaptain');
     }
 
     /**
@@ -86,11 +92,9 @@ class Team extends Model
         if ($this->participants()->count() >= $this->sport->max_participant) return true;
         else return false;
     }
-
     public function isValid(){
         if ($this->participants()->count() >= $this->sport->min_participant) return true;
         else return false;
-
     }
 
     /**
@@ -105,9 +109,14 @@ class Team extends Model
 
     public function isOwner($id)
     {
-        $participant = Participant::find($id);
-        $user_id = $participant->user->id;
+        $participant = User::find($id);
+        $user_id = $participant->id;
         if ($this->owner_id == $user_id) return true;
         else return false;
+    }
+    public function captain()
+    {
+        //$this->participants()->where('isCaptain', 1)->get();
+        $this->users()->when('isCaptain', 1)->get();
     }
 }

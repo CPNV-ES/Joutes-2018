@@ -60,5 +60,9 @@ $api->version('v1', function ($api) {
         $api->resource('/','App\Http\Controllers\API\HomeController', ['only' => [
             'index'
         ]]);
+
+        $api->resource('backendtargets','App\Http\Controllers\API\BackendTargetController', ['only' => [
+            'index'
+        ]]);
     });
 });
