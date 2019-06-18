@@ -1,5 +1,6 @@
 /node_modules
 /public/storage
+/storage/*
 /storage/*.key
 /vendor
 /.idea
@@ -14,3 +15,4 @@ public/tournament_img/
 package-lock\.json
 
 /config/*_rsa*
+.vscode/sftp.json

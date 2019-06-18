@@ -100,4 +100,8 @@ class Event extends Model
                 return $participant;
         }
     }
+
+    public function participant_event(){
+        return $this->belongsToMany('App\Participant');
+    }
 }

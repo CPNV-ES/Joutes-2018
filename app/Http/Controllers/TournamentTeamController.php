@@ -20,17 +20,10 @@ class TournamentTeamController extends Controller
     public function index(Request $request , $id)
     {
         $tournament =  Tournament::findOrFail($id);
-        $teams = $tournament->teams;
 
-        $list = array();
         // return a list of teams for a selected tournament using ajax
         if ($request->ajax()) {
-            $list = array();
-            for ($i=0; $i < sizeof($teams); $i++) {
-                if ($teams[$i]->isComplete() == false) // Only teams that still have availability
-                    $list[$teams[$i]->id] = $teams[$i]->name;
-            }
-            return $list;
+            return $tournament->completeTeams()->get()->toJson();
         }
     }
 

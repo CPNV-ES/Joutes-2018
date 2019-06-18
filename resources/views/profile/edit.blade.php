@@ -31,7 +31,7 @@
             {{ Form::select('teamSelected', [], null, ['placeholder' => 'Sélectionner', 'class' => 'form-control allSameStyle', 'id' => 'teamSelected', 'disabled' => 'disabled']) }}
         </div>
         <div class="form-group">
-            {{ Form::checkbox('switch', 1, false, ['class' => 'switch', "id"=>'switch', 'disabled' => 'disabled']) }} Je veux créer un equipe <br>
+            {{ Form::checkbox('switch', 1, false, ['class' => 'switch', "id"=>'switch', 'disabled' => 'disabled']) }} Je veux créer une equipe <br>
         </div>
         <div class="form-group">
             {{ Form::label('teamNew', 'Nom de l\'équipe') }}

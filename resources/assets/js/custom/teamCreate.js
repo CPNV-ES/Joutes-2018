@@ -5,7 +5,7 @@ $( document ).ready(function() {
     $('#formTeam #event').change(function (e) {
         e.preventDefault();
         var val =  $('#event option:selected').val();
-        resetContent();
+        resetContent(1);
         disableTournamensSelections();
         disableTeamNew();
         disableButtonValidate();
@@ -15,7 +15,7 @@ $( document ).ready(function() {
     $('#formTeam #tournament').change(function (e) {
         e.preventDefault();
         var val =  $('#tournament option:selected').val();
-        resetContent();
+        resetContent(2);
         enabledTeamNew();
         disableButtonValidate();
     });
@@ -124,9 +124,17 @@ $( document ).ready(function() {
         $('#formValidate').attr('disabled','disabled');
     }
 
-    // reset content values in the input fields
-    function resetContent(){
-        $("#name").val("");
-        $("#errorMessage").text("");
+    // case 2 : Reset options of the select
+    function resetContent(level) {
+        $("#formTeam #name").val("");
+        $("#formTeam #errorMessage").text("");
+        $("#formTeam #errorMessageTeam").text("");
+        if (level == 1) {
+            $("#formTeam #tournament option").remove();
+            $('#formTeam #tournament').append('<option selected = "selected" disabled = "disabled"  hidden="hidden">Sélectionner</option>'); // append an option tag for the array item
+        }
+        if (level == 2) {
+
+        }
     }
 });

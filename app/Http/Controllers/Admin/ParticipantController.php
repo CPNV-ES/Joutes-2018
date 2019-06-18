@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Participant;
 use App\Team;
+use App\User;
 use Illuminate\Http\Request;
 use Cookie;
 
@@ -20,7 +20,8 @@ class ParticipantController extends Controller
      */
     public function index()
     {
-        $participants = Participant::all();
+        $participants = User::all();
+        //$participants = Participant::all();
         return view('participant.index', array(
             "participants" => $participants,
         ));
@@ -35,8 +36,7 @@ class ParticipantController extends Controller
     */
    public function export(Request $request)
    {
-       $participants = Participant::all();
-       
+       $participants = User::all();
        $exporter = new \Laracsv\Export();
        $csv = $exporter->getCsv();
        $csv->setDelimiter("\t");
@@ -47,7 +47,7 @@ class ParticipantController extends Controller
            $participant->email = $participant->user ? $participant->user->email : '';
        });
        $output = $exporter->build($participants, ['first_name', 'last_name', 'email', 'team_names', 'sport_names']);
-       
+
        return response(\League\Csv\Reader::BOM_UTF16_LE . mb_convert_encoding($csv->getContent(), 'UTF-16LE', 'UTF-8'))->header('Content-Type', 'text/csv');
    }
 
@@ -82,22 +82,22 @@ class ParticipantController extends Controller
      */
     public function show($id)
     {
-        $participant = Participant::find($id);
+        $participant = User::find($id);
         $teams = Team::all();
         $error = $infos = null;
 
-        $dropdownList = array(); 
+        $dropdownList = array();
 
         //get all team where the member is not in
         $teamOfThisMember = array();
         foreach ($participant->teams as $teamMember) {
             array_push($teamOfThisMember, $teamMember->name);
         }
-        for ($i=0; $i < sizeof($teams); $i++) { 
+        for ($i=0; $i < sizeof($teams); $i++) {
 
             if(count($participant->teams) == 0 || !in_array($teams[$i]->name, $teamOfThisMember)) //if this current team is not in the teams of the member
                 $dropdownList[$teams[$i]->id] = $teams[$i]->name;
-        
+
         }//for
 
          if(empty($dropdownList))
@@ -129,7 +129,7 @@ class ParticipantController extends Controller
         //
     }
 
-    /**
+    /**git st
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request

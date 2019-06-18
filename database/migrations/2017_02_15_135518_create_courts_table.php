@@ -18,8 +18,8 @@ class CreateCourtsTable extends Migration
             $table->increments('id'); 
             $table->integer('sport_id')->unsigned(); 
             $table->string('name', 45); 
- 
             $table->foreign('sport_id')->references('id')->on('sports'); 
+            $table->softDeletes();
         }); 
     }
 

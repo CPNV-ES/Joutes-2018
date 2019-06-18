@@ -35,7 +35,7 @@ $( document ).ready(function() {
 
 
 		}
-		
+
 		alertConfirm(form, title, text);
 
 		});
@@ -122,13 +122,13 @@ $( document ).ready(function() {
                 var minValue = $('#formSport #min_participant').val();
                 var maxValue = $('#formSport #max_participant').val();
 
-		    	var patternName = /^[a-zA-Z0-9-_ ]{3,20}$/;
+		    	var patternName = /^[a-zA-ZÀ-ÖØ-öø-ÿ0-9-_ ]{3,20}$/;
 		    	var patternDecription = /^[a-zA-Z0-9-_ ]{0,45}$/;
                 var patternValue = /^[0-9]+$/;
 
 
 		    	if(!patternName.test(nameValue)){
-		    		error += 'Le champ Nom ne doit pas être vide et doit avoir entre 3 et 45 caractères.<br>';
+		    		error += 'Le champ Nom ne doit pas être vide et doit avoir entre 3 et 20 caractères.<br>';
 		    	}
 		    	if(!patternDecription.test(descriptionValue)){
 		    		error += 'Le champ Description peut avoir maximum 45 caractères.<br>';
@@ -148,7 +148,7 @@ $( document ).ready(function() {
 		    	var sportValue = $('#formCourt #sport').val(); // '' = empty, 1-2-3-... = sport
 
 		    	var patternName = /^[a-zA-Z0-9-_ ]{1,20}$/;
-		    	var patternAcronym = /^[a-zA-Z0-9-_ ]{1,3}$/;
+		    	var patternAcronym = /^[a-zA-Z0-9-_ ]{1,6}$/;
 		    	var patternSport = /^[0-9]+$/;
 
 		    	if(!patternName.test(nameValue)){
@@ -689,15 +689,15 @@ $( document ).ready(function() {
 		    var oldTime = $(this).text();
 
 			var tempTime = oldTime.split(':');
-			var timeInSecond = tempTime[0] * 60 * 60 + tempTime[1] * 60 ; 
+			var timeInSecond = tempTime[0] * 60 * 60 + tempTime[1] * 60 ;
 
 			//add time
 			timeInSecond += (shiftTime * 60)
-		
+
 			//convert second in string HH:MM:SS
 			var newDate = new Date(null);
 			newDate.setTime( newDate.getTime() + newDate.getTimezoneOffset()*60*1000 ); // make timezone correcte
-			newDate.setSeconds(timeInSecond); 
+			newDate.setSeconds(timeInSecond);
 			var result = newDate.toISOString().substr(11, 8);
 
 			// create var for the dom display and for the DB , the 0 add in start and the slice fix the number for having 14:05:00 instead of 14:5:0
@@ -709,8 +709,8 @@ $( document ).ready(function() {
 	            method      : 'PUT',
 	            context     : this,
 	            cache       : false,
-	            headers     : {            
-	                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')        
+	            headers     : {
+	                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
 	            },
 	            data        : {
 	        		newTime : timeDB
@@ -739,11 +739,11 @@ $( document ).ready(function() {
 
 		});
 
-	
+
 
 	} //shiftMatch
 
-	function displayAlert(type, message){	
+	function displayAlert(type, message){
 		$(".alert").remove();
 
 		switch(type) {
@@ -773,7 +773,7 @@ $( document ).ready(function() {
 	}
 
 	//EDIT TIME
-	
+
 	$("table#matches td.action i.editTime").click(function() {
 		unlockTime($(this));
 	});
@@ -784,13 +784,13 @@ $( document ).ready(function() {
 
 		var tdAction = pencil.parent();
 		var tdTime = tdAction.parent().children("td.separator");
-		var hour = (tdTime.text()).split(":")[0]; 
+		var hour = (tdTime.text()).split(":")[0];
 		var minute = tdTime.text().split(":")[1];
 
 		var form = '<input type="text" id="formHourTime" value="'+hour+'">:<input type="text" id="formMinuteTime" value="'+minute+'">';
 
 		tdTime.text("");
-		tdTime.append(form); 
+		tdTime.append(form);
 
 		// Create and delete icons
 		var checkSquare = document.createElement("i");
@@ -836,20 +836,20 @@ $( document ).ready(function() {
 
 			var newMinute = $("#formMinuteTime").val();
 			var newHour = $("#formHourTime").val();
-			
+
 			// if not between 0 and 59, not numeric or empty
 			if( newMinute >= 60 || newMinute < 0 || newMinute % 1 !== 0 || newMinute == ''){
-				displayAlert("danger", "Format de temps invalide"); 
+				displayAlert("danger", "Format de temps invalide");
 				return;
 			}
 
 			// if not between 0 and 59, not numeric or empty
 			if( newHour >= 24 || newHour < 0 || newHour % 1 !== 0 || newHour == ''){
-				displayAlert("danger", "Format de temps invalide"); 
+				displayAlert("danger", "Format de temps invalide");
 				return;
 			}
 
-				
+
 
 			var tournamentId = $("table#matches").data("tournament");
 			var poolId = $("table#matches").data("pool");
@@ -861,8 +861,8 @@ $( document ).ready(function() {
 	            method      : 'PUT',
 	            context     : this,
 	            cache       : false,
-	            headers     : {            
-	                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')        
+	            headers     : {
+	                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
 	            },
 	            data        : {
 	        		newTime : timeDB
@@ -875,7 +875,7 @@ $( document ).ready(function() {
                     opac.remove();
 	            },
 	            success : function(data) {
-	            	  
+
 	            	//display edit score btn
 					$(this).parent().children('.editScore').show();
 
@@ -905,7 +905,7 @@ $( document ).ready(function() {
 	            }
 	        });
 
-		
+
 		});
 
 	}
@@ -1020,7 +1020,6 @@ function alertConfirmEndPool(title, text) {
 // Validation for profile change teams form
 
 $( document ).ready(function() {
-
     $('#formProfile #switch').click(function() {
         //event.preventDefault(); // cancel the event click, needed to delte participant in team. Without the form is sumbit on icon click
         disableButtonValidate();
@@ -1146,7 +1145,29 @@ $( document ).ready(function() {
                 {
                     $('#formProfile #teamSelected').append('<option selected = "selected" disabled = "disabled"  hidden="hidden">Sélectionner</option>'); // append an option tag for the array item
                     for (var key in data) {
-                        $('#formProfile #teamSelected').append('<option value ="' + key + '">' + data[key] + '</option>'); // append an option tag for the array item
+                        var team = data[key].name;
+                        var participants = data[key].users;
+                        var participantInTeam = "";
+
+                        for(var participant in participants){
+                            if(participants[participant].pivot.isCaptain == 1){
+                                var captain = participants[participant].first_name + " " + participants[participant].last_name;
+                            }else {
+                                participantInTeam += participants[participant].first_name + " " + participants[participant].last_name + ", ";
+                            }
+                        }
+                        if(captain == null){
+                            captain = "Pas de capitaine";
+                        }
+                        if(participantInTeam) {
+                            participantInTeam = participantInTeam.substring(0, participantInTeam.length - 2);
+                        }else{
+                            participantInTeam = "-";
+                        }
+
+                        //participantInTeam = participantInTeam.substring(0, participantInTeam.length - 2);
+
+                        $('#formProfile #teamSelected').append('<option value ="' + data[key].id + '">' + 'Equipe : '+ team + ' | Capitaine : ' + captain + ' | Participants : ' + participantInTeam + '</option>'); // append an option tag for the array item
                         enableTeamsSelections();
                     }
                 }
@@ -1392,6 +1413,7 @@ $( document ).ready(function() {
     }
 
 });
+
 // @author Davide Carboni
 // Validation for profile SigIn form
 
@@ -1580,7 +1602,27 @@ $( document ).ready(function() {
                 {
                     $('#formProfileChangeTeam #teamSelected').append('<option selected = "selected" disabled = "disabled"  hidden="hidden">Sélectionner</option>'); // append an option tag for the array item
                     for (var key in data) {
-                        $('#formProfileChangeTeam #teamSelected').append('<option value ="' + key + '">' + data[key] + '</option>'); // append an option tag for the array item
+                        var team = data[key].name;
+                        var participants = data[key].users;
+                        var participantInTeam = "";
+
+                        for(var participant in participants){
+                            if(participants[participant].pivot.isCaptain == 1){
+                                var captain = participants[participant].first_name + " " + participants[participant].last_name;
+                            }else {
+                                participantInTeam += participants[participant].first_name + " " + participants[participant].last_name + ", ";
+                            }
+                        }
+                        if(captain == null){
+                            captain = "Pas de capitaine";
+                        }
+                        if(participantInTeam) {
+                            participantInTeam = participantInTeam.substring(0, participantInTeam.length - 2);
+                        }else{
+                            participantInTeam = "-";
+                        }
+
+                        $('#formProfileChangeTeam #teamSelected').append('<option value ="' + data[key].id + '">' + 'Equipe : '+ team + ' | Capitaine : ' + captain + ' | Participants : ' + participantInTeam + '</option>'); // append an option tag for the array item
                         enableTeamsSelections();
                     }
                 }
@@ -1848,7 +1890,7 @@ $( document ).ready(function() {
     $('#formTeam #event').change(function (e) {
         e.preventDefault();
         var val =  $('#event option:selected').val();
-        resetContent();
+        resetContent(1);
         disableTournamensSelections();
         disableTeamNew();
         disableButtonValidate();
@@ -1858,7 +1900,7 @@ $( document ).ready(function() {
     $('#formTeam #tournament').change(function (e) {
         e.preventDefault();
         var val =  $('#tournament option:selected').val();
-        resetContent();
+        resetContent(2);
         enabledTeamNew();
         disableButtonValidate();
     });
@@ -1967,10 +2009,18 @@ $( document ).ready(function() {
         $('#formValidate').attr('disabled','disabled');
     }
 
-    // reset content values in the input fields
-    function resetContent(){
-        $("#name").val("");
-        $("#errorMessage").text("");
+    // case 2 : Reset options of the select
+    function resetContent(level) {
+        $("#formTeam #name").val("");
+        $("#formTeam #errorMessage").text("");
+        $("#formTeam #errorMessageTeam").text("");
+        if (level == 1) {
+            $("#formTeam #tournament option").remove();
+            $('#formTeam #tournament').append('<option selected = "selected" disabled = "disabled"  hidden="hidden">Sélectionner</option>'); // append an option tag for the array item
+        }
+        if (level == 2) {
+
+        }
     }
 });
 

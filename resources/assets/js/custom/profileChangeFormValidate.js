@@ -186,7 +186,27 @@ $( document ).ready(function() {
                 {
                     $('#formProfileChangeTeam #teamSelected').append('<option selected = "selected" disabled = "disabled"  hidden="hidden">Sélectionner</option>'); // append an option tag for the array item
                     for (var key in data) {
-                        $('#formProfileChangeTeam #teamSelected').append('<option value ="' + key + '">' + data[key] + '</option>'); // append an option tag for the array item
+                        var team = data[key].name;
+                        var participants = data[key].users;
+                        var participantInTeam = "";
+
+                        for(var participant in participants){
+                            if(participants[participant].pivot.isCaptain == 1){
+                                var captain = participants[participant].first_name + " " + participants[participant].last_name;
+                            }else {
+                                participantInTeam += participants[participant].first_name + " " + participants[participant].last_name + ", ";
+                            }
+                        }
+                        if(captain == null){
+                            captain = "Pas de capitaine";
+                        }
+                        if(participantInTeam) {
+                            participantInTeam = participantInTeam.substring(0, participantInTeam.length - 2);
+                        }else{
+                            participantInTeam = "-";
+                        }
+
+                        $('#formProfileChangeTeam #teamSelected').append('<option value ="' + data[key].id + '">' + 'Equipe : '+ team + ' | Capitaine : ' + captain + ' | Participants : ' + participantInTeam + '</option>'); // append an option tag for the array item
                         enableTeamsSelections();
                     }
                 }

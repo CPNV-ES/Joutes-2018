@@ -110,6 +110,11 @@ class Tournament extends Model
         return $this->hasMany('App\Team');
     }
 
+    public function completeTeams()
+    {
+        return $this->teams()->with('users');
+    }
+
     /**
      * Create a new belongs to many relationship instance between Tournament and Pool
      *
