@@ -29,7 +29,7 @@ class Joutes2019Seeder extends Seeder
         \Illuminate\Support\Facades\DB::statement('delete from pools;');
 
         $this->basics();
-        $this->tournaments();
+        $this->tournamentsList();
         //$this->BeachVolley();
         //$this->Basket();
         //$this->UniHockey();
@@ -55,8 +55,8 @@ class Joutes2019Seeder extends Seeder
         ]))->save();
     }
 
-    // Create tournaments
-    private function tournaments()
+    // Create (empty) tournaments
+    private function tournamentsList()
     {
         echo "Création du tournoi de beach...";
         // Beach Volley
@@ -119,7 +119,7 @@ class Joutes2019Seeder extends Seeder
             $court->sport()->associate($sport);
             $court->save();
         }
-        $tournament = new \App\Tournament(['name' => 'Unihockey','start_date' => Carbon\Carbon::Parse('2019-07-02 08:00'),'end_date' => Carbon\Carbon::Parse('2019-07-02 16:00'), 'max_teams' => 10, 'img' => 'unihockey.jpg']);
+        $tournament = new \App\Tournament(['name' => 'Unihockey','start_date' => Carbon\Carbon::Parse('2019-07-02 08:00'),'end_date' => Carbon\Carbon::Parse('2019-07-02 12:00'), 'max_teams' => 10, 'img' => 'unihockey.jpg']);
         $tournament->sport()->associate($sport);
         $tournament->event()->associate($this->event);
         $tournament->save();
@@ -219,6 +219,7 @@ class Joutes2019Seeder extends Seeder
         $nbTeams = count($teams);
         $evenNumberOfTeams = ($nbTeams % 2 == 0); // it matters....
 
+        // Building the rounds follows the algorithm described here:  https://nrich.maths.org/1443. Thank you Arunachalam Y
         // There will be N-1 rounds (each team will play N-1 games) if the number of teams is even,
         // N rounds if it is odd: each team will play N-1 games and rest during one round
         // Build an array so that it's easy to later define rounds in a richer way than just a number
