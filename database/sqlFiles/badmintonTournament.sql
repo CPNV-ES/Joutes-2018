@@ -39,16 +39,16 @@ INSERT INTO game_types(game_type_description) VALUES ('Modalités de jeu');
 INSERT INTO pool_modes(mode_description,planningAlgorithm) VALUES ('Matches simples',1),('Aller-retour',2),('Elimination directe',3);
 
 --
---  Insert Data in participants
+--  Insert Data in users
 --
 
-INSERT INTO participants(first_name,last_name) VALUES ("Ahmed","Casey"),("Chester","Day"),("Riley","Garrison"),("Duncan","Roy"),("Remedios","Black"),("Mark","Molina"),("Dana","Justice"),("Linus","Leon"),("Cairo","Farmer"),("Nyssa","Gallagher");
-INSERT INTO participants(first_name,last_name) VALUES ("Allegra","Waller"),("Emery","Copeland"),("Illana","Mcgowan"),("Magee","Bauer"),("Patricia","Briggs"),("Samuel","Meyers"),("Nelle","Holcomb"),("Shay","David"),("Kai","Quinn"),("Brendan","Macdonald");
-INSERT INTO participants(first_name,last_name) VALUES ("Justin","Jones"),("Erich","Shepherd"),("Joseph","Compton"),("Moses","Pope"),("Hedley","Thornton"),("Deborah","Wells"),("Kay","Ortega"),("Dorothy","Johnston"),("Irene","Alston"),("Doris","Baird");
-INSERT INTO participants(first_name,last_name) VALUES ("Zorita","Ellis"),("Yen","Hale"),("Madison","Marshall"),("Angela","Perry"),("Michael","Woodard"),("Karyn","Riddle"),("Carol","Lang"),("Malik","Padilla"),("Maxine","Rowland"),("Halee","Larson");
-INSERT INTO participants(first_name,last_name) VALUES ("Tatyana","Rosario"),("Latifah","Jenkins"),("Wynne","Rowland"),("Nola","Adkins"),("Nicole","Wilkerson"),("Sybil","Murray"),("Cadman","Evans"),("Xenos","Kramer"),("Illana","Riley"),("Evan","Logan");
-INSERT INTO participants(first_name,last_name) VALUES ("Risa","Fuller"),("Jenette","Alvarado"),("Colorado","Moss"),("Bree","Velazquez"),("Madonna","Preston"),("Daria","Pearson"),("Uta","Hensley"),("Paul","Lambert"),("Declan","Ramirez"),("Davis","Mcleod");
-INSERT INTO participants(first_name,last_name) VALUES ("Wanda","Sears"),("Melvin","Bowen"),("Lareina","Forbes"),("Dane","Holland"),("Norman","Mcleod"),("Blythe","Cruz"),("Jayme","Gill"),("Adele","Warren"),("Candace","Valenzuela"),("Judith","Blake");
+INSERT INTO users(first_name,last_name) VALUES ("Ahmed","Casey"),("Chester","Day"),("Riley","Garrison"),("Duncan","Roy"),("Remedios","Black"),("Mark","Molina"),("Dana","Justice"),("Linus","Leon"),("Cairo","Farmer"),("Nyssa","Gallagher");
+INSERT INTO users(first_name,last_name) VALUES ("Allegra","Waller"),("Emery","Copeland"),("Illana","Mcgowan"),("Magee","Bauer"),("Patricia","Briggs"),("Samuel","Meyers"),("Nelle","Holcomb"),("Shay","David"),("Kai","Quinn"),("Brendan","Macdonald");
+INSERT INTO users(first_name,last_name) VALUES ("Justin","Jones"),("Erich","Shepherd"),("Joseph","Compton"),("Moses","Pope"),("Hedley","Thornton"),("Deborah","Wells"),("Kay","Ortega"),("Dorothy","Johnston"),("Irene","Alston"),("Doris","Baird");
+INSERT INTO users(first_name,last_name) VALUES ("Zorita","Ellis"),("Yen","Hale"),("Madison","Marshall"),("Angela","Perry"),("Michael","Woodard"),("Karyn","Riddle"),("Carol","Lang"),("Malik","Padilla"),("Maxine","Rowland"),("Halee","Larson");
+INSERT INTO users(first_name,last_name) VALUES ("Tatyana","Rosario"),("Latifah","Jenkins"),("Wynne","Rowland"),("Nola","Adkins"),("Nicole","Wilkerson"),("Sybil","Murray"),("Cadman","Evans"),("Xenos","Kramer"),("Illana","Riley"),("Evan","Logan");
+INSERT INTO users(first_name,last_name) VALUES ("Risa","Fuller"),("Jenette","Alvarado"),("Colorado","Moss"),("Bree","Velazquez"),("Madonna","Preston"),("Daria","Pearson"),("Uta","Hensley"),("Paul","Lambert"),("Declan","Ramirez"),("Davis","Mcleod");
+INSERT INTO users(first_name,last_name) VALUES ("Wanda","Sears"),("Melvin","Bowen"),("Lareina","Forbes"),("Dane","Holland"),("Norman","Mcleod"),("Blythe","Cruz"),("Jayme","Gill"),("Adele","Warren"),("Candace","Valenzuela"),("Judith","Blake");
 
 --
 --  Insert Data in teams
@@ -91,10 +91,10 @@ INSERT INTO teams(NAME,tournament_id) VALUES ('Believer',1);
 INSERT INTO teams(NAME,tournament_id) VALUES ('Warriors',1);
 
 --
---  Insert Data in participant_team
+--  Insert Data in team_user
 --
 
-INSERT INTO participant_team(participant_id, team_id, isCaptain) SELECT id, ROUND(id/2), (id%2) FROM participants LIMIT 64;
+INSERT INTO team_user(user_id, team_id, isCaptain) SELECT id, ROUND(id/2), (id%2) FROM users LIMIT 64;
 
 --
 --  Insert Data in contenders
