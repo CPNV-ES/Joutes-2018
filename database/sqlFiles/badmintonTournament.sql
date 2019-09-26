@@ -1,5 +1,18 @@
 USE joutes;
 
+ALTER TABLE contenders AUTO_INCREMENT=1;
+ALTER TABLE courts AUTO_INCREMENT=1;
+ALTER TABLE events AUTO_INCREMENT=1;
+ALTER TABLE game_types AUTO_INCREMENT=1;
+ALTER TABLE games AUTO_INCREMENT=1;
+ALTER TABLE pool_modes AUTO_INCREMENT=1;
+ALTER TABLE pools AUTO_INCREMENT=1;
+ALTER TABLE sports AUTO_INCREMENT=1;
+ALTER TABLE team_user AUTO_INCREMENT=1;
+ALTER TABLE teams AUTO_INCREMENT=1;
+ALTER TABLE tournaments AUTO_INCREMENT=1;
+ALTER TABLE users AUTO_INCREMENT=1;
+
 -- ========================================== Data ==============================================
 
 --
