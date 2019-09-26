@@ -6,7 +6,7 @@ USE joutes;
 --  Insert Data in events
 --
 
-INSERT INTO joutes.events(NAME) VALUES ('joutes 2017');
+INSERT INTO joutes.events(NAME) VALUES ('joutes 2020');
 
 --
 --  Insert Data in sports
@@ -24,7 +24,7 @@ INSERT INTO courts(NAME, sport_id) VALUES ('Terrain A', 1),('Terrain B', 1),('Te
 --  Insert Data in tournaments
 --
 
-INSERT INTO tournaments(NAME, start_date, event_id, sport_id) VALUES ('Tournoi de Bad', '2017-06-11', 1, 1);
+INSERT INTO tournaments(NAME, start_date, event_id, sport_id) VALUES ('Tournoi de Bad', '2020-06-11', 1, 1);
 
 --
 --  Insert Data in game_types
