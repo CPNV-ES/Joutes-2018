@@ -7,6 +7,7 @@ ALTER TABLE game_types AUTO_INCREMENT=1;
 ALTER TABLE games AUTO_INCREMENT=1;
 ALTER TABLE pool_modes AUTO_INCREMENT=1;
 ALTER TABLE pools AUTO_INCREMENT=1;
+ALTER TABLE roles AUTO_INCREMENT=1;
 ALTER TABLE sports AUTO_INCREMENT=1;
 ALTER TABLE team_user AUTO_INCREMENT=1;
 ALTER TABLE teams AUTO_INCREMENT=1;
@@ -50,6 +51,12 @@ INSERT INTO game_types(game_type_description) VALUES ('Modalités de jeu');
 --
 
 INSERT INTO pool_modes(mode_description,planningAlgorithm) VALUES ('Matches simples',1),('Aller-retour',2),('Elimination directe',3);
+
+--
+--  Insert Data in roles
+--
+
+INSERT INTO roles(slug,name) VALUES ("STUD","student"),("PROF","professor"),("ADMIN","administrator");
 
 --
 --  Insert Data in users
@@ -279,5 +286,4 @@ CALL generateAllGames();
 
 DROP PROCEDURE generateGames; -- cleanup
 DROP PROCEDURE generateAllGames; -- cleanup
-
 
