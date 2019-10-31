@@ -286,4 +286,3 @@ CALL generateAllGames();
 
 DROP PROCEDURE generateGames; -- cleanup
 DROP PROCEDURE generateAllGames; -- cleanup
-
