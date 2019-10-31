@@ -15,11 +15,8 @@ class User extends Authenticatable
     }
     public function setRememberToken($value){
     }
-    public function getRole(){
-        return $this->role;
-    }
 
-    public function roles(){
+    public function role(){
         return $this->belongsTo('App\Role');
     }
 

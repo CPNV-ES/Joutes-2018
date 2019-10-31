@@ -44,7 +44,7 @@ class MakeGestionnaire extends Command
         if(User::where('username', '=', $username)->exists()){
             $u = User::where('username', $username)->first();
             $r = Role::where('slug', 'GEST')->first();
-            $u->roles()->associate($r);
+            $u->role()->associate($r);
             $u->save();
         
             $this->line("L'utilisateur $username est maintenant gestionnaire.");
