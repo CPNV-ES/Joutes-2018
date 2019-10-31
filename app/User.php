@@ -19,6 +19,10 @@ class User extends Authenticatable
         return $this->role;
     }
 
+    public function roles(){
+        return $this->belongsTo('App\Role');
+    }
+
     public function participant()
     {
         return $this->hasOne('App\Participant');

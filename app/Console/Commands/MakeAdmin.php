@@ -3,8 +3,8 @@
 namespace App\Console\Commands;
 
 use App\User;
+use App\Role;
 use Illuminate\Console\Command;
-use Illuminate\Support\Facades\Hash;
 
 class MakeAdmin extends Command
 {
@@ -42,7 +42,10 @@ class MakeAdmin extends Command
         $username = $this->argument('username');
 
         if(User::where('username', '=', $username)->exists()){
-            User::where('username', $username)->update(array('roles_id' => '3'));
+            $u = User::where('username', $username)->first();
+            $r = Role::where('slug', 'ADMIN')->first();
+            $u->roles()->associate($r);
+            $u->save();
         
             $this->line("L'utilisateur $username est maintenant administrateur.");
         

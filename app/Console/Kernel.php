@@ -14,7 +14,7 @@ class Kernel extends ConsoleKernel
      */
     protected $commands = [
         Commands\MakeAdmin::class,
-        Commands\MakeProfessor::class
+        Commands\MakeGestionnaire::class
     ];
 
     /**

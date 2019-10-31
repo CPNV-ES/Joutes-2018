@@ -3,24 +3,24 @@
 namespace App\Console\Commands;
 
 use App\User;
+use App\Role;
 use Illuminate\Console\Command;
-use Illuminate\Support\Facades\Hash;
 
-class MakeProfessor extends Command
+class MakeGestionnaire extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'make:professor {username}';
+    protected $signature = 'make:gestionnaire {username}';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Change the user right to professor';
+    protected $description = 'Change the user right to gestionnaire';
 
     /**
      * Create a new command instance.
@@ -42,9 +42,12 @@ class MakeProfessor extends Command
         $username = $this->argument('username');
 
         if(User::where('username', '=', $username)->exists()){
-            User::where('username', $username)->update(array('roles_id' => '2'));
+            $u = User::where('username', $username)->first();
+            $r = Role::where('slug', 'GEST')->first();
+            $u->roles()->associate($r);
+            $u->save();
         
-            $this->line("L'utilisateur $username est maintenant professor.");
+            $this->line("L'utilisateur $username est maintenant gestionnaire.");
             
         }else{     
             $this->line("Erreur: L'utilisateur $username n'existe pas.");
