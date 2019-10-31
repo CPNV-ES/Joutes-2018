@@ -13,12 +13,12 @@ class Role extends Model
     public function getSlug(){
         return $this->slug;
     }
-
     
     public function getName(){
         return $this->name;
     }
 
+    
     public function users(){
         return $this->hasMany('App\User', 'roles_id');
     }

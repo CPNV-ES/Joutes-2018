@@ -71,6 +71,16 @@
     border-right: 3px solid #9ee493;
 }
 
+.btn-administration-a{
+    text-align: center;
+    font-size: large;
+}
+.btn-administration{
+    background-color: #9ade90;
+}
+
+
+
 .navbar .navbar-bottom{
     position: absolute;
     bottom: 0;

@@ -84,6 +84,9 @@
                         <li class="@if(Route::is('courts.index')) active @endif"><a href="{{ route('courts.index') }}"> <i class="fa fa-map-marker" aria-hidden="true"></i> Terrains</a></li>
                         <li class="@if(Route::is('teams.index')) active @endif"><a href="{{ route('teams.index') }}"> <i class="fa fa-users" aria-hidden="true"></i> Equipes</a></li>
                         <li class="@if(Route::is('participants.index')) active @endif"><a href="{{ route('participants.index') }}"> <i class="fa fa-user" aria-hidden="true"></i> Participants</a></li>
+                        
+                        <!-- Administation Button -->
+                        <li class="@if(Route::is('administration.index')) active @endif"><a href="{{ route('administration.index') }}" class="btn-administration-a"> <input type="button" class="btn btn-administration" value="Administration"></a></li>
                     @endif
                     @if(Auth::user()->role == 'participant')
                         <li class="@if(Route::is('profile.index')) active @endif"><a href="{{ route('profile.index') }}"> <i class="fa fa-user" aria-hidden="true"></i> Profile</a></li>
