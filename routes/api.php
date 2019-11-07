@@ -64,9 +64,5 @@ $api->version('v1', function ($api) {
         $api->resource('backendtargets','App\Http\Controllers\API\BackendTargetController', ['only' => [
             'index'
         ]]);
-
-        $api->resource('administration', 'App\Http\Controllers\Admin\AdministrationPage', ['only' => [
-            'index'
-        ]]);
     });
 });

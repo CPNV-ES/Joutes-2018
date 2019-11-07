@@ -87,6 +87,7 @@
                         
                         <!-- Administation Button -->
                         <li class="@if(Route::is('administration.index')) active @endif"><a href="{{ route('administration.index') }}" class="btn-administration-a"> <input type="button" class="btn btn-administration" value="Administration"></a></li>
+                   
                     @endif
                     @if(Auth::user()->role == 'participant')
                         <li class="@if(Route::is('profile.index')) active @endif"><a href="{{ route('profile.index') }}"> <i class="fa fa-user" aria-hidden="true"></i> Profile</a></li>

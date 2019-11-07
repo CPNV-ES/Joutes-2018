@@ -38,7 +38,9 @@ Route::group(['middleware'=>'checkIsAdmin', 'prefix'=>'admin', 'namespace' => 'A
 	Route::resource('tournaments', 'TournamentController', ['only' => ['edit', 'update', 'destroy']]);
 	Route::resource('events.tournaments', 'EventTournamentController', [ 'only' => ['create', 'store']]);
 	Route::resource('sports', 'SportController');
-	Route::resource('courts', 'CourtController');
+	Route::resource('courts', 'CourtController');	
+	Route::resource('administration', 'AdministrationController');
+	Route::resource('administration.roles', 'AdministrationController');
 	//Route::resource('teams', 'TeamController');
 	//Route::resource('participants', 'ParticipantController');
 	//Route::resource('teams.participants', 'TeamParticipantController', ['only' => ['destroy', 'store']]);
@@ -63,5 +65,4 @@ Route::group(['middleware'=>'checkIsParticipantOrAdmin', 'namespace' => 'Admin',
     Route::resource('participants', 'ParticipantController');
     Route::resource('teams.participants', 'TeamParticipantController', ['only' => ['destroy', 'store']]);
 	Route::get('tournaments/{tournament}/export', 'TournamentController@export')->name('tournaments.export');
-    Route::resource('administration', 'AdministrationPage');
 });

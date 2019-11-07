@@ -77,6 +77,10 @@
 }
 .btn-administration{
     background-color: #9ade90;
+    font-size: 18px;
+}
+.btn-administration-a :hover{
+    color: #2a3f54;
 }
 
 
@@ -127,5 +131,34 @@
     .navbar{
        display: none;
     }
+}
+
+
+
+
+.card {
+    /* Add shadows to create the "card" effect */
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+    transition: 0.3s;
+    border-radius: 5px;
+    width: 30%;
+    height: 160px;
+    background-color: #7eb3769f;
+    color: #FFFFFF;
+}
+
+.card-center{   
+    padding: 40px 0;
+    text-align: center;
+}
+
+/* On mouse-over, add a deeper shadow */
+.card:hover {
+    box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+}
+
+/* Add some padding inside the card container */
+.card-container {
+    padding: 2px 16px;
 }
 

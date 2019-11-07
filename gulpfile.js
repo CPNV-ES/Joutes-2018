@@ -9,7 +9,7 @@ const elixir = require('laravel-elixir');
  | for your Laravel application. By default, we are compiling the Sass
  | file for your application as well as publishing vendor resources.
  |
- */
+ */ 
 
 elixir((mix) => {
     /*mix.sass('app.scss')
@@ -30,5 +30,5 @@ elixir((mix) => {
            	"custom/profileCreateformValidate.js",
            "custom/profileChangeFormValidate.js",
 		   	"custom/teamCreate.js"
-    	]);
+		])
 });

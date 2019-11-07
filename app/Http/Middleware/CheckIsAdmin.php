@@ -18,15 +18,12 @@ class CheckIsAdmin
     public function handle($request, Closure $next)
     {
 
-        if (Auth::user() == null) {
+        if (!Auth::check()) {
             return redirect(route('events.index'));
-        } else {
-            if (!Auth::check()) {
-                return redirect(route('events.index'));
-            } else if (Auth::user()->role != 'administrator') {
-                return redirect(route('events.index'));
-            }
-            return $next($request);
+        } else if (Auth::user()->role->getSlug() != 'ADMIN') {
+            return redirect(route('events.index'));
         }
+        return $next($request);
+        
     }
 }
