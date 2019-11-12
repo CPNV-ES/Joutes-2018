@@ -39,8 +39,11 @@ Route::group(['middleware'=>'checkIsAdmin', 'prefix'=>'admin', 'namespace' => 'A
 	Route::resource('events.tournaments', 'EventTournamentController', [ 'only' => ['create', 'store']]);
 	Route::resource('sports', 'SportController');
 	Route::resource('courts', 'CourtController');	
-	Route::resource('administration', 'AdministrationController');
-	Route::resource('administration.roles', 'AdministrationController');
+	
+	//Administration page
+	Route::get('administration', 'AdministrationController@index')->name('administration.index');
+	Route::resource('roles', 'RoleController');
+	
 	//Route::resource('teams', 'TeamController');
 	//Route::resource('participants', 'ParticipantController');
 	//Route::resource('teams.participants', 'TeamParticipantController', ['only' => ['destroy', 'store']]);

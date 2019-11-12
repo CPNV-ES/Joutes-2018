@@ -15,12 +15,8 @@ class AdministrationController extends Controller
       * @author Butticaz Yvann
       */
  
-     public function index(){
-         return view('administration.index');
-     }
-
-     public function roles(){
-        return view('events.index');
+    public function index(){
+        return view('administration.index');
     }
- 
+
  }

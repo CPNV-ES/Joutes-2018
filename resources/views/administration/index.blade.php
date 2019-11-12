@@ -9,14 +9,13 @@
         </div>
     
         <div class="row mt-5">
-            <a href="{{ route('administration.roles') }}">
+            <a href="{{ route('roles.index') }}">
                 <div class="card card-center">
                     <h2><b>Rôles utilisateurs</b></h2>
                 </div>
             </a>
         </div> 
         
-
     </div>
 
 @stop

@@ -97,6 +97,7 @@
             <div class="nav navbar-nav navbar-bottom">
 
                 <footer class="footer">
+                    <div class="versiontag"><strong style="color:red;">Work in progress</strong></div>
                     <div class="versiontag">Version @include('partials.versiontag')</div>
                     <div class="copyright">© CPNV - 2019</div>
                     <div class="devs">
@@ -111,6 +112,7 @@
                             <a href="#" class="dev">Senistan Jegarajasingam</a>
                             <a href="#" class="dev">Quentin Rossier</a>
                         </div>
+                        
                     </div>
                 </footer>
 
