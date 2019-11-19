@@ -448,7 +448,7 @@ form .btn-success, form .btn-success:hover, .btn-login-form{
     border-color: #2a3f54;
 }
 
-#formSport, #formEvent, #formTournament, #formCourt, #formTeam {
+#formSport, #formEvent, #formTournament, #formCourt, #formTeam, #formRole {
 	width: 40%;
     margin: 40px auto;
     background-color: white;

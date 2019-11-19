@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Role;
 
 class RoleController extends Controller
 {
@@ -14,7 +15,8 @@ class RoleController extends Controller
      */
     public function index()
     {
-        return view('administration.roles');
+        $roles = Role::all();
+        return view('administration.roles')->with('roles', $roles);
     }
 
     /**
@@ -24,7 +26,7 @@ class RoleController extends Controller
      */
     public function create()
     {
-        //
+        return view('administration.editRole');
     }
 
     /**
@@ -57,7 +59,8 @@ class RoleController extends Controller
      */
     public function edit($id)
     {
-        //
+        $role = Role::find($id);
+        return view('administration.editRole')->with('role', $role);
     }
 
     /**
