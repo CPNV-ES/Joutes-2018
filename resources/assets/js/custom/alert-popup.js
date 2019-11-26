@@ -32,7 +32,9 @@ $( document ).ready(function() {
 		    case "memberTeam":
 		    	title = "Voulez-vous vraiment retirer "+name+" ?";
 		        break;
-
+			case "role":
+				title = "Voulez-vous vraiment supprimer le rôle "+name+" ?";
+				break;
 
 		}
 		

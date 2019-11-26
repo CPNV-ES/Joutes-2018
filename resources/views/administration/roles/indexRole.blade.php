@@ -29,13 +29,18 @@
                                 <td>{{$role->slug}}</td>
                                 <td>{{$role->name}}</td> 
                                 <td class="text-center" style="font-size:16px;">
-                                    <a href="{{ route('roles.edit', $role->id)}}" title="Éditer le sport" class="edit" style="margin-right: 10%;">
+                                    <a href="{{ route('roles.edit', $role->id)}}" title="Éditer le role" class="edit" style="margin-right: 10%;">
                                         <i class="fa fa-lg fa-pencil action" aria-hidden="true"></i>
                                     </a>
-                                    <a href="{{ route('roles.edit', $role->id)}}" title="Éditer le sport" class="edit" style="margin-left: 10%;">
-                                        <i class="fa fa-lg fa-trash-o action" aria-hidden="true"></i>
-                                    </a>
+
+                                    {{ Form::open(array('url' => route('roles.destroy', $role->id), 'method' => 'delete', 'style' => '
+                                    display: inline-block;')) }}
+                                        <button type="submit" class="button-delete" data-name="{{ $role->name }}" data-type="role">
+                                            <i class="fa fa-trash-o fa-lg action" aria-hidden="true"></i>
+                                        </button>
+								    {{ Form::close() }}
                                 </td>
+                            </tr>
                         @endforeach
                        
                     </tbody>

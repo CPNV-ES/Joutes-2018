@@ -22,8 +22,9 @@
                 @endif
             </div>
         @endif
-        
-        {{ Form::open(array('url' => route('roles.edit', $role->id), 'method' => 'post',  'id' => 'formRole')) }}
+
+
+        {{ Form::open(array('url' => route('roles.update', $role->id), 'method' => 'put',  'id' => 'formRole')) }}
             
             <div class="form-group">
                 {{ Form::label('slug', 'Slug : ') }}
