@@ -34,7 +34,7 @@ Prise en charge le 31.10.2019, par Yvann Butticaz
 
 7. _(Terminé, le 12 Novembre)_ Ajout du controller "RoleController" et de la page des roles.
 
-8. Implémentation du crud dans la page des roles :
+8. _(Terminé, le 26 Novembre)_ Implémentation du crud dans la page des roles :
     - Affichage des données "role" dans le tableau
     - Ajout de roles
     - Modification de roles
@@ -46,7 +46,7 @@ Prise en charge le 31.10.2019, par Yvann Butticaz
 
 # Commit / Merge
 
-(Fait, le ...)
+(Fait, le 26 Novembre) Commit sur la branche Yvann
 
 # Revue de code
 
